@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard SIG SDA - Kementerian PU</title>
 
+  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -46,7 +49,7 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK -->
+    <!-- KARTU STATISTIK (8 Kolom / Grid) -->
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-8">
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
@@ -153,12 +156,20 @@
           <div id="sumurTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                <tr><th class="p-3">No</th><th class="p-3">Nomor Sumur</th><th class="p-3">Desa / Kel</th><th class="p-3">Kab/Kota</th><th class="p-3">Debit (l/dt)</th><th class="p-3">Kedalaman (m)</th><th class="p-3">Fungsi</th><th class="p-3">Status</th></tr>
+                <tr><th class="p-3">No</th><th class="p-3">Nomor Sumur</th><th class="p-3">Desa / Kel</th><th class="p-3">Kecamatan</th><th class="p-3">Kab/Kota</th><th class="p-3">Debit (l/dt)</th><th class="p-3">Kedalaman (m)</th><th class="p-3">Fungsi</th><th class="p-3">Status</th></tr>
               </thead><tbody id="tableSumur" class="divide-y text-sm bg-white"></tbody>
             </table>
           </div>
 
         </div>
+      </div>
+    </div>
+    
+    <!-- GRAFIK STATISTIK -->
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
+      <div class="p-6">
+        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4 border-b pb-2"><i class="fa-solid fa-chart-column mr-2 text-brand-blue"></i>Grafik Infrastruktur</h2>
+        <div class="relative w-full h-[300px]"><canvas id="infraChart"></canvas></div>
       </div>
     </div>
   </main>
@@ -171,11 +182,11 @@
 
   <script>
     // =========================================================================
-    // WAJIB GANTI: MASUKKAN URL API GOOGLE APPS SCRIPT ANDA DI SINI
+    // WAJIB GANTI DENGAN URL API BARU SETELAH DEPLOY ULANG KODE.GS !!!
     // =========================================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
 
-    let map;
+    let map, myChart;
     let layers = {
       pos: L.layerGroup(), bendung: L.layerGroup(), bendungan: L.layerGroup(),
       sedimen: L.layerGroup(), banjir: L.layerGroup(), pantai: L.layerGroup(), 
@@ -202,8 +213,6 @@
 
     function fetchDashboardData() {
       fetch(API_URL).then(res => res.json()).then(data => {
-        console.log("Data loaded from API:", Object.keys(data)); // Log keys of loaded data
-
         if (data.status === "error") throw new Error(data.message);
         
         rawData.pos = data.posData || [];
@@ -213,21 +222,18 @@
         rawData.banjir = data.banjirData || [];
         rawData.pantai = data.pantaiData || [];
         rawData.embung = data.embungData || [];
-        
-        // Ensure sumurData is retrieved, even if it's undefined in the API response, default to empty array
-        rawData.sumur = data.sumurData || []; 
-        console.log("Sumur Bor Data:", rawData.sumur); // Check if data is populated
+        rawData.sumur = data.sumurData || []; // Menyimpan Data Sumur Bor
         
         populateKabupatenDropdown();
         renderData("ALL"); 
         document.getElementById('loadingModal').classList.add('hidden');
       }).catch(err => {
-        console.error(err); alert("Gagal mengambil data. Pastikan Apps Script sudah di-deploy dengan benar!");
+        console.error(err); 
+        alert("Gagal memuat data. Kemungkinan KODE.GS belum di-Deploy ulang sebagai versi baru.");
         document.getElementById('loadingModal').classList.add('hidden');
       });
     }
 
-    // Fungsi pengaman agar tidak error jika sel kosong
     function safeString(val) { return (val || "").toString().trim().toUpperCase(); }
     function isMatch(rowKab, selKab) {
       if(selKab === "ALL") return true;
@@ -242,9 +248,7 @@
       rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
       rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
       rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
-      
-      // Sumur Bor: Kab/Kota ada di Index 3
-      rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
+      rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); }); // Kab Sumur di index 3
       
       let select = document.getElementById('filterKabupaten');
       Array.from(kabSet).filter(k => k !== "").sort().forEach(kab => {
@@ -258,7 +262,6 @@
     }
 
     function renderData(selKab) {
-      // Filtering per sheet berdasarkan posisi kolom Kab/Kota / Kecamatan
       let fPos = rawData.pos.filter(r => isMatch(r[2], selKab));
       let fBendung = rawData.bendung.filter(r => isMatch(r[1], selKab));
       let fBendungan = rawData.bendungan.filter(r => isMatch(r[1], selKab)); 
@@ -266,10 +269,8 @@
       let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
       let fPantai = rawData.pantai.filter(r => isMatch(r[1], selKab)); 
       let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
-      // Filter Sumur Bor menggunakan Index 3 (Kab/Kota)
-      let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab)); 
+      let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab)); // Filter Sumur Bor
 
-      // Update Angka Statistik
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
       document.getElementById('statBendungan').innerText = fBendungan.length;
@@ -277,21 +278,16 @@
       document.getElementById('statBanjir').innerText = fBanjir.length;
       document.getElementById('statPantai').innerText = fPantai.length;
       document.getElementById('statEmbung').innerText = fEmbung.length;
-      document.getElementById('statSumur').innerText = fSumur.length; // Angka Sumur Bor
+      document.getElementById('statSumur').innerText = fSumur.length; // Stat Sumur Bor
 
       const ic = (bg, fa) => L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon ${bg} w-7 h-7"><i class="fa-solid ${fa} text-xs"></i></div>`, iconSize: [28,28], iconAnchor: [14,14] });
       const iPos = ic('bg-blue-500', 'fa-droplet'), iBend = ic('bg-yellow-500', 'fa-water'), iBndgn = ic('bg-emerald-500', 'fa-water-ladder');
       const iSed = ic('bg-orange-500', 'fa-mountain'), iBnjr = ic('bg-purple-500', 'fa-house-flood-water');
-      const iPntai = ic('bg-teal-500', 'fa-anchor'), iEmb = ic('bg-pink-500', 'fa-bowl-water');
-      const iSmr = ic('bg-indigo-500', 'fa-faucet-drip'); // Ikon Sumur Bor
+      const iPntai = ic('bg-teal-500', 'fa-anchor'), iEmb = ic('bg-pink-500', 'fa-bowl-water'), iSmr = ic('bg-indigo-500', 'fa-faucet-drip');
 
-      // Bersihkan marker lama
       Object.keys(layers).forEach(k => { if(k !== 'geojson') layers[k].clearLayers(); });
 
-      // ==============================================
-      // RENDER TABLE & MARKER PETA
-      // ==============================================
-      
+      // Render Pos
       let hPos = '';
       fPos.forEach((r, i) => {
         let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
@@ -300,6 +296,7 @@
       });
       document.getElementById('tablePos').innerHTML = hPos;
 
+      // Render Bendung
       let hBendung = '';
       fBendung.forEach((r, i) => {
         let lat = parseFloat(r[15]), lng = parseFloat(r[16]);
@@ -308,6 +305,7 @@
       });
       document.getElementById('tableBendung').innerHTML = hBendung;
 
+      // Render Bendungan
       let hBendungan = '';
       fBendungan.forEach((r, i) => {
         let lat = parseFloat(r[4]), lng = parseFloat(r[5]);
@@ -316,6 +314,7 @@
       });
       document.getElementById('tableBendungan').innerHTML = hBendungan;
 
+      // Render Sedimen
       let hSedimen = '';
       fSedimen.forEach((r, i) => {
         let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
@@ -324,6 +323,7 @@
       });
       document.getElementById('tableSedimen').innerHTML = hSedimen;
 
+      // Render Banjir
       let hBanjir = '';
       fBanjir.forEach((r, i) => {
         let lat = parseFloat(r[14]), lng = parseFloat(r[15]);
@@ -332,6 +332,7 @@
       });
       document.getElementById('tableBanjir').innerHTML = hBanjir;
 
+      // Render Pantai
       let hPantai = '';
       fPantai.forEach((r, i) => {
         let lat = parseFloat(r[11]), lng = parseFloat(r[12]);
@@ -340,6 +341,7 @@
       });
       document.getElementById('tablePantai').innerHTML = hPantai;
 
+      // Render Embung
       let hEmbung = '';
       fEmbung.forEach((r, i) => {
         let lat = parseFloat(r[21]), lng = parseFloat(r[22]);
@@ -348,24 +350,23 @@
       });
       document.getElementById('tableEmbung').innerHTML = hEmbung;
 
-      // ================= DATA SUMUR BOR (Sesuai dengan 13 Kolom) =================
+      // ================= DATA SUMUR BOR =================
       let hSumur = '';
       fSumur.forEach((r, i) => {
-        // Menggunakan Index 4 = Latitude, Index 5 = Longitude
+        // [4]: Latitude, [5]: Longitude
         let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
         
-        // Memastikan koordinat valid sebelum menggambar marker
         if (!isNaN(lat) && !isNaN(lng)) {
-          layers.sumur.addLayer(
-            L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur Bor'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`)
-          );
+          // Popup Marker Sumur Bor
+          layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
         }
         
-        // Render Baris Tabel: 0:Nomor, 1:Desa, 3:Kab, 6:Debit, 7:Kedalaman, 10:Fungsi, 11:Status
+        // Baris Tabel Sumur Bor
         hSumur += `<tr>
           <td class="p-3">${i+1}</td>
           <td class="p-3 font-bold text-indigo-700">${r[0] || '-'}</td>
           <td class="p-3">${r[1] || '-'}</td>
+          <td class="p-3">${r[2] || '-'}</td>
           <td class="p-3">${r[3] || '-'}</td>
           <td class="p-3">${r[6] || '-'}</td>
           <td class="p-3">${r[7] || '-'}</td>
@@ -374,12 +375,19 @@
         </tr>`;
       });
       
-      // If table is empty, show a message
-      if (hSumur === '') {
-        hSumur = `<tr><td colspan="8" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
-      }
-      
+      if (hSumur === '') hSumur = `<tr><td colspan="9" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
       document.getElementById('tableSumur').innerHTML = hSumur;
+
+      // Render Grafik Chart.js
+      if(myChart) myChart.destroy();
+      myChart = new Chart(document.getElementById('infraChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
+          datasets: [{ data: [fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length], backgroundColor: ['#3B82F6', '#FDB813', '#10B981', '#F97316', '#A855F7', '#14B8A6', '#EC4899', '#6366F1'], borderRadius: 6 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+      });
     }
 
     function renderGeojsonBoundary(selKab) {
