@@ -82,35 +82,42 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK (Disesuaikan jadi 4 kolom pada layar besar) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- KARTU STATISTIK (Disesuaikan jadi 5 kolom pada layar besar) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
       <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-droplet"></i></div>
+        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-droplet"></i></div>
         <div>
-          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Pos Hidrologi</p>
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pos Hidrologi</p>
           <h3 id="statPos" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
         </div>
       </div>
       <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-brand-yellow text-brand-darkblue flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water"></i></div>
+        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-brand-yellow text-brand-darkblue flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water"></i></div>
         <div>
-          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Bendung</p>
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendung</p>
           <h3 id="statBendung" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
         </div>
       </div>
       <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water-ladder"></i></div>
+        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water-ladder"></i></div>
         <div>
-          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
           <h3 id="statBendungan" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
         </div>
       </div>
-      <!-- KARTU BARU: PENGENDALI SEDIMEN -->
       <div data-aos="fade-up" data-aos-delay="400" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-orange-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-mountain"></i></div>
+        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-orange-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-mountain"></i></div>
         <div>
-          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Pengendali Sedimen</p>
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pengendali Sedimen</p>
           <h3 id="statSedimen" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
+      </div>
+      <!-- KARTU BARU: PENGENDALI BANJIR -->
+      <div data-aos="fade-up" data-aos-delay="500" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
+        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-purple-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-house-flood-water"></i></div>
+        <div>
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pengendali Banjir</p>
+          <h3 id="statBanjir" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
         </div>
       </div>
     </div>
@@ -149,23 +156,28 @@
               <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
                 <input type="checkbox" id="togglePos" checked onchange="toggleLayer('pos')" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
                 <i class="fa-solid fa-droplet text-blue-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Pos Hidrologi</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:inline">Pos</span>
               </label>
               <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
                 <input type="checkbox" id="toggleBendung" checked onchange="toggleLayer('bendung')" class="w-4 h-4 text-yellow-500 rounded focus:ring-yellow-500">
                 <i class="fa-solid fa-water text-brand-yellow"></i>
-                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Bendung</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:inline">Bendung</span>
               </label>
               <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
                 <input type="checkbox" id="toggleBendungan" checked onchange="toggleLayer('bendungan')" class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500">
                 <i class="fa-solid fa-water-ladder text-emerald-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Bendungan</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:inline">Bendungan</span>
               </label>
-              <!-- TOGGLE BARU: PENGENDALI SEDIMEN -->
               <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
                 <input type="checkbox" id="toggleSedimen" checked onchange="toggleLayer('sedimen')" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-500">
                 <i class="fa-solid fa-mountain text-orange-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Pengendali Sedimen</span>
+                <span class="text-xs font-bold text-slate-700 hidden md:inline">Sedimen</span>
+              </label>
+              <!-- TOGGLE BARU: PENGENDALI BANJIR -->
+              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
+                <input type="checkbox" id="toggleBanjir" checked onchange="toggleLayer('banjir')" class="w-4 h-4 text-purple-500 rounded focus:ring-purple-500">
+                <i class="fa-solid fa-house-flood-water text-purple-500"></i>
+                <span class="text-xs font-bold text-slate-700 hidden md:inline">Banjir</span>
               </label>
             </div>
           </div>
@@ -188,8 +200,9 @@
           <button onclick="switchTab('posTab')" id="btn-posTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-brand-blue text-white transition">Pos Hidrologi</button>
           <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendung</button>
           <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendungan</button>
-          <!-- TAB BARU -->
           <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Pengendali Sedimen</button>
+          <!-- TAB BARU -->
+          <button onclick="switchTab('banjirTab')" id="btn-banjirTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Pengendali Banjir</button>
         </div>
 
         <!-- Tabel Konten -->
@@ -220,20 +233,30 @@
           </table>
         </div>
 
-        <!-- TABEL BARU: PENGENDALI SEDIMEN -->
         <div id="sedimenTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
           <table class="w-full text-left border-collapse">
+            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
+              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Aset</th><th class="py-3 px-4">Kecamatan</th><th class="py-3 px-4">Jenis</th><th class="py-3 px-4">Kondisi</th><th class="py-3 px-4">Daya Tampung (m³)</th></tr>
+            </thead>
+            <tbody id="tableSedimen" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
+          </table>
+        </div>
+
+        <!-- TABEL BARU: PENGENDALI BANJIR -->
+        <div id="banjirTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
             <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
               <tr>
                 <th class="py-3 px-4 w-12 text-center">No</th>
                 <th class="py-3 px-4">Nama Aset</th>
-                <th class="py-3 px-4">Kecamatan</th>
-                <th class="py-3 px-4">Jenis</th>
+                <th class="py-3 px-4">Kab/Kota</th>
+                <th class="py-3 px-4">Tipe Bangunan</th>
                 <th class="py-3 px-4">Kondisi</th>
-                <th class="py-3 px-4">Daya Tampung (m³)</th>
+                <th class="py-3 px-4">Wilayah Sungai</th>
+                <th class="py-3 px-4">Panjang (m)</th>
               </tr>
             </thead>
-            <tbody id="tableSedimen" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
+            <tbody id="tableBanjir" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
           </table>
         </div>
       </div>
@@ -249,7 +272,7 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // ==========================================
-    // MASUKKAN URL API GOOGLE APPS SCRIPT ANDA DI BAWAH INI
+    // MASUKKAN URL API GOOGLE APPS SCRIPT ANDA
     // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
 
@@ -257,14 +280,16 @@
     let posLayerGroup = L.layerGroup();
     let bendungLayerGroup = L.layerGroup();
     let bendunganLayerGroup = L.layerGroup();
-    let sedimenLayerGroup = L.layerGroup(); // Layer Baru
+    let sedimenLayerGroup = L.layerGroup(); 
+    let banjirLayerGroup = L.layerGroup(); // Layer Baru
     let geojsonLayerGroup = L.layerGroup();
     let myChart = null; 
 
     let allPosData = [];
     let allBendungData = [];
     let allBendunganData = [];
-    let allSedimenData = []; // Data Baru
+    let allSedimenData = []; 
+    let allBanjirData = []; // Data Baru
     let rawGeojsonData = null;
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -283,7 +308,8 @@
       posLayerGroup.addTo(map);
       bendungLayerGroup.addTo(map);
       bendunganLayerGroup.addTo(map);
-      sedimenLayerGroup.addTo(map); // Tambahkan ke map
+      sedimenLayerGroup.addTo(map); 
+      banjirLayerGroup.addTo(map); // Tambahkan ke map
 
       fetch('https://raw.githubusercontent.com/balaiperumahanntt-ui/petanttgeojson/refs/heads/main/ntt%20geojson.geojson')
         .then(response => response.json())
@@ -299,7 +325,8 @@
       if (type === 'pos') isChecked ? map.addLayer(posLayerGroup) : map.removeLayer(posLayerGroup);
       if (type === 'bendung') isChecked ? map.addLayer(bendungLayerGroup) : map.removeLayer(bendungLayerGroup);
       if (type === 'bendungan') isChecked ? map.addLayer(bendunganLayerGroup) : map.removeLayer(bendunganLayerGroup);
-      if (type === 'sedimen') isChecked ? map.addLayer(sedimenLayerGroup) : map.removeLayer(sedimenLayerGroup); // Toggle Baru
+      if (type === 'sedimen') isChecked ? map.addLayer(sedimenLayerGroup) : map.removeLayer(sedimenLayerGroup); 
+      if (type === 'banjir') isChecked ? map.addLayer(banjirLayerGroup) : map.removeLayer(banjirLayerGroup); // Toggle Baru
     }
 
     function fetchDashboardData() {
@@ -311,7 +338,8 @@
           allPosData = data.posData || [];
           allBendungData = data.bendungData || [];
           allBendunganData = data.bendunganData || [];
-          allSedimenData = data.sedimenData || []; // Assign Data Baru
+          allSedimenData = data.sedimenData || []; 
+          allBanjirData = data.banjirData || []; // Assign Data Baru
           
           populateKabupatenDropdown();
           renderData("ALL"); 
@@ -329,6 +357,8 @@
       let kabSet = new Set();
       allPosData.forEach(row => { if(row[2]) kabSet.add(String(row[2]).trim().toUpperCase()); });
       allBendungData.forEach(row => { if(row[1]) kabSet.add(String(row[1]).trim().toUpperCase()); });
+      // Menambahkan list kab dari Pengendali Banjir (Index 1 = Kab/Kota)
+      allBanjirData.forEach(row => { if(row[1]) kabSet.add(String(row[1]).trim().toUpperCase()); });
       
       let select = document.getElementById('filterKabupaten');
       Array.from(kabSet).sort().forEach(kab => {
@@ -349,82 +379,117 @@
       let fPos = allPosData.filter(row => selectedKab === "ALL" || String(row[2]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[2]).toUpperCase()));
       let fBendung = allBendungData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[1]).toUpperCase()));
       let fBendungan = allBendunganData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
-      // Filter Sedimen (Kecamatan berada di index 1)
       let fSedimen = allSedimenData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
+      // Filter Banjir (Kab/Kota berada di index 1)
+      let fBanjir = allBanjirData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[1]).toUpperCase()));
 
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
       document.getElementById('statBendungan').innerText = fBendungan.length;
-      document.getElementById('statSedimen').innerText = fSedimen.length; // Stat Baru
+      document.getElementById('statSedimen').innerText = fSedimen.length;
+      document.getElementById('statBanjir').innerText = fBanjir.length; // Stat Baru
 
-      renderChart(fPos.length, fBendung.length, fBendungan.length, fSedimen.length);
+      renderChart(fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length);
 
       const posIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-blue-500 w-8 h-8"><i class="fa-solid fa-droplet text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
       const bendungIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-brand-yellow w-8 h-8 text-slate-800"><i class="fa-solid fa-water text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
       const bendunganIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-emerald-500 w-8 h-8"><i class="fa-solid fa-water-ladder text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
-      const sedimenIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-orange-500 w-8 h-8"><i class="fa-solid fa-mountain text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] }); // Ikon Baru
+      const sedimenIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-orange-500 w-8 h-8"><i class="fa-solid fa-mountain text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] }); 
+      const banjirIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-purple-500 w-8 h-8"><i class="fa-solid fa-house-flood-water text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] }); // Ikon Baru
 
       posLayerGroup.clearLayers(); 
       bendungLayerGroup.clearLayers(); 
       bendunganLayerGroup.clearLayers();
-      sedimenLayerGroup.clearLayers(); // Bersihkan layer baru
+      sedimenLayerGroup.clearLayers();
+      banjirLayerGroup.clearLayers(); // Bersihkan layer baru
 
       let htmlPos = '';
       fPos.forEach((row, idx) => {
         let lat = parseFloat(row[5]), lng = parseFloat(row[6]);
         if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: posIcon});
-          marker.bindPopup(`<b>${row[1]}</b><br>Kab/Kota: ${row[2]}<br>Jenis: ${row[3]}<br>Status: ${row[4]}`);
+          let marker = L.marker([lat, lng], {icon: posIcon}).bindPopup(`<b>${row[1]}</b><br>Kab/Kota: ${row[2]}<br>Jenis: ${row[3]}<br>Status: ${row[4]}`);
           posLayerGroup.addLayer(marker);
         }
         htmlPos += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td><td class="py-2 px-4"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${row[4]}</span></td></tr>`;
       });
-      document.getElementById('tablePos').innerHTML = htmlPos || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+      document.getElementById('tablePos').innerHTML = htmlPos || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
 
       let htmlBendung = '';
       fBendung.forEach((row, idx) => {
         let lat = parseFloat(row[15]), lng = parseFloat(row[16]);
         if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: bendungIcon});
-          marker.bindPopup(`<b>${row[2]}</b><br>Kab/Kota: ${row[1]}<br>DAS: ${row[6]}<br>Kondisi: ${row[7]}`);
+          let marker = L.marker([lat, lng], {icon: bendungIcon}).bindPopup(`<b>${row[2]}</b><br>Kab/Kota: ${row[1]}<br>DAS: ${row[6]}<br>Kondisi: ${row[7]}`);
           bendungLayerGroup.addLayer(marker);
         }
         htmlBendung += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[2]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[6]}</td><td class="py-2 px-4">${row[7]}</td></tr>`;
       });
-      document.getElementById('tableBendung').innerHTML = htmlBendung || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+      document.getElementById('tableBendung').innerHTML = htmlBendung || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
 
       let htmlBendungan = '';
       fBendungan.forEach((row, idx) => {
         let lat = parseFloat(row[4]), lng = parseFloat(row[5]);
         if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: bendunganIcon});
-          marker.bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Volume: ${row[3]} m³<br>Status: ${row[2]}`);
+          let marker = L.marker([lat, lng], {icon: bendunganIcon}).bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Volume: ${row[3]} m³<br>Status: ${row[2]}`);
           bendunganLayerGroup.addLayer(marker);
         }
         htmlBendungan += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[0]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td></tr>`;
       });
-      document.getElementById('tableBendungan').innerHTML = htmlBendungan || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+      document.getElementById('tableBendungan').innerHTML = htmlBendungan || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
 
-      // Render Pengendali Sedimen (Tabel & Peta)
       let htmlSedimen = '';
       fSedimen.forEach((row, idx) => {
-        // Asumsi data: Nama Aset[0], Kecamatan[1], Jenis[2], Kondisi[3], Daya Tampung[4], Latitude[5], Longitude[6]
         let lat = parseFloat(row[5]), lng = parseFloat(row[6]);
         if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: sedimenIcon});
-          marker.bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Jenis: ${row[2]}<br>Kondisi: ${row[3]}<br>Daya Tampung: ${row[4]} m³`);
+          let marker = L.marker([lat, lng], {icon: sedimenIcon}).bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Jenis: ${row[2]}<br>Kondisi: ${row[3]}<br>Daya Tampung: ${row[4]} m³`);
           sedimenLayerGroup.addLayer(marker);
         }
-        htmlSedimen += `<tr class="hover:bg-slate-50">
+        htmlSedimen += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[0]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td><td class="py-2 px-4">${row[4]}</td></tr>`;
+      });
+      document.getElementById('tableSedimen').innerHTML = htmlSedimen || `<tr><td colspan="6" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
+
+      // Render Pengendali Banjir (Tabel & Peta)
+      let htmlBanjir = '';
+      fBanjir.forEach((row, idx) => {
+        /*
+          Asumsi Index Kolom Pengendali Banjir:
+          0: Nama Aset, 1: Kabupaten/Kota, 2: Kecamatan, 3: Kelurahan, 4: Tipe Bangunan, 
+          5: Jenis Bangunan, 6: Kondisi Infrastruktur, 7: Wilayah Sungai, 8: DAS, 9: Kewenangan, 
+          10: Lintas, 11: Tahun Mulai, 12: Tahun Selesai, 13: Panjang Tanggul (m), 
+          14: Latitude, 15: Longitude
+        */
+        let lat = parseFloat(row[14]), lng = parseFloat(row[15]);
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+          // Popup Peta menampilkan detail yang lebih lengkap
+          let popupContent = `
+            <div style="min-width:200px">
+              <h4 style="margin:0 0 5px 0; color:#0E3B68; font-weight:bold">${row[0]}</h4>
+              <hr style="margin:5px 0">
+              <b>Lokasi:</b> ${row[1]} (Kec. ${row[2]})<br>
+              <b>Tipe:</b> ${row[4]}<br>
+              <b>Kondisi:</b> ${row[6]}<br>
+              <b>Wilayah Sungai:</b> ${row[7]}<br>
+              <b>DAS:</b> ${row[8]}<br>
+              <b>Panjang:</b> ${row[13]} m<br>
+              <b>Tahun Selesai:</b> ${row[12]}
+            </div>
+          `;
+          let marker = L.marker([lat, lng], {icon: banjirIcon}).bindPopup(popupContent);
+          banjirLayerGroup.addLayer(marker);
+        }
+        
+        // Tabel HTML (Menampilkan kolom kunci saja agar rapi)
+        htmlBanjir += `<tr class="hover:bg-slate-50">
           <td class="py-2 px-4 text-center">${idx+1}</td>
-          <td class="py-2 px-4 font-bold">${row[0]}</td>
+          <td class="py-2 px-4 font-bold text-brand-darkblue">${row[0]}</td>
           <td class="py-2 px-4">${row[1]}</td>
-          <td class="py-2 px-4">${row[2]}</td>
-          <td class="py-2 px-4">${row[3]}</td>
           <td class="py-2 px-4">${row[4]}</td>
+          <td class="py-2 px-4">${row[6]}</td>
+          <td class="py-2 px-4">${row[7]}</td>
+          <td class="py-2 px-4">${row[13] || '-'}</td>
         </tr>`;
       });
-      document.getElementById('tableSedimen').innerHTML = htmlSedimen || `<tr><td colspan="6" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+      document.getElementById('tableBanjir').innerHTML = htmlBanjir || `<tr><td colspan="7" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
     }
 
     function renderGeojsonBoundary(selectedKab) {
@@ -460,16 +525,16 @@
       }
     }
 
-    function renderChart(jmlPos, jmlBendung, jmlBendungan, jmlSedimen) {
+    function renderChart(jmlPos, jmlBendung, jmlBendungan, jmlSedimen, jmlBanjir) {
       const ctx = document.getElementById('infraChart').getContext('2d');
       if (myChart) myChart.destroy();
       myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['Pos Hidrologi', 'Bendung', 'Bendungan', 'Pengendali Sedimen'], // Label baru ditambahkan
+          labels: ['Pos Hidrologi', 'Bendung', 'Bendungan', 'Peng. Sedimen', 'Peng. Banjir'], // Label baru
           datasets: [{ 
-            data: [jmlPos, jmlBendung, jmlBendungan, jmlSedimen], 
-            backgroundColor: ['#3B82F6', '#FDB813', '#10B981', '#F97316'], // Warna Orange (Baru)
+            data: [jmlPos, jmlBendung, jmlBendungan, jmlSedimen, jmlBanjir], 
+            backgroundColor: ['#3B82F6', '#FDB813', '#10B981', '#F97316', '#A855F7'], // Warna Purple untuk Banjir
             borderRadius: 8, borderWidth: 0, barThickness: 60 
           }]
         },
@@ -478,7 +543,7 @@
           plugins: { legend: { display: false } },
           scales: {
             y: { beginAtZero: true, grid: { color: '#E2E8F0', drawBorder: false }, ticks: { precision: 0 } },
-            x: { grid: { display: false, drawBorder: false } }
+            x: { grid: { display: false, drawBorder: false }, ticks: { font: {size: 11} } }
           }
         }
       });
