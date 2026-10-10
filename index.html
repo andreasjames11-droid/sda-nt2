@@ -162,8 +162,6 @@
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm bg-white"></tbody>
             </table>
           </div>
-
-          <!-- TABEL EMBUNG -->
           <div id="embungTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -172,6 +170,7 @@
             </table>
           </div>
 
+          <!-- TABEL SUMUR BOR (Diupdate Sesuai Urutan Baru) -->
           <div id="sumurTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -251,8 +250,10 @@
       rawData.bendung.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
       rawData.banjir.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
       rawData.pantai.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
-      rawData.embung.forEach(r => { if(r[18]) kabSet.add(String(r[18]).trim().toUpperCase()); }); // Index 18 Kab/Kota Embung
-      rawData.sumur.forEach(r => { if(r[5]) kabSet.add(String(r[5]).trim().toUpperCase()); });
+      rawData.embung.forEach(r => { if(r[18]) kabSet.add(String(r[18]).trim().toUpperCase()); });
+      
+      // UPDATE: Index Kab/Kota Sumur Bor sekarang adalah 3
+      rawData.sumur.forEach(r => { if(r[3]) kabSet.add(String(r[3]).trim().toUpperCase()); });
       
       let select = document.getElementById('filterKabupaten');
       Array.from(kabSet).sort().forEach(kab => {
@@ -278,12 +279,10 @@
       let fSedimen = rawData.sedimen.filter(r => isMatch(r[1], selKab)); 
       let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
       let fPantai = rawData.pantai.filter(r => isMatch(r[2], selKab)); 
-      
-      // Index 18 (Kabupaten/Kota) pada Sheet Embung
       let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
       
-      // Index 5 (Kabupaten/Kota) pada Sheet Sumur
-      let fSumur = rawData.sumur.filter(r => isMatch(r[5], selKab)); 
+      // UPDATE: Filter Kab/Kota Sumur Bor menggunakan Index 3
+      let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab)); 
 
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
@@ -353,14 +352,10 @@
       });
       document.getElementById('tablePantai').innerHTML = hPantai;
 
-      // ================= EMBUNG =================
       let hEmbung = '';
       fEmbung.forEach((r, i) => {
-        // Index 21: Latitude, Index 22: Longitude
         let lat = parseFloat(r[21]), lng = parseFloat(r[22]);
-        
         if (!isNaN(lat) && !isNaN(lng)) {
-          // r[1]: Nama, r[18]: Kab/Kota, r[23]: Type, r[7]: Kondisi Bangunan, r[28]: Kapasitas
           let pop = `<b>${r[1]}</b><hr class="my-1">Kab/Kota: ${r[18]}<br>Tipe: ${r[23]}<br>Kondisi: ${r[7]}<br>Kapasitas: ${r[28]} m³`;
           layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(pop));
         }
@@ -368,16 +363,19 @@
       });
       document.getElementById('tableEmbung').innerHTML = hEmbung;
 
-      // ================= SUMUR BOR =================
+      // ================= SUMUR BOR (UPDATE INDEKS BARU) =================
       let hSumur = '';
       fSumur.forEach((r, i) => {
-        // Index 0: X (Longitude), Index 1: Y (Latitude)
-        let lat = parseFloat(r[1]), lng = parseFloat(r[0]); 
+        // UPDATE: Index 4 = Latitude, Index 5 = Longitude
+        let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
+        
         if (!isNaN(lat) && !isNaN(lng)) {
-          // r[2]: Nomor, r[7]: Dalam, r[6]: Debit
-          layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[2]}</b><br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
+          // r[0]: Nomor, r[7]: Dalam, r[6]: Debit
+          layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0]}</b><br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
         }
-        hSumur += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-indigo-700">${r[2]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[5]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[7]}</td><td class="p-3">${r[10]}</td></tr>`;
+        
+        // r[0]: Nomor Sumur, r[1]: Desa/Kel, r[3]: Kab/Kota, r[6]: Debit, r[7]: Kedalaman, r[10]: Fungsi
+        hSumur += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-indigo-700">${r[0]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[7]}</td><td class="p-3">${r[10]}</td></tr>`;
       });
       document.getElementById('tableSumur').innerHTML = hSumur;
     }
