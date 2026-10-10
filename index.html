@@ -5,26 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard SIG SDA - Kementerian PU</title>
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
-  <!-- Chart.js (Untuk Grafik Statistik) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- AOS CSS untuk Animasi -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-  <!-- Konfigurasi Tema Warna PU (Biru dan Kuning) -->
   <script>
     tailwind.config = {
       theme: {
@@ -67,7 +55,6 @@
 </head>
 <body class="min-h-screen text-slate-800 pb-12 antialiased">
 
-  <!-- HEADER -->
   <header data-aos="fade-down" class="glass-header text-white shadow-xl mb-8 border-b-4 border-brand-yellow">
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
       <div class="relative flex-shrink-0">
@@ -90,8 +77,8 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- KARTU STATISTIK (Disesuaikan jadi 4 kolom pada layar besar) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
         <div class="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-droplet"></i></div>
         <div>
@@ -111,6 +98,14 @@
         <div>
           <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
           <h3 id="statBendungan" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
+      </div>
+      <!-- KARTU BARU: PENGENDALI SEDIMEN -->
+      <div data-aos="fade-up" data-aos-delay="400" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-orange-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-mountain"></i></div>
+        <div>
+          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Pengendali Sedimen</p>
+          <h3 id="statSedimen" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
         </div>
       </div>
     </div>
@@ -140,11 +135,12 @@
           </div>
 
           <!-- KONTROL PETA -->
-          <div class="flex flex-col sm:flex-row items-center gap-3 flex-wrap lg:justify-end">
+          <div class="flex flex-col xl:flex-row items-center gap-3 flex-wrap lg:justify-end">
             <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2 bg-white border-2 border-brand-yellow/50 rounded-xl text-sm font-bold text-brand-darkblue focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer w-full sm:w-auto">
               <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
             </select>
-            <div class="flex items-center gap-2">
+            
+            <div class="flex flex-wrap justify-center items-center gap-2">
               <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
                 <input type="checkbox" id="togglePos" checked onchange="toggleLayer('pos')" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
                 <i class="fa-solid fa-droplet text-blue-500"></i>
@@ -159,6 +155,12 @@
                 <input type="checkbox" id="toggleBendungan" checked onchange="toggleLayer('bendungan')" class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500">
                 <i class="fa-solid fa-water-ladder text-emerald-500"></i>
                 <span class="text-xs font-bold text-slate-700 hidden sm:inline">Bendungan</span>
+              </label>
+              <!-- TOGGLE BARU: PENGENDALI SEDIMEN -->
+              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
+                <input type="checkbox" id="toggleSedimen" checked onchange="toggleLayer('sedimen')" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-500">
+                <i class="fa-solid fa-mountain text-orange-500"></i>
+                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Pengendali Sedimen</span>
               </label>
             </div>
           </div>
@@ -177,10 +179,12 @@
           <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Rincian Data Aset</h2>
         </div>
 
-        <div class="flex border-b border-slate-200 mb-4 gap-2">
+        <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-2">
           <button onclick="switchTab('posTab')" id="btn-posTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-brand-blue text-white transition">Pos Hidrologi</button>
           <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendung</button>
           <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendungan</button>
+          <!-- TAB BARU -->
+          <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Pengendali Sedimen</button>
         </div>
 
         <!-- Tabel Konten -->
@@ -210,11 +214,27 @@
             <tbody id="tableBendungan" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
           </table>
         </div>
+
+        <!-- TABEL BARU: PENGENDALI SEDIMEN -->
+        <div id="sedimenTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
+              <tr>
+                <th class="py-3 px-4 w-12 text-center">No</th>
+                <th class="py-3 px-4">Nama Aset</th>
+                <th class="py-3 px-4">Kecamatan</th>
+                <th class="py-3 px-4">Jenis</th>
+                <th class="py-3 px-4">Kondisi</th>
+                <th class="py-3 px-4">Daya Tampung (m³)</th>
+              </tr>
+            </thead>
+            <tbody id="tableSedimen" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </main>
 
-  <!-- LOADING MODAL -->
   <div id="loadingModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white p-4 transition-opacity">
     <div class="w-16 h-16 border-4 border-brand-yellow border-t-transparent rounded-full animate-spin mb-4"></div>
     <h3 class="text-lg font-bold text-white">Memuat Data GIS...</h3>
@@ -224,7 +244,7 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // ==========================================
-    // BAGIAN PENTING: API URL GOOGLE APPS SCRIPT
+    // MASUKKAN URL API GOOGLE APPS SCRIPT ANDA DI BAWAH INI
     // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbz1a7pQAj194_a_tS9HtldcsmEL5Aoc0RUMlU5mpRg0xw1TjcOXgiJ_ENLvZZr-_ypJhg/exec";
 
@@ -232,12 +252,14 @@
     let posLayerGroup = L.layerGroup();
     let bendungLayerGroup = L.layerGroup();
     let bendunganLayerGroup = L.layerGroup();
+    let sedimenLayerGroup = L.layerGroup(); // Layer Baru
     let geojsonLayerGroup = L.layerGroup();
     let myChart = null; 
 
     let allPosData = [];
     let allBendungData = [];
     let allBendunganData = [];
+    let allSedimenData = []; // Data Baru
     let rawGeojsonData = null;
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -256,6 +278,7 @@
       posLayerGroup.addTo(map);
       bendungLayerGroup.addTo(map);
       bendunganLayerGroup.addTo(map);
+      sedimenLayerGroup.addTo(map); // Tambahkan ke map
 
       fetch('https://raw.githubusercontent.com/balaiperumahanntt-ui/petanttgeojson/refs/heads/main/ntt%20geojson.geojson')
         .then(response => response.json())
@@ -271,21 +294,19 @@
       if (type === 'pos') isChecked ? map.addLayer(posLayerGroup) : map.removeLayer(posLayerGroup);
       if (type === 'bendung') isChecked ? map.addLayer(bendungLayerGroup) : map.removeLayer(bendungLayerGroup);
       if (type === 'bendungan') isChecked ? map.addLayer(bendunganLayerGroup) : map.removeLayer(bendunganLayerGroup);
+      if (type === 'sedimen') isChecked ? map.addLayer(sedimenLayerGroup) : map.removeLayer(sedimenLayerGroup); // Toggle Baru
     }
 
-    // ==========================================
-    // FUNGSI PENGAMBILAN DATA (FETCH API)
-    // ==========================================
     function fetchDashboardData() {
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
-          if (data.status === "error") {
-            throw new Error(data.message);
-          }
-          allPosData = data.posData;
-          allBendungData = data.bendungData;
-          allBendunganData = data.bendunganData;
+          if (data.status === "error") throw new Error(data.message);
+          
+          allPosData = data.posData || [];
+          allBendungData = data.bendungData || [];
+          allBendunganData = data.bendunganData || [];
+          allSedimenData = data.sedimenData || []; // Assign Data Baru
           
           populateKabupatenDropdown();
           renderData("ALL"); 
@@ -294,7 +315,7 @@
         })
         .catch(error => {
           console.error("Error Fetch:", error);
-          alert("Gagal memuat data dari Spreadsheet (API Error). Pastikan URL Web App sudah benar.");
+          alert("Gagal memuat data dari Spreadsheet (API Error).");
           document.getElementById('loadingModal').classList.add('hidden');
         });
     }
@@ -323,18 +344,25 @@
       let fPos = allPosData.filter(row => selectedKab === "ALL" || String(row[2]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[2]).toUpperCase()));
       let fBendung = allBendungData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[1]).toUpperCase()));
       let fBendungan = allBendunganData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
+      // Filter Sedimen (Kecamatan berada di index 1)
+      let fSedimen = allSedimenData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
 
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
       document.getElementById('statBendungan').innerText = fBendungan.length;
+      document.getElementById('statSedimen').innerText = fSedimen.length; // Stat Baru
 
-      renderChart(fPos.length, fBendung.length, fBendungan.length);
+      renderChart(fPos.length, fBendung.length, fBendungan.length, fSedimen.length);
 
       const posIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-blue-500 w-8 h-8"><i class="fa-solid fa-droplet text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
       const bendungIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-brand-yellow w-8 h-8 text-slate-800"><i class="fa-solid fa-water text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
       const bendunganIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-emerald-500 w-8 h-8"><i class="fa-solid fa-water-ladder text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
+      const sedimenIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-orange-500 w-8 h-8"><i class="fa-solid fa-mountain text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] }); // Ikon Baru
 
-      posLayerGroup.clearLayers(); bendungLayerGroup.clearLayers(); bendunganLayerGroup.clearLayers();
+      posLayerGroup.clearLayers(); 
+      bendungLayerGroup.clearLayers(); 
+      bendunganLayerGroup.clearLayers();
+      sedimenLayerGroup.clearLayers(); // Bersihkan layer baru
 
       let htmlPos = '';
       fPos.forEach((row, idx) => {
@@ -371,6 +399,27 @@
         htmlBendungan += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[0]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td></tr>`;
       });
       document.getElementById('tableBendungan').innerHTML = htmlBendungan || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+
+      // Render Pengendali Sedimen (Tabel & Peta)
+      let htmlSedimen = '';
+      fSedimen.forEach((row, idx) => {
+        // Asumsi data: Nama Aset[0], Kecamatan[1], Jenis[2], Kondisi[3], Daya Tampung[4], Latitude[5], Longitude[6]
+        let lat = parseFloat(row[5]), lng = parseFloat(row[6]);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          let marker = L.marker([lat, lng], {icon: sedimenIcon});
+          marker.bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Jenis: ${row[2]}<br>Kondisi: ${row[3]}<br>Daya Tampung: ${row[4]} m³`);
+          sedimenLayerGroup.addLayer(marker);
+        }
+        htmlSedimen += `<tr class="hover:bg-slate-50">
+          <td class="py-2 px-4 text-center">${idx+1}</td>
+          <td class="py-2 px-4 font-bold">${row[0]}</td>
+          <td class="py-2 px-4">${row[1]}</td>
+          <td class="py-2 px-4">${row[2]}</td>
+          <td class="py-2 px-4">${row[3]}</td>
+          <td class="py-2 px-4">${row[4]}</td>
+        </tr>`;
+      });
+      document.getElementById('tableSedimen').innerHTML = htmlSedimen || `<tr><td colspan="6" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
     }
 
     function renderGeojsonBoundary(selectedKab) {
@@ -406,14 +455,18 @@
       }
     }
 
-    function renderChart(jmlPos, jmlBendung, jmlBendungan) {
+    function renderChart(jmlPos, jmlBendung, jmlBendungan, jmlSedimen) {
       const ctx = document.getElementById('infraChart').getContext('2d');
       if (myChart) myChart.destroy();
       myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['Pos Hidrologi', 'Bendung', 'Bendungan'],
-          datasets: [{ data: [jmlPos, jmlBendung, jmlBendungan], backgroundColor: ['#3B82F6', '#FDB813', '#10B981'], borderRadius: 8, borderWidth: 0, barThickness: 60 }]
+          labels: ['Pos Hidrologi', 'Bendung', 'Bendungan', 'Pengendali Sedimen'], // Label baru ditambahkan
+          datasets: [{ 
+            data: [jmlPos, jmlBendung, jmlBendungan, jmlSedimen], 
+            backgroundColor: ['#3B82F6', '#FDB813', '#10B981', '#F97316'], // Warna Orange (Baru)
+            borderRadius: 8, borderWidth: 0, barThickness: 60 
+          }]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
