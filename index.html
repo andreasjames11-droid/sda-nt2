@@ -42,28 +42,16 @@
     #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
 
-    /* Efek Garis Bercahaya Kuning-Biru (Glow Line) */
-    .glow-line-header {
-      position: relative;
-    }
-    .glow-line-header::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -6px;
-      width: 100%;
+    /* Garis Pemisah Bercahaya Kuning-Biru di Bawah Teks Judul */
+    .title-glow-line {
+      display: block;
       height: 3px;
-      background: linear-gradient(90deg, #FDB813, #0E3B68, #3B82F6, #FDB813);
-      background-size: 300% 300%;
-      box-shadow: 0 0 10px rgba(253, 184, 19, 0.8), 0 0 20px rgba(14, 59, 104, 0.6);
-      animation: glowAnimation 4s ease infinite;
+      width: 100%;
+      background: linear-gradient(90deg, #FDB813, #0E3B68);
+      box-shadow: 0 0 8px rgba(253, 184, 19, 0.8), 0 0 4px rgba(14, 59, 104, 0.6);
       border-radius: 2px;
-    }
-
-    @keyframes glowAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      margin-top: 3px;
+      margin-bottom: 4px;
     }
   </style>
 </head>
@@ -98,47 +86,96 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK (8 Kolom / Grid) -->
+    <!-- KARTU STATISTIK (Dengan Garis Bercahaya Kuning-Biru di Bawah Judul) -->
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-8">
+      
+      <!-- 1. Pos Hidrologi -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Pos Hidrologi</p><h3 id="statPos" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pos Hidrologi</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statPos" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 2. Bendung -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-yellow-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Bendung</p><h3 id="statBendung" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendung</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statBendung" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 3. Bendungan -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water-ladder"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Bendungan</p><h3 id="statBendungan" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statBendungan" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 4. Sedimen -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-orange-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-mountain"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Sedimen</p><h3 id="statSedimen" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Sedimen</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statSedimen" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 5. Banjir -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-purple-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-house-flood-water"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Banjir</p><h3 id="statBanjir" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Banjir</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statBanjir" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 6. Pantai -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-teal-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Pantai</p><h3 id="statPantai" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pantai</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statPantai" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 7. Embung -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-bowl-water"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Embung</p><h3 id="statEmbung" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Embung</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statEmbung" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
+      <!-- 8. Sumur Bor -->
       <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-indigo-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-faucet-drip"></i></div>
-        <div><p class="text-xs text-slate-500 font-bold uppercase glow-line-header inline-block mb-1">Sumur Bor</p><h3 id="statSumur" class="text-2xl font-extrabold text-brand-darkblue mt-1">0</h3></div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Sumur Bor</p>
+          <span class="title-glow-line"></span>
+          <h3 id="statSumur" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
       </div>
+
     </div>
 
     <!-- PETA SEBARAN & KONTROL -->
     <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
       <div class="p-6 space-y-4">
         <div class="flex flex-col xl:flex-row justify-between gap-4">
-          <h2 class="text-lg font-bold text-brand-darkblue uppercase"><i class="fa-solid fa-map mr-2 text-brand-blue"></i><span class="glow-line-header pb-1">Peta Sebaran</span></h2>
+          <h2 class="text-lg font-bold text-brand-darkblue uppercase"><i class="fa-solid fa-map mr-2 text-brand-blue"></i>Peta Sebaran</h2>
           
           <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap xl:justify-end">
             <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold w-full md:w-auto">
@@ -164,11 +201,11 @@
     <!-- TABEL DATA -->
     <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
       <div class="p-6">
-        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4"><i class="fa-solid fa-table mr-2 text-brand-blue"></i><span class="glow-line-header pb-1">Rincian Data Aset</span></h2>
+        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4"><i class="fa-solid fa-table mr-2 text-brand-blue"></i>Rincian Data Aset</h2>
 
         <!-- TABS -->
         <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-1">
-          <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-brand-blue text-white">Pos Hidrologi</button>
+          <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-brand-blue text-white">Pos</button>
           <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendung</button>
           <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendungan</button>
           <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sedimen</button>
@@ -214,7 +251,7 @@
     <!-- GRAFIK STATISTIK -->
     <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
       <div class="p-6">
-        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4 border-b pb-2"><i class="fa-solid fa-chart-column mr-2 text-brand-blue"></i><span class="glow-line-header pb-1">Grafik Infrastruktur</span></h2>
+        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4 border-b pb-2"><i class="fa-solid fa-chart-column mr-2 text-brand-blue"></i>Grafik Infrastruktur</h2>
         <div class="relative w-full h-[300px]"><canvas id="infraChart"></canvas></div>
       </div>
     </div>
