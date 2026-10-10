@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard SIG SDA - Kementerian PU</title>
 
-     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,18 +18,7 @@
 
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              blue: '#0E3B68',       
-              darkblue: '#082545',   
-              yellow: '#FDB813',     
-              lightyellow: '#FED154'
-            }
-          }
-        }
-      }
+      theme: { extend: { colors: { brand: { blue: '#0E3B68', darkblue: '#082545', yellow: '#FDB813', lightyellow: '#FED154' } } } }
     }
   </script>
 
@@ -39,522 +26,413 @@
     body {
       background-color: #F8FAFC;
       background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1t7Zv7jB0Tfe6pBm1tFms9bNd9zW0mM8-');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .glass-header { background: linear-gradient(135deg, #082545 0%, #0E3B68 100%); }
     #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #F1F5F9; }
     ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-    
-    .map-marker-icon {
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; color: white;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); border: 2px solid white;
-    }
+    .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
   </style>
 </head>
 <body class="min-h-screen text-slate-800 pb-12 antialiased">
 
   <header data-aos="fade-down" class="glass-header text-white shadow-xl mb-8 border-b-4 border-brand-yellow">
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-      <div class="relative flex-shrink-0">
-        <div class="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center overflow-hidden">
-          <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" onerror="this.style.display='none'" alt="Logo PU" class="w-full h-full object-contain z-10">
-        </div>
+    <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+      <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-white rounded-full p-2">
+        <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" alt="Logo PU" class="w-full h-full object-contain">
       </div>
       <div>
-        <span class="inline-block px-3 py-1 bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/40 rounded-full text-xs font-semibold tracking-wider uppercase mb-1">
-          Kementerian Pekerjaan Umum
-        </span>
-        <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">
-          SISTEM INFORMASI GEOGRAFIS SDA
-        </h1>
-        <p class="text-slate-200 text-sm sm:text-base font-medium mt-1">
-          Dashboard Interaktif: Sebaran Infrastruktur Sumber Daya Air Provinsi NTT
-        </p>
+        <span class="inline-block px-3 py-1 bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/40 rounded-full text-xs font-semibold tracking-wider uppercase mb-1">Kementerian Pekerjaan Umum</span>
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">SISTEM INFORMASI GEOGRAFIS SDA</h1>
+        <p class="text-slate-200 text-sm font-medium mt-1">Dashboard Interaktif Sebaran Infrastruktur Sumber Daya Air Provinsi NTT</p>
       </div>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK (Disesuaikan jadi 5 kolom pada layar besar) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-      <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-droplet"></i></div>
-        <div>
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pos Hidrologi</p>
-          <h3 id="statPos" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
-        </div>
+    <!-- KARTU STATISTIK (8 Kolom / Grid) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-8">
+      <div data-aos="fade-up" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Pos Hidrologi</p><h3 id="statPos" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
       </div>
-      <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-brand-yellow text-brand-darkblue flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water"></i></div>
-        <div>
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendung</p>
-          <h3 id="statBendung" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
-        </div>
+      <div data-aos="fade-up" data-aos-delay="50" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-yellow-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Bendung</p><h3 id="statBendung" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
       </div>
-      <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water-ladder"></i></div>
-        <div>
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
-          <h3 id="statBendungan" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
-        </div>
+      <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water-ladder"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Bendungan</p><h3 id="statBendungan" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
       </div>
-      <div data-aos="fade-up" data-aos-delay="400" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-orange-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-mountain"></i></div>
-        <div>
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pengendali Sedimen</p>
-          <h3 id="statSedimen" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
-        </div>
+      <div data-aos="fade-up" data-aos-delay="150" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-orange-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-mountain"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Sedimen</p><h3 id="statSedimen" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
       </div>
-      <!-- KARTU BARU: PENGENDALI BANJIR -->
-      <div data-aos="fade-up" data-aos-delay="500" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
-        <div class="w-14 h-14 flex-shrink-0 rounded-full bg-purple-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-house-flood-water"></i></div>
-        <div>
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pengendali Banjir</p>
-          <h3 id="statBanjir" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
-        </div>
+      <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-purple-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-house-flood-water"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Banjir</p><h3 id="statBanjir" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
+      </div>
+      <!-- KARTU BARU -->
+      <div data-aos="fade-up" data-aos-delay="250" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-teal-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Pantai</p><h3 id="statPantai" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-bowl-water"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Embung</p><h3 id="statEmbung" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="350" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-indigo-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-faucet-drip"></i></div>
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Sumur Bor</p><h3 id="statSumur" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
       </div>
     </div>
 
     <!-- GRAFIK STATISTIK -->
     <div data-aos="fade-up" class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
-      <div class="p-6 sm:p-10 space-y-6">
-        <div class="flex flex-col sm:flex-row items-center justify-between border-b-2 border-brand-yellow/30 pb-4 gap-4">
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl bg-brand-blue text-white font-bold text-sm flex items-center justify-center shadow"><i class="fa-solid fa-chart-column"></i></span>
-            <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Grafik Statistik Infrastruktur</h2>
-          </div>
-        </div>
-        <div class="relative w-full h-[350px]">
-          <canvas id="infraChart"></canvas>
-        </div>
+      <div class="p-6">
+        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4 border-b pb-2"><i class="fa-solid fa-chart-column mr-2 text-brand-blue"></i>Grafik Infrastruktur</h2>
+        <div class="relative w-full h-[300px]"><canvas id="infraChart"></canvas></div>
       </div>
     </div>
 
     <!-- PETA SEBARAN & KONTROL -->
     <div data-aos="fade-up" class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
-      <div class="p-6 sm:p-10 space-y-6">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between border-b-2 border-brand-yellow/30 pb-4 gap-4">
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-xl bg-brand-blue text-white font-bold text-sm flex items-center justify-center shadow"><i class="fa-solid fa-map"></i></span>
-            <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Peta Sebaran Infrastruktur</h2>
-          </div>
-
-          <!-- KONTROL PETA -->
-          <div class="flex flex-col xl:flex-row items-center gap-3 flex-wrap lg:justify-end">
-            <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2 bg-white border-2 border-brand-yellow/50 rounded-xl text-sm font-bold text-brand-darkblue focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer w-full sm:w-auto">
+      <div class="p-6 space-y-4">
+        <div class="flex flex-col xl:flex-row justify-between gap-4">
+          <h2 class="text-lg font-bold text-brand-darkblue uppercase"><i class="fa-solid fa-map mr-2 text-brand-blue"></i>Peta Sebaran</h2>
+          
+          <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap xl:justify-end">
+            <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold w-full md:w-auto">
               <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
             </select>
             
-            <div class="flex flex-wrap justify-center items-center gap-2">
-              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
-                <input type="checkbox" id="togglePos" checked onchange="toggleLayer('pos')" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                <i class="fa-solid fa-droplet text-blue-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden md:inline">Pos</span>
-              </label>
-              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
-                <input type="checkbox" id="toggleBendung" checked onchange="toggleLayer('bendung')" class="w-4 h-4 text-yellow-500 rounded focus:ring-yellow-500">
-                <i class="fa-solid fa-water text-brand-yellow"></i>
-                <span class="text-xs font-bold text-slate-700 hidden md:inline">Bendung</span>
-              </label>
-              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
-                <input type="checkbox" id="toggleBendungan" checked onchange="toggleLayer('bendungan')" class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500">
-                <i class="fa-solid fa-water-ladder text-emerald-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden md:inline">Bendungan</span>
-              </label>
-              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
-                <input type="checkbox" id="toggleSedimen" checked onchange="toggleLayer('sedimen')" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-500">
-                <i class="fa-solid fa-mountain text-orange-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden md:inline">Sedimen</span>
-              </label>
-              <!-- TOGGLE BARU: PENGENDALI BANJIR -->
-              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
-                <input type="checkbox" id="toggleBanjir" checked onchange="toggleLayer('banjir')" class="w-4 h-4 text-purple-500 rounded focus:ring-purple-500">
-                <i class="fa-solid fa-house-flood-water text-purple-500"></i>
-                <span class="text-xs font-bold text-slate-700 hidden md:inline">Banjir</span>
-              </label>
+            <!-- Toggles (Menggunakan warna background ringan agar rapi) -->
+            <div class="flex flex-wrap gap-2 text-xs font-bold text-slate-700">
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pos')" class="accent-blue-500"><span class="text-blue-500"><i class="fa-solid fa-droplet"></i> Pos</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('bendung')" class="accent-yellow-500"><span class="text-yellow-500"><i class="fa-solid fa-water"></i> Bendung</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('bendungan')" class="accent-emerald-500"><span class="text-emerald-500"><i class="fa-solid fa-water-ladder"></i> Bendungan</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('sedimen')" class="accent-orange-500"><span class="text-orange-500"><i class="fa-solid fa-mountain"></i> Sedimen</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('banjir')" class="accent-purple-500"><span class="text-purple-500"><i class="fa-solid fa-house-flood-water"></i> Banjir</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pantai')" class="accent-teal-500"><span class="text-teal-500"><i class="fa-solid fa-anchor"></i> Pantai</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('embung')" class="accent-pink-500"><span class="text-pink-500"><i class="fa-solid fa-bowl-water"></i> Embung</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('sumur')" class="accent-indigo-500"><span class="text-indigo-500"><i class="fa-solid fa-faucet-drip"></i> Sumur Bor</span></label>
             </div>
           </div>
         </div>
-        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 shadow-inner">
-          <div id="map"></div>
-        </div>
+        <div class="p-2 bg-slate-50 border rounded-xl shadow-inner"><div id="map"></div></div>
       </div>
     </div>
 
     <!-- TABEL DATA -->
     <div data-aos="fade-up" class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
-      <div class="p-6 sm:p-10">
-        <div class="flex items-center gap-3 border-b-2 border-brand-yellow/30 pb-3 mb-6">
-          <span class="w-8 h-8 rounded-xl bg-brand-blue text-white font-bold text-sm flex items-center justify-center shadow"><i class="fa-solid fa-table"></i></span>
-          <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Rincian Data Aset</h2>
+      <div class="p-6">
+        <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4"><i class="fa-solid fa-table mr-2 text-brand-blue"></i>Rincian Data Aset</h2>
+
+        <!-- TABS (Diubah jadi flex-wrap agar tidak berantakan jika banyak) -->
+        <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-1">
+          <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-brand-blue text-white">Pos Hidrologi</button>
+          <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendung</button>
+          <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendungan</button>
+          <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sedimen</button>
+          <button onclick="switchTab('banjirTab')" id="btn-banjirTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Banjir</button>
+          <button onclick="switchTab('pantaiTab')" id="btn-pantaiTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Pantai</button>
+          <button onclick="switchTab('embungTab')" id="btn-embungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Embung</button>
+          <button onclick="switchTab('sumurTab')" id="btn-sumurTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sumur Bor</button>
         </div>
 
-        <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-2">
-          <button onclick="switchTab('posTab')" id="btn-posTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-brand-blue text-white transition">Pos Hidrologi</button>
-          <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendung</button>
-          <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendungan</button>
-          <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Pengendali Sedimen</button>
-          <!-- TAB BARU -->
-          <button onclick="switchTab('banjirTab')" id="btn-banjirTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Pengendali Banjir</button>
-        </div>
+        <!-- Wadah Scroll Horizontal untuk tabel -->
+        <div class="overflow-x-auto max-h-[400px] rounded-xl border border-slate-200">
+          
+          <!-- Tabel Pos -->
+          <div id="posTab" class="tab-content block">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Pos</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis</th><th class="p-3">Status</th></tr></thead><tbody id="tablePos" class="divide-y text-sm"></tbody></table>
+          </div>
+          <!-- Tabel Bendung -->
+          <div id="bendungTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">DAS</th><th class="p-3">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y text-sm"></tbody></table>
+          </div>
+          <!-- Tabel Bendungan -->
+          <div id="bendunganTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Status</th><th class="p-3">Volume (m³)</th></tr></thead><tbody id="tableBendungan" class="divide-y text-sm"></tbody></table>
+          </div>
+          <!-- Tabel Sedimen -->
+          <div id="sedimenTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Jenis</th><th class="p-3">Kondisi</th><th class="p-3">Daya Tampung</th></tr></thead><tbody id="tableSedimen" class="divide-y text-sm"></tbody></table>
+          </div>
+          <!-- Tabel Banjir -->
+          <div id="banjirTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe</th><th class="p-3">Kondisi</th><th class="p-3">Panjang</th></tr></thead><tbody id="tableBanjir" class="divide-y text-sm"></tbody></table>
+          </div>
+          
+          <!-- TABEL BARU: Pantai -->
+          <div id="pantaiTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap">
+              <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
+                <tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr>
+              </thead><tbody id="tablePantai" class="divide-y text-sm bg-white"></tbody>
+            </table>
+          </div>
 
-        <!-- Tabel Konten -->
-        <div id="posTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm block">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
-              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Pos</th><th class="py-3 px-4">Kab/Kota</th><th class="py-3 px-4">Jenis</th><th class="py-3 px-4">Status</th></tr>
-            </thead>
-            <tbody id="tablePos" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
-          </table>
-        </div>
+          <!-- TABEL BARU: Embung -->
+          <div id="embungTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap">
+              <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
+                <tr><th class="p-3">No</th><th class="p-3">Nama Unit</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe Embung</th><th class="p-3">Kondisi</th><th class="p-3">Kapasitas (m³)</th></tr>
+              </thead><tbody id="tableEmbung" class="divide-y text-sm bg-white"></tbody>
+            </table>
+          </div>
 
-        <div id="bendungTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
-              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Aset</th><th class="py-3 px-4">Kab/Kota</th><th class="py-3 px-4">DAS</th><th class="py-3 px-4">Kondisi</th></tr>
-            </thead>
-            <tbody id="tableBendung" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
-          </table>
-        </div>
-
-        <div id="bendunganTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
-              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Bendungan</th><th class="py-3 px-4">Kecamatan</th><th class="py-3 px-4">Status</th><th class="py-3 px-4">Volume (m³)</th></tr>
-            </thead>
-            <tbody id="tableBendungan" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
-          </table>
-        </div>
-
-        <div id="sedimenTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
-              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Aset</th><th class="py-3 px-4">Kecamatan</th><th class="py-3 px-4">Jenis</th><th class="py-3 px-4">Kondisi</th><th class="py-3 px-4">Daya Tampung (m³)</th></tr>
-            </thead>
-            <tbody id="tableSedimen" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
-          </table>
-        </div>
-
-        <!-- TABEL BARU: PENGENDALI BANJIR -->
-        <div id="banjirTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
-          <table class="w-full text-left border-collapse whitespace-nowrap">
-            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
-              <tr>
-                <th class="py-3 px-4 w-12 text-center">No</th>
-                <th class="py-3 px-4">Nama Aset</th>
-                <th class="py-3 px-4">Kab/Kota</th>
-                <th class="py-3 px-4">Tipe Bangunan</th>
-                <th class="py-3 px-4">Kondisi</th>
-                <th class="py-3 px-4">Wilayah Sungai</th>
-                <th class="py-3 px-4">Panjang (m)</th>
-              </tr>
-            </thead>
-            <tbody id="tableBanjir" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
-          </table>
+          <!-- TABEL BARU: Sumur Bor -->
+          <div id="sumurTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap">
+              <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
+                <tr><th class="p-3">No</th><th class="p-3">Nomor Sumur</th><th class="p-3">Desa / Kel</th><th class="p-3">Kab/Kota</th><th class="p-3">Debit (l/dt)</th><th class="p-3">Kedalaman (m)</th><th class="p-3">Fungsi</th></tr>
+              </thead><tbody id="tableSumur" class="divide-y text-sm bg-white"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
-  <div id="loadingModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white p-4 transition-opacity">
-    <div class="w-16 h-16 border-4 border-brand-yellow border-t-transparent rounded-full animate-spin mb-4"></div>
-    <h3 class="text-lg font-bold text-white">Memuat Data GIS...</h3>
-    <p class="text-xs text-slate-300 mt-1">Mengambil data infrastruktur dari server.</p>
+  <div id="loadingModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white p-4">
+    <div class="w-12 h-12 border-4 border-brand-yellow border-t-transparent rounded-full animate-spin mb-4"></div>
+    <h3 class="text-lg font-bold">Memuat Data GIS...</h3><p class="text-xs text-slate-300">Menyinkronkan data infrastruktur dari server.</p>
   </div>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // ==========================================
-    // MASUKKAN URL API GOOGLE APPS SCRIPT ANDA
+    // MASUKKAN URL API GOOGLE APPS SCRIPT ANDA DI SINI
     // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
 
-    let map;
-    let posLayerGroup = L.layerGroup();
-    let bendungLayerGroup = L.layerGroup();
-    let bendunganLayerGroup = L.layerGroup();
-    let sedimenLayerGroup = L.layerGroup(); 
-    let banjirLayerGroup = L.layerGroup(); // Layer Baru
-    let geojsonLayerGroup = L.layerGroup();
-    let myChart = null; 
+    let map, myChart = null;
+    
+    // Layers
+    let layers = {
+      pos: L.layerGroup(), bendung: L.layerGroup(), bendungan: L.layerGroup(),
+      sedimen: L.layerGroup(), banjir: L.layerGroup(),
+      pantai: L.layerGroup(), embung: L.layerGroup(), sumur: L.layerGroup(),
+      geojson: L.layerGroup()
+    };
 
-    let allPosData = [];
-    let allBendungData = [];
-    let allBendunganData = [];
-    let allSedimenData = []; 
-    let allBanjirData = []; // Data Baru
+    let rawData = { pos:[], bendung:[], bendungan:[], sedimen:[], banjir:[], pantai:[], embung:[], sumur:[] };
     let rawGeojsonData = null;
 
-    document.addEventListener("DOMContentLoaded", function() {
-      AOS.init({ duration: 800, once: true, offset: 50 });
-      initMap();
-      fetchDashboardData();
-    });
+    document.addEventListener("DOMContentLoaded", () => { AOS.init({ duration: 800, once: true }); initMap(); fetchDashboardData(); });
 
     function initMap() {
       map = L.map('map').setView([-8.6, 121.0], 7);
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16, attribution: '© Esri, HERE, Garmin, NGA, USGS'
-      }).addTo(map);
-
-      geojsonLayerGroup.addTo(map);
-      posLayerGroup.addTo(map);
-      bendungLayerGroup.addTo(map);
-      bendunganLayerGroup.addTo(map);
-      sedimenLayerGroup.addTo(map); 
-      banjirLayerGroup.addTo(map); // Tambahkan ke map
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16 }).addTo(map);
+      Object.values(layers).forEach(layer => layer.addTo(map));
 
       fetch('https://raw.githubusercontent.com/balaiperumahanntt-ui/petanttgeojson/refs/heads/main/ntt%20geojson.geojson')
-        .then(response => response.json())
-        .then(data => {
-          rawGeojsonData = data;
-          renderGeojsonBoundary("ALL");
-        })
-        .catch(err => console.error("Gagal load GeoJSON NTT", err));
+        .then(res => res.json()).then(data => { rawGeojsonData = data; renderGeojsonBoundary("ALL"); }).catch(err => console.error(err));
     }
 
     function toggleLayer(type) {
-      const isChecked = document.getElementById(`toggle${type.charAt(0).toUpperCase() + type.slice(1)}`).checked;
-      if (type === 'pos') isChecked ? map.addLayer(posLayerGroup) : map.removeLayer(posLayerGroup);
-      if (type === 'bendung') isChecked ? map.addLayer(bendungLayerGroup) : map.removeLayer(bendungLayerGroup);
-      if (type === 'bendungan') isChecked ? map.addLayer(bendunganLayerGroup) : map.removeLayer(bendunganLayerGroup);
-      if (type === 'sedimen') isChecked ? map.addLayer(sedimenLayerGroup) : map.removeLayer(sedimenLayerGroup); 
-      if (type === 'banjir') isChecked ? map.addLayer(banjirLayerGroup) : map.removeLayer(banjirLayerGroup); // Toggle Baru
+      // Toggle logic using map.hasLayer
+      if (map.hasLayer(layers[type])) map.removeLayer(layers[type]);
+      else map.addLayer(layers[type]);
     }
 
     function fetchDashboardData() {
-      fetch(API_URL)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "error") throw new Error(data.message);
-          
-          allPosData = data.posData || [];
-          allBendungData = data.bendungData || [];
-          allBendunganData = data.bendunganData || [];
-          allSedimenData = data.sedimenData || []; 
-          allBanjirData = data.banjirData || []; // Assign Data Baru
-          
-          populateKabupatenDropdown();
-          renderData("ALL"); 
-
-          document.getElementById('loadingModal').classList.add('hidden');
-        })
-        .catch(error => {
-          console.error("Error Fetch:", error);
-          alert("Gagal memuat data dari Spreadsheet (API Error).");
-          document.getElementById('loadingModal').classList.add('hidden');
-        });
+      fetch(API_URL).then(res => res.json()).then(data => {
+        if (data.status === "error") throw new Error(data.message);
+        rawData.pos = data.posData || [];
+        rawData.bendung = data.bendungData || [];
+        rawData.bendungan = data.bendunganData || [];
+        rawData.sedimen = data.sedimenData || []; 
+        rawData.banjir = data.banjirData || [];
+        rawData.pantai = data.pantaiData || [];
+        rawData.embung = data.embungData || [];
+        rawData.sumur = data.sumurData || [];
+        
+        populateKabupatenDropdown();
+        renderData("ALL"); 
+        document.getElementById('loadingModal').classList.add('hidden');
+      }).catch(err => {
+        console.error(err); alert("Gagal memuat data (API Error). Cek Console.");
+        document.getElementById('loadingModal').classList.add('hidden');
+      });
     }
 
     function populateKabupatenDropdown() {
       let kabSet = new Set();
-      allPosData.forEach(row => { if(row[2]) kabSet.add(String(row[2]).trim().toUpperCase()); });
-      allBendungData.forEach(row => { if(row[1]) kabSet.add(String(row[1]).trim().toUpperCase()); });
-      // Menambahkan list kab dari Pengendali Banjir (Index 1 = Kab/Kota)
-      allBanjirData.forEach(row => { if(row[1]) kabSet.add(String(row[1]).trim().toUpperCase()); });
+      // Indeks kolom Kab/Kota dari masing-masing sheet
+      rawData.pos.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
+      rawData.bendung.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
+      rawData.banjir.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
+      rawData.pantai.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
+      rawData.embung.forEach(r => { if(r[17]) kabSet.add(String(r[17]).trim().toUpperCase()); });
+      rawData.sumur.forEach(r => { if(r[5]) kabSet.add(String(r[5]).trim().toUpperCase()); });
       
       let select = document.getElementById('filterKabupaten');
       Array.from(kabSet).sort().forEach(kab => {
-        let opt = document.createElement('option');
-        opt.value = kab;
-        opt.textContent = kab;
-        select.appendChild(opt);
+        let opt = document.createElement('option'); opt.value = kab; opt.textContent = kab; select.appendChild(opt);
       });
     }
 
     function applyFilter() {
       let selectedKab = document.getElementById('filterKabupaten').value;
-      renderData(selectedKab);
-      renderGeojsonBoundary(selectedKab);
+      renderData(selectedKab); renderGeojsonBoundary(selectedKab);
     }
 
-    function renderData(selectedKab) {
-      let fPos = allPosData.filter(row => selectedKab === "ALL" || String(row[2]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[2]).toUpperCase()));
-      let fBendung = allBendungData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[1]).toUpperCase()));
-      let fBendungan = allBendunganData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
-      let fSedimen = allSedimenData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
-      // Filter Banjir (Kab/Kota berada di index 1)
-      let fBanjir = allBanjirData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[1]).toUpperCase()));
+    // Helper untuk cek kabupaten
+    function isMatch(rowKab, selKab) {
+      if(selKab === "ALL") return true;
+      let str = String(rowKab).toUpperCase();
+      return str.includes(selKab) || selKab.includes(str);
+    }
 
+    function renderData(selKab) {
+      // Filtering Data
+      let fPos = rawData.pos.filter(r => isMatch(r[2], selKab));
+      let fBendung = rawData.bendung.filter(r => isMatch(r[1], selKab));
+      let fBendungan = rawData.bendungan.filter(r => isMatch(r[1], selKab)); // Filter by Kec
+      let fSedimen = rawData.sedimen.filter(r => isMatch(r[1], selKab)); // Filter by Kec
+      let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
+      let fPantai = rawData.pantai.filter(r => isMatch(r[2], selKab)); // Kab = 2
+      let fEmbung = rawData.embung.filter(r => isMatch(r[17], selKab)); // Kab = 17
+      let fSumur = rawData.sumur.filter(r => isMatch(r[5], selKab)); // Kab = 5
+
+      // Update Stats
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
       document.getElementById('statBendungan').innerText = fBendungan.length;
       document.getElementById('statSedimen').innerText = fSedimen.length;
-      document.getElementById('statBanjir').innerText = fBanjir.length; // Stat Baru
+      document.getElementById('statBanjir').innerText = fBanjir.length;
+      document.getElementById('statPantai').innerText = fPantai.length;
+      document.getElementById('statEmbung').innerText = fEmbung.length;
+      document.getElementById('statSumur').innerText = fSumur.length;
 
-      renderChart(fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length);
+      renderChart([fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length]);
 
-      const posIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-blue-500 w-8 h-8"><i class="fa-solid fa-droplet text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
-      const bendungIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-brand-yellow w-8 h-8 text-slate-800"><i class="fa-solid fa-water text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
-      const bendunganIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-emerald-500 w-8 h-8"><i class="fa-solid fa-water-ladder text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
-      const sedimenIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-orange-500 w-8 h-8"><i class="fa-solid fa-mountain text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] }); 
-      const banjirIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-purple-500 w-8 h-8"><i class="fa-solid fa-house-flood-water text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] }); // Ikon Baru
+      // Ikon Leaflet
+      const ic = (bg, fa) => L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon ${bg} w-7 h-7"><i class="fa-solid ${fa} text-xs"></i></div>`, iconSize: [28,28], iconAnchor: [14,14] });
+      const iPos = ic('bg-blue-500', 'fa-droplet'), iBend = ic('bg-yellow-500', 'fa-water'), iBndgn = ic('bg-emerald-500', 'fa-water-ladder');
+      const iSed = ic('bg-orange-500', 'fa-mountain'), iBnjr = ic('bg-purple-500', 'fa-house-flood-water');
+      const iPntai = ic('bg-teal-500', 'fa-anchor'), iEmb = ic('bg-pink-500', 'fa-bowl-water'), iSmr = ic('bg-indigo-500', 'fa-faucet-drip');
 
-      posLayerGroup.clearLayers(); 
-      bendungLayerGroup.clearLayers(); 
-      bendunganLayerGroup.clearLayers();
-      sedimenLayerGroup.clearLayers();
-      banjirLayerGroup.clearLayers(); // Bersihkan layer baru
+      // Clear layers
+      Object.keys(layers).forEach(k => { if(k !== 'geojson') layers[k].clearLayers(); });
 
-      let htmlPos = '';
-      fPos.forEach((row, idx) => {
-        let lat = parseFloat(row[5]), lng = parseFloat(row[6]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: posIcon}).bindPopup(`<b>${row[1]}</b><br>Kab/Kota: ${row[2]}<br>Jenis: ${row[3]}<br>Status: ${row[4]}`);
-          posLayerGroup.addLayer(marker);
-        }
-        htmlPos += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td><td class="py-2 px-4"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${row[4]}</span></td></tr>`;
+      // =========================== RENDERING MAP & TABLE ===========================
+      
+      let hPos = '';
+      fPos.forEach((r, i) => {
+        let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.pos.addLayer(L.marker([lat, lng], {icon: iPos}).bindPopup(`<b>${r[1]}</b><br>${r[2]}<br>${r[3]}`));
+        hPos += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[1]}</td><td class="p-3">${r[2]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[4]}</td></tr>`;
       });
-      document.getElementById('tablePos').innerHTML = htmlPos || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
+      document.getElementById('tablePos').innerHTML = hPos;
 
-      let htmlBendung = '';
-      fBendung.forEach((row, idx) => {
-        let lat = parseFloat(row[15]), lng = parseFloat(row[16]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: bendungIcon}).bindPopup(`<b>${row[2]}</b><br>Kab/Kota: ${row[1]}<br>DAS: ${row[6]}<br>Kondisi: ${row[7]}`);
-          bendungLayerGroup.addLayer(marker);
-        }
-        htmlBendung += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[2]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[6]}</td><td class="py-2 px-4">${row[7]}</td></tr>`;
+      let hBendung = '';
+      fBendung.forEach((r, i) => {
+        let lat = parseFloat(r[15]), lng = parseFloat(r[16]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.bendung.addLayer(L.marker([lat, lng], {icon: iBend}).bindPopup(`<b>${r[2]}</b><br>${r[1]}`));
+        hBendung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[2]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[7]}</td></tr>`;
       });
-      document.getElementById('tableBendung').innerHTML = htmlBendung || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
+      document.getElementById('tableBendung').innerHTML = hBendung;
 
-      let htmlBendungan = '';
-      fBendungan.forEach((row, idx) => {
-        let lat = parseFloat(row[4]), lng = parseFloat(row[5]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: bendunganIcon}).bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Volume: ${row[3]} m³<br>Status: ${row[2]}`);
-          bendunganLayerGroup.addLayer(marker);
-        }
-        htmlBendungan += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[0]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td></tr>`;
+      let hBendungan = '';
+      fBendungan.forEach((r, i) => {
+        let lat = parseFloat(r[4]), lng = parseFloat(r[5]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.bendungan.addLayer(L.marker([lat, lng], {icon: iBndgn}).bindPopup(`<b>${r[0]}</b>`));
+        hBendungan += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[2]}</td><td class="p-3">${r[3]}</td></tr>`;
       });
-      document.getElementById('tableBendungan').innerHTML = htmlBendungan || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
+      document.getElementById('tableBendungan').innerHTML = hBendungan;
 
-      let htmlSedimen = '';
-      fSedimen.forEach((row, idx) => {
-        let lat = parseFloat(row[5]), lng = parseFloat(row[6]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-          let marker = L.marker([lat, lng], {icon: sedimenIcon}).bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Jenis: ${row[2]}<br>Kondisi: ${row[3]}<br>Daya Tampung: ${row[4]} m³`);
-          sedimenLayerGroup.addLayer(marker);
-        }
-        htmlSedimen += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[0]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td><td class="py-2 px-4">${row[4]}</td></tr>`;
+      let hSedimen = '';
+      fSedimen.forEach((r, i) => {
+        let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.sedimen.addLayer(L.marker([lat, lng], {icon: iSed}).bindPopup(`<b>${r[0]}</b>`));
+        hSedimen += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[2]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[4]}</td></tr>`;
       });
-      document.getElementById('tableSedimen').innerHTML = htmlSedimen || `<tr><td colspan="6" class="text-center py-4 text-slate-400">Tidak ada data</td></tr>`;
+      document.getElementById('tableSedimen').innerHTML = hSedimen;
 
-      // Render Pengendali Banjir (Tabel & Peta)
-      let htmlBanjir = '';
-      fBanjir.forEach((row, idx) => {
-        /*
-          Asumsi Index Kolom Pengendali Banjir:
-          0: Nama Aset, 1: Kabupaten/Kota, 2: Kecamatan, 3: Kelurahan, 4: Tipe Bangunan, 
-          5: Jenis Bangunan, 6: Kondisi Infrastruktur, 7: Wilayah Sungai, 8: DAS, 9: Kewenangan, 
-          10: Lintas, 11: Tahun Mulai, 12: Tahun Selesai, 13: Panjang Tanggul (m), 
-          14: Latitude, 15: Longitude
-        */
-        let lat = parseFloat(row[14]), lng = parseFloat(row[15]);
-        
-        if (!isNaN(lat) && !isNaN(lng)) {
-          // Popup Peta menampilkan detail yang lebih lengkap
-          let popupContent = `
-            <div style="min-width:200px">
-              <h4 style="margin:0 0 5px 0; color:#0E3B68; font-weight:bold">${row[0]}</h4>
-              <hr style="margin:5px 0">
-              <b>Lokasi:</b> ${row[1]} (Kec. ${row[2]})<br>
-              <b>Tipe:</b> ${row[4]}<br>
-              <b>Kondisi:</b> ${row[6]}<br>
-              <b>Wilayah Sungai:</b> ${row[7]}<br>
-              <b>DAS:</b> ${row[8]}<br>
-              <b>Panjang:</b> ${row[13]} m<br>
-              <b>Tahun Selesai:</b> ${row[12]}
-            </div>
-          `;
-          let marker = L.marker([lat, lng], {icon: banjirIcon}).bindPopup(popupContent);
-          banjirLayerGroup.addLayer(marker);
-        }
-        
-        // Tabel HTML (Menampilkan kolom kunci saja agar rapi)
-        htmlBanjir += `<tr class="hover:bg-slate-50">
-          <td class="py-2 px-4 text-center">${idx+1}</td>
-          <td class="py-2 px-4 font-bold text-brand-darkblue">${row[0]}</td>
-          <td class="py-2 px-4">${row[1]}</td>
-          <td class="py-2 px-4">${row[4]}</td>
-          <td class="py-2 px-4">${row[6]}</td>
-          <td class="py-2 px-4">${row[7]}</td>
-          <td class="py-2 px-4">${row[13] || '-'}</td>
-        </tr>`;
+      let hBanjir = '';
+      fBanjir.forEach((r, i) => {
+        let lat = parseFloat(r[14]), lng = parseFloat(r[15]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.banjir.addLayer(L.marker([lat, lng], {icon: iBnjr}).bindPopup(`<b>${r[0]}</b><br>${r[1]}`));
+        hBanjir += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[4]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[13]}</td></tr>`;
       });
-      document.getElementById('tableBanjir').innerHTML = htmlBanjir || `<tr><td colspan="7" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+      document.getElementById('tableBanjir').innerHTML = hBanjir;
+
+      // 6. Pantai (Lat:12, Lng:13, Nama:1, Kab:2, Jenis:5, Kondisi:6, Panjang:10)
+      let hPantai = '';
+      fPantai.forEach((r, i) => {
+        let lat = parseFloat(r[12]), lng = parseFloat(r[13]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.pantai.addLayer(L.marker([lat, lng], {icon: iPntai}).bindPopup(`<b>${r[1]}</b><br>Kab/Kota: ${r[2]}<br>Panjang: ${r[10]}m`));
+        hPantai += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[1]}</td><td class="p-3">${r[2]}</td><td class="p-3">${r[5]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[10]}</td></tr>`;
+      });
+      document.getElementById('tablePantai').innerHTML = hPantai;
+
+      // 7. Embung (Lat:20, Lng:21, Nama:1, Kab:17, Tipe:22, Kondisi:6, Kapasitas:27)
+      let hEmbung = '';
+      fEmbung.forEach((r, i) => {
+        let lat = parseFloat(r[20]), lng = parseFloat(r[21]);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          let pop = `<b>${r[1]}</b><hr class="my-1">Kab/Kota: ${r[17]}<br>Tipe: ${r[22]}<br>Kapasitas: ${r[27]} m³`;
+          layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(pop));
+        }
+        hEmbung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-pink-700">${r[1]}</td><td class="p-3">${r[17]}</td><td class="p-3">${r[22]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[27]}</td></tr>`;
+      });
+      document.getElementById('tableEmbung').innerHTML = hEmbung;
+
+      // 8. Sumur Bor (Karena X/Y terbalik biasanya, saya asumsikan X=Lng[0], Y=Lat[1]. Nama:2, Desa:3, Kab:5, Debit:6, Dalam:7, Fungsi:10)
+      let hSumur = '';
+      fSumur.forEach((r, i) => {
+        // PERHATIAN: Di sistem GIS X biasanya Longitude, Y biasanya Latitude. Jika terbalik di maps, tukar index 1 dan 0 di bawah ini.
+        let lat = parseFloat(r[1]), lng = parseFloat(r[0]); 
+        if (!isNaN(lat) && !isNaN(lng)) layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[2]}</b><br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
+        hSumur += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-indigo-700">${r[2]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[5]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[7]}</td><td class="p-3">${r[10]}</td></tr>`;
+      });
+      document.getElementById('tableSumur').innerHTML = hSumur;
     }
 
-    function renderGeojsonBoundary(selectedKab) {
+    function renderGeojsonBoundary(selKab) {
       if(!rawGeojsonData) return;
-      geojsonLayerGroup.clearLayers();
-      let boundsToZoom = [];
-
+      layers.geojson.clearLayers();
+      let bounds = [];
       L.geoJson(rawGeojsonData, {
-        style: function(feature) {
-          let namaWilayah = (feature.properties.WADMKK || feature.properties.KABUPATEN || feature.properties.KABKOT || feature.properties.NAME_2 || "").toUpperCase();
-          let isSelected = (selectedKab === "ALL" || namaWilayah.includes(selectedKab) || selectedKab.includes(namaWilayah));
-          
-          if (isSelected) {
-            return { color: '#0E3B68', weight: selectedKab === "ALL" ? 1.5 : 2.5, fillColor: selectedKab === "ALL" ? '#F1F5F9' : '#FDB813', fillOpacity: selectedKab === "ALL" ? 0.3 : 0.25, dashArray: selectedKab === "ALL" ? '3' : '' };
-          } else {
-            return { color: '#CBD5E1', weight: 1, fillColor: '#F8FAFC', fillOpacity: 0.1, dashArray: '4' };
-          }
+        style: (f) => {
+          let nm = (f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT || "").toUpperCase();
+          let c = (selKab === "ALL" || nm.includes(selKab) || selKab.includes(nm));
+          return c ? { color: '#0E3B68', weight: selKab==="ALL"?1:2.5, fillColor: selKab==="ALL"?'#F1F5F9':'#FDB813', fillOpacity: selKab==="ALL"?0.3:0.25 } : { color: '#CBD5E1', weight: 1, fillOpacity: 0.1 };
         },
-        onEachFeature: function(feature, layer) {
-          let namaWilayah = (feature.properties.WADMKK || feature.properties.KABUPATEN || feature.properties.KABKOT || feature.properties.NAME_2 || "").toUpperCase();
-          if (selectedKab !== "ALL" && (namaWilayah.includes(selectedKab) || selectedKab.includes(namaWilayah))) {
-            boundsToZoom.push(layer.getBounds());
-          }
+        onEachFeature: (f, l) => {
+          let nm = (f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT || "").toUpperCase();
+          if (selKab !== "ALL" && (nm.includes(selKab) || selKab.includes(nm))) bounds.push(l.getBounds());
         }
-      }).addTo(geojsonLayerGroup);
-
-      if (selectedKab !== "ALL" && boundsToZoom.length > 0) {
-        let combinedBounds = boundsToZoom[0];
-        for(let i=1; i<boundsToZoom.length; i++) combinedBounds.extend(boundsToZoom[i]);
-        map.fitBounds(combinedBounds, { padding: [30, 30] });
-      } else if (selectedKab === "ALL") {
-        map.setView([-8.6, 121.0], 7);
-      }
+      }).addTo(layers.geojson);
+      
+      if (selKab !== "ALL" && bounds.length > 0) {
+        let b = bounds[0]; for(let i=1; i<bounds.length; i++) b.extend(bounds[i]); map.fitBounds(b, { padding: [30, 30] });
+      } else if (selKab === "ALL") map.setView([-8.6, 121.0], 7);
     }
 
-    function renderChart(jmlPos, jmlBendung, jmlBendungan, jmlSedimen, jmlBanjir) {
-      const ctx = document.getElementById('infraChart').getContext('2d');
-      if (myChart) myChart.destroy();
-      myChart = new Chart(ctx, {
+    function renderChart(dataArr) {
+      if(myChart) myChart.destroy();
+      myChart = new Chart(document.getElementById('infraChart').getContext('2d'), {
         type: 'bar',
         data: {
-          labels: ['Pos Hidrologi', 'Bendung', 'Bendungan', 'Peng. Sedimen', 'Peng. Banjir'], // Label baru
-          datasets: [{ 
-            data: [jmlPos, jmlBendung, jmlBendungan, jmlSedimen, jmlBanjir], 
-            backgroundColor: ['#3B82F6', '#FDB813', '#10B981', '#F97316', '#A855F7'], // Warna Purple untuk Banjir
-            borderRadius: 8, borderWidth: 0, barThickness: 60 
-          }]
+          labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
+          datasets: [{ data: dataArr, backgroundColor: ['#3B82F6', '#FDB813', '#10B981', '#F97316', '#A855F7', '#14B8A6', '#EC4899', '#6366F1'], borderRadius: 6 }]
         },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, grid: { color: '#E2E8F0', drawBorder: false }, ticks: { precision: 0 } },
-            x: { grid: { display: false, drawBorder: false }, ticks: { font: {size: 11} } }
-          }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
       });
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => { el.classList.remove('block'); el.classList.add('hidden'); });
+    function switchTab(tId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.replace('block', 'hidden'));
       document.querySelectorAll('[id^="btn-"]').forEach(btn => { btn.classList.replace('bg-brand-blue', 'bg-slate-100'); btn.classList.replace('text-white', 'text-slate-600'); });
-      document.getElementById(tabId).classList.remove('hidden'); document.getElementById(tabId).classList.add('block');
-      let activeBtn = document.getElementById('btn-' + tabId);
-      activeBtn.classList.replace('bg-slate-100', 'bg-brand-blue'); activeBtn.classList.replace('text-slate-600', 'text-white');
+      document.getElementById(tId).classList.replace('hidden', 'block');
+      document.getElementById('btn-' + tId).classList.replace('bg-slate-100', 'bg-brand-blue');
+      document.getElementById('btn-' + tId).classList.replace('text-slate-600', 'text-white');
     }
   </script>
 </body>
