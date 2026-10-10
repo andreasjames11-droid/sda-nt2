@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -23,21 +22,45 @@
   </script>
 
   <style>
+    /* Efek Animasi Background Bergerak (Panning) */
+    @keyframes moveBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     body {
       background-color: #F8FAFC;
-      /* URL BACKGROUND DIGANTI DI SINI */
-      background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1JMEx-U_1_FCYwtJ5i2R9dYhGY5eHniSL');
-      background-size: cover; 
-      background-position: center; 
+      /* Background menggunakan direct link Google Drive dengan efek gradasi transparan */
+      background-image: linear-gradient(rgba(248, 250, 252, 0.88), rgba(248, 250, 252, 0.88)), url('https://lh3.googleusercontent.com/d/1JMEx-U_1_FCYwtJ5i2R9dYhGY5eHniSL');
+      background-size: 150% 150%; 
       background-attachment: fixed; 
       font-family: 'Plus Jakarta Sans', sans-serif;
+      animation: moveBackground 40s linear infinite;
     }
+    
     .glass-header { background: linear-gradient(135deg, #082545 0%, #0E3B68 100%); }
     #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
   </style>
 </head>
 <body class="min-h-screen text-slate-800 pb-12 antialiased">
+
+  <!-- RUNNING TEXT (PENGUMUMAN BERJALAN) -->
+  <div class="bg-brand-yellow text-brand-darkblue py-2 overflow-hidden whitespace-nowrap shadow-md border-b border-yellow-400 font-bold text-xs sm:text-sm">
+    <div class="inline-block animate-[marquee_25s_linear_infinite] px-4">
+      <i class="fa-solid fa-triangle-exclamation mr-2"></i> PENGUMUMAN: Data Ini Bersifat Sementara Sewaktu-waktu Dapat Berubah — BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
+      <i class="fa-solid fa-triangle-exclamation mr-2"></i> PENGUMUMAN: Data Ini Bersifat Sementara Sewaktu-waktu Dapat Berubah — BBWS NT II
+    </div>
+  </div>
+
+  <!-- CSS Animasi Marquee / Running Text -->
+  <style>
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
 
   <header class="glass-header text-white shadow-xl mb-8 border-b-4 border-brand-yellow">
     <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
@@ -183,7 +206,7 @@
 
   <script>
     // =========================================================================
-    // WAJIB GANTI DENGAN URL API BARU SETELAH DEPLOY ULANG KODE.GS !!!
+    // URL API GOOGLE APPS SCRIPT
     // =========================================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
 
