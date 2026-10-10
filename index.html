@@ -25,8 +25,12 @@
   <style>
     body {
       background-color: #F8FAFC;
-      background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1t7Zv7jB0Tfe6pBm1tFms9bNd9zW0mM8-');
-      background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Plus Jakarta Sans', sans-serif;
+      /* URL BACKGROUND DIGANTI DI SINI */
+      background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1JMEx-U_1_FCYwtJ5i2R9dYhGY5eHniSL');
+      background-size: cover; 
+      background-position: center; 
+      background-attachment: fixed; 
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .glass-header { background: linear-gradient(135deg, #082545 0%, #0E3B68 100%); }
     #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
@@ -151,8 +155,6 @@
           <div id="embungTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Unit</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe Embung</th><th class="p-3">Kondisi</th><th class="p-3">Kapasitas (m³)</th></tr></thead><tbody id="tableEmbung" class="divide-y text-sm"></tbody></table>
           </div>
-          
-          <!-- TABEL SUMUR BOR -->
           <div id="sumurTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -160,7 +162,6 @@
               </thead><tbody id="tableSumur" class="divide-y text-sm bg-white"></tbody>
             </table>
           </div>
-
         </div>
       </div>
     </div>
@@ -184,7 +185,7 @@
     // =========================================================================
     // WAJIB GANTI DENGAN URL API BARU SETELAH DEPLOY ULANG KODE.GS !!!
     // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycby7DirHa-aD_G1-ViYfEhfPixzuzJQgDztC03o-vn9ou5qL67-Tw8rGeHfeXnUCy4I1Pg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
 
     let map, myChart;
     let layers = {
@@ -222,7 +223,7 @@
         rawData.banjir = data.banjirData || [];
         rawData.pantai = data.pantaiData || [];
         rawData.embung = data.embungData || [];
-        rawData.sumur = data.sumurData || []; // Menyimpan Data Sumur Bor
+        rawData.sumur = data.sumurData || [];
         
         populateKabupatenDropdown();
         renderData("ALL"); 
@@ -248,7 +249,7 @@
       rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
       rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
       rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
-      rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); }); // Kab Sumur di index 3
+      rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
       
       let select = document.getElementById('filterKabupaten');
       Array.from(kabSet).filter(k => k !== "").sort().forEach(kab => {
@@ -269,7 +270,7 @@
       let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
       let fPantai = rawData.pantai.filter(r => isMatch(r[1], selKab)); 
       let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
-      let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab)); // Filter Sumur Bor
+      let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab));
 
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
@@ -278,7 +279,7 @@
       document.getElementById('statBanjir').innerText = fBanjir.length;
       document.getElementById('statPantai').innerText = fPantai.length;
       document.getElementById('statEmbung').innerText = fEmbung.length;
-      document.getElementById('statSumur').innerText = fSumur.length; // Stat Sumur Bor
+      document.getElementById('statSumur').innerText = fSumur.length;
 
       const ic = (bg, fa) => L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon ${bg} w-7 h-7"><i class="fa-solid ${fa} text-xs"></i></div>`, iconSize: [28,28], iconAnchor: [14,14] });
       const iPos = ic('bg-blue-500', 'fa-droplet'), iBend = ic('bg-yellow-500', 'fa-water'), iBndgn = ic('bg-emerald-500', 'fa-water-ladder');
@@ -353,15 +354,12 @@
       // ================= DATA SUMUR BOR =================
       let hSumur = '';
       fSumur.forEach((r, i) => {
-        // [4]: Latitude, [5]: Longitude
         let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
         
         if (!isNaN(lat) && !isNaN(lng)) {
-          // Popup Marker Sumur Bor
           layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
         }
         
-        // Baris Tabel Sumur Bor
         hSumur += `<tr>
           <td class="p-3">${i+1}</td>
           <td class="p-3 font-bold text-indigo-700">${r[0] || '-'}</td>
