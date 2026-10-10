@@ -23,11 +23,32 @@
   </script>
 
   <style>
+    <style>
+    /* 1. Tambahkan efek animasi bergerak (Panning) */
+    @keyframes moveBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     body {
       background-color: #F8FAFC;
-      background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1t7Zv7jB0Tfe6pBm1tFms9bNd9zW0mM8-');
-      background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Plus Jakarta Sans', sans-serif;
+      /* 2. Gunakan direct link dari Google Drive Anda */
+      background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1JMEx-U_1_FCYwtJ5i2R9dYhGY5eHniSL');
+      
+      /* 3. Perbesar background lebih dari 100% agar ada ruang untuk bergeser */
+      background-size: 150% 150%; 
+      background-attachment: fixed; 
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      
+      /* 4. Terapkan animasi: bergerak pelan selama 40 detik terus menerus */
+      animation: moveBackground 40s linear infinite;
     }
+    
+    .glass-header { background: linear-gradient(135deg, #082545 0%, #0E3B68 100%); }
+    #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
+    .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
+  </style>
     .glass-header { background: linear-gradient(135deg, #082545 0%, #0E3B68 100%); }
     #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
