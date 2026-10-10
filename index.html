@@ -74,7 +74,6 @@
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-purple-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-house-flood-water"></i></div>
         <div><p class="text-xs text-slate-500 font-bold uppercase">Banjir</p><h3 id="statBanjir" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
       </div>
-      <!-- KARTU BARU -->
       <div data-aos="fade-up" data-aos-delay="250" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-teal-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
         <div><p class="text-xs text-slate-500 font-bold uppercase">Pantai</p><h3 id="statPantai" class="text-2xl font-extrabold text-brand-darkblue">0</h3></div>
@@ -108,7 +107,6 @@
               <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
             </select>
             
-            <!-- Toggles (Menggunakan warna background ringan agar rapi) -->
             <div class="flex flex-wrap gap-2 text-xs font-bold text-slate-700">
               <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pos')" class="accent-blue-500"><span class="text-blue-500"><i class="fa-solid fa-droplet"></i> Pos</span></label>
               <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('bendung')" class="accent-yellow-500"><span class="text-yellow-500"><i class="fa-solid fa-water"></i> Bendung</span></label>
@@ -117,7 +115,7 @@
               <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('banjir')" class="accent-purple-500"><span class="text-purple-500"><i class="fa-solid fa-house-flood-water"></i> Banjir</span></label>
               <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pantai')" class="accent-teal-500"><span class="text-teal-500"><i class="fa-solid fa-anchor"></i> Pantai</span></label>
               <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('embung')" class="accent-pink-500"><span class="text-pink-500"><i class="fa-solid fa-bowl-water"></i> Embung</span></label>
-              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('sumur')" class="accent-indigo-500"><span class="text-indigo-500"><i class="fa-solid fa-faucet-drip"></i> Sumur Bor</span></label>
+              <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('sumur')" class="accent-indigo-500"><span class="text-indigo-500"><i class="fa-solid fa-faucet-drip"></i> Sumur</span></label>
             </div>
           </div>
         </div>
@@ -130,7 +128,7 @@
       <div class="p-6">
         <h2 class="text-lg font-bold text-brand-darkblue uppercase mb-4"><i class="fa-solid fa-table mr-2 text-brand-blue"></i>Rincian Data Aset</h2>
 
-        <!-- TABS (Diubah jadi flex-wrap agar tidak berantakan jika banyak) -->
+        <!-- TABS -->
         <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-1">
           <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-brand-blue text-white">Pos Hidrologi</button>
           <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendung</button>
@@ -142,49 +140,38 @@
           <button onclick="switchTab('sumurTab')" id="btn-sumurTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sumur Bor</button>
         </div>
 
-        <!-- Wadah Scroll Horizontal untuk tabel -->
         <div class="overflow-x-auto max-h-[400px] rounded-xl border border-slate-200">
           
-          <!-- Tabel Pos -->
           <div id="posTab" class="tab-content block">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Pos</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis</th><th class="p-3">Status</th></tr></thead><tbody id="tablePos" class="divide-y text-sm"></tbody></table>
           </div>
-          <!-- Tabel Bendung -->
           <div id="bendungTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">DAS</th><th class="p-3">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y text-sm"></tbody></table>
           </div>
-          <!-- Tabel Bendungan -->
           <div id="bendunganTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Status</th><th class="p-3">Volume (m³)</th></tr></thead><tbody id="tableBendungan" class="divide-y text-sm"></tbody></table>
           </div>
-          <!-- Tabel Sedimen -->
           <div id="sedimenTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Jenis</th><th class="p-3">Kondisi</th><th class="p-3">Daya Tampung</th></tr></thead><tbody id="tableSedimen" class="divide-y text-sm"></tbody></table>
           </div>
-          <!-- Tabel Banjir -->
           <div id="banjirTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe</th><th class="p-3">Kondisi</th><th class="p-3">Panjang</th></tr></thead><tbody id="tableBanjir" class="divide-y text-sm"></tbody></table>
           </div>
-          
-          <!-- TABEL BARU: Pantai -->
           <div id="pantaiTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
-              <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                <tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr>
-              </thead><tbody id="tablePantai" class="divide-y text-sm bg-white"></tbody>
+              <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm bg-white"></tbody>
             </table>
           </div>
 
-          <!-- TABEL BARU: Embung -->
+          <!-- TABEL EMBUNG -->
           <div id="embungTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                <tr><th class="p-3">No</th><th class="p-3">Nama Unit</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe Embung</th><th class="p-3">Kondisi</th><th class="p-3">Kapasitas (m³)</th></tr>
+                <tr><th class="p-3">No</th><th class="p-3">Nama Unit</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe Embung</th><th class="p-3">Kondisi Bangunan</th><th class="p-3">Kapasitas (m³)</th></tr>
               </thead><tbody id="tableEmbung" class="divide-y text-sm bg-white"></tbody>
             </table>
           </div>
 
-          <!-- TABEL BARU: Sumur Bor -->
           <div id="sumurTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -211,7 +198,6 @@
 
     let map, myChart = null;
     
-    // Layers
     let layers = {
       pos: L.layerGroup(), bendung: L.layerGroup(), bendungan: L.layerGroup(),
       sedimen: L.layerGroup(), banjir: L.layerGroup(),
@@ -234,7 +220,6 @@
     }
 
     function toggleLayer(type) {
-      // Toggle logic using map.hasLayer
       if (map.hasLayer(layers[type])) map.removeLayer(layers[type]);
       else map.addLayer(layers[type]);
     }
@@ -262,12 +247,11 @@
 
     function populateKabupatenDropdown() {
       let kabSet = new Set();
-      // Indeks kolom Kab/Kota dari masing-masing sheet
       rawData.pos.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
       rawData.bendung.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
       rawData.banjir.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
       rawData.pantai.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
-      rawData.embung.forEach(r => { if(r[17]) kabSet.add(String(r[17]).trim().toUpperCase()); });
+      rawData.embung.forEach(r => { if(r[18]) kabSet.add(String(r[18]).trim().toUpperCase()); }); // Index 18 Kab/Kota Embung
       rawData.sumur.forEach(r => { if(r[5]) kabSet.add(String(r[5]).trim().toUpperCase()); });
       
       let select = document.getElementById('filterKabupaten');
@@ -281,7 +265,6 @@
       renderData(selectedKab); renderGeojsonBoundary(selectedKab);
     }
 
-    // Helper untuk cek kabupaten
     function isMatch(rowKab, selKab) {
       if(selKab === "ALL") return true;
       let str = String(rowKab).toUpperCase();
@@ -289,17 +272,19 @@
     }
 
     function renderData(selKab) {
-      // Filtering Data
       let fPos = rawData.pos.filter(r => isMatch(r[2], selKab));
       let fBendung = rawData.bendung.filter(r => isMatch(r[1], selKab));
-      let fBendungan = rawData.bendungan.filter(r => isMatch(r[1], selKab)); // Filter by Kec
-      let fSedimen = rawData.sedimen.filter(r => isMatch(r[1], selKab)); // Filter by Kec
+      let fBendungan = rawData.bendungan.filter(r => isMatch(r[1], selKab)); 
+      let fSedimen = rawData.sedimen.filter(r => isMatch(r[1], selKab)); 
       let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
-      let fPantai = rawData.pantai.filter(r => isMatch(r[2], selKab)); // Kab = 2
-      let fEmbung = rawData.embung.filter(r => isMatch(r[17], selKab)); // Kab = 17
-      let fSumur = rawData.sumur.filter(r => isMatch(r[5], selKab)); // Kab = 5
+      let fPantai = rawData.pantai.filter(r => isMatch(r[2], selKab)); 
+      
+      // Index 18 (Kabupaten/Kota) pada Sheet Embung
+      let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
+      
+      // Index 5 (Kabupaten/Kota) pada Sheet Sumur
+      let fSumur = rawData.sumur.filter(r => isMatch(r[5], selKab)); 
 
-      // Update Stats
       document.getElementById('statPos').innerText = fPos.length;
       document.getElementById('statBendung').innerText = fBendung.length;
       document.getElementById('statBendungan').innerText = fBendungan.length;
@@ -311,13 +296,11 @@
 
       renderChart([fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length]);
 
-      // Ikon Leaflet
       const ic = (bg, fa) => L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon ${bg} w-7 h-7"><i class="fa-solid ${fa} text-xs"></i></div>`, iconSize: [28,28], iconAnchor: [14,14] });
       const iPos = ic('bg-blue-500', 'fa-droplet'), iBend = ic('bg-yellow-500', 'fa-water'), iBndgn = ic('bg-emerald-500', 'fa-water-ladder');
       const iSed = ic('bg-orange-500', 'fa-mountain'), iBnjr = ic('bg-purple-500', 'fa-house-flood-water');
       const iPntai = ic('bg-teal-500', 'fa-anchor'), iEmb = ic('bg-pink-500', 'fa-bowl-water'), iSmr = ic('bg-indigo-500', 'fa-faucet-drip');
 
-      // Clear layers
       Object.keys(layers).forEach(k => { if(k !== 'geojson') layers[k].clearLayers(); });
 
       // =========================== RENDERING MAP & TABLE ===========================
@@ -362,7 +345,6 @@
       });
       document.getElementById('tableBanjir').innerHTML = hBanjir;
 
-      // 6. Pantai (Lat:12, Lng:13, Nama:1, Kab:2, Jenis:5, Kondisi:6, Panjang:10)
       let hPantai = '';
       fPantai.forEach((r, i) => {
         let lat = parseFloat(r[12]), lng = parseFloat(r[13]);
@@ -371,24 +353,30 @@
       });
       document.getElementById('tablePantai').innerHTML = hPantai;
 
-      // 7. Embung (Lat:20, Lng:21, Nama:1, Kab:17, Tipe:22, Kondisi:6, Kapasitas:27)
+      // ================= EMBUNG =================
       let hEmbung = '';
       fEmbung.forEach((r, i) => {
-        let lat = parseFloat(r[20]), lng = parseFloat(r[21]);
+        // Index 21: Latitude, Index 22: Longitude
+        let lat = parseFloat(r[21]), lng = parseFloat(r[22]);
+        
         if (!isNaN(lat) && !isNaN(lng)) {
-          let pop = `<b>${r[1]}</b><hr class="my-1">Kab/Kota: ${r[17]}<br>Tipe: ${r[22]}<br>Kapasitas: ${r[27]} m³`;
+          // r[1]: Nama, r[18]: Kab/Kota, r[23]: Type, r[7]: Kondisi Bangunan, r[28]: Kapasitas
+          let pop = `<b>${r[1]}</b><hr class="my-1">Kab/Kota: ${r[18]}<br>Tipe: ${r[23]}<br>Kondisi: ${r[7]}<br>Kapasitas: ${r[28]} m³`;
           layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(pop));
         }
-        hEmbung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-pink-700">${r[1]}</td><td class="p-3">${r[17]}</td><td class="p-3">${r[22]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[27]}</td></tr>`;
+        hEmbung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-pink-700">${r[1]}</td><td class="p-3">${r[18]}</td><td class="p-3">${r[23]}</td><td class="p-3">${r[7]}</td><td class="p-3">${r[28]}</td></tr>`;
       });
       document.getElementById('tableEmbung').innerHTML = hEmbung;
 
-      // 8. Sumur Bor (Karena X/Y terbalik biasanya, saya asumsikan X=Lng[0], Y=Lat[1]. Nama:2, Desa:3, Kab:5, Debit:6, Dalam:7, Fungsi:10)
+      // ================= SUMUR BOR =================
       let hSumur = '';
       fSumur.forEach((r, i) => {
-        // PERHATIAN: Di sistem GIS X biasanya Longitude, Y biasanya Latitude. Jika terbalik di maps, tukar index 1 dan 0 di bawah ini.
+        // Index 0: X (Longitude), Index 1: Y (Latitude)
         let lat = parseFloat(r[1]), lng = parseFloat(r[0]); 
-        if (!isNaN(lat) && !isNaN(lng)) layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[2]}</b><br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
+        if (!isNaN(lat) && !isNaN(lng)) {
+          // r[2]: Nomor, r[7]: Dalam, r[6]: Debit
+          layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[2]}</b><br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
+        }
         hSumur += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-indigo-700">${r[2]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[5]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[7]}</td><td class="p-3">${r[10]}</td></tr>`;
       });
       document.getElementById('tableSumur').innerHTML = hSumur;
