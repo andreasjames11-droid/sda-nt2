@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard SIG SDA - Kementerian PU</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Chart.js (Untuk Grafik Statistik) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- AOS CSS untuk Animasi -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Konfigurasi Tema Warna PU (Biru dan Kuning) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#0E3B68',       
+              darkblue: '#082545',   
+              yellow: '#FDB813',     
+              lightyellow: '#FED154'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F8FAFC;
+      background-image: linear-gradient(rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.85)), url('https://lh3.googleusercontent.com/d/1t7Zv7jB0Tfe6pBm1tFms9bNd9zW0mM8-');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .glass-header { background: linear-gradient(135deg, #082545 0%, #0E3B68 100%); }
+    #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    
+    .map-marker-icon {
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; color: white;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); border: 2px solid white;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-12 antialiased">
+
+  <!-- HEADER -->
+  <header data-aos="fade-down" class="glass-header text-white shadow-xl mb-8 border-b-4 border-brand-yellow">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+      <div class="relative flex-shrink-0">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center overflow-hidden">
+          <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" onerror="this.style.display='none'" alt="Logo PU" class="w-full h-full object-contain z-10">
+        </div>
+      </div>
+      <div>
+        <span class="inline-block px-3 py-1 bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/40 rounded-full text-xs font-semibold tracking-wider uppercase mb-1">
+          Kementerian Pekerjaan Umum
+        </span>
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">
+          SISTEM INFORMASI GEOGRAFIS SDA
+        </h1>
+        <p class="text-slate-200 text-sm sm:text-base font-medium mt-1">
+          Dashboard Interaktif: Sebaran Infrastruktur Sumber Daya Air Provinsi NTT
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6">
+    <!-- KARTU STATISTIK -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-droplet"></i></div>
+        <div>
+          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Pos Hidrologi</p>
+          <h3 id="statPos" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-brand-yellow text-brand-darkblue flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water"></i></div>
+        <div>
+          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Bendung</p>
+          <h3 id="statBendung" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid fa-water-ladder"></i></div>
+        <div>
+          <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
+          <h3 id="statBendungan" class="text-3xl font-extrabold text-brand-darkblue">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAFIK STATISTIK -->
+    <div data-aos="fade-up" class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
+      <div class="p-6 sm:p-10 space-y-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between border-b-2 border-brand-yellow/30 pb-4 gap-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-brand-blue text-white font-bold text-sm flex items-center justify-center shadow"><i class="fa-solid fa-chart-column"></i></span>
+            <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Grafik Statistik Infrastruktur</h2>
+          </div>
+        </div>
+        <div class="relative w-full h-[350px]">
+          <canvas id="infraChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- PETA SEBARAN & KONTROL -->
+    <div data-aos="fade-up" class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
+      <div class="p-6 sm:p-10 space-y-6">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between border-b-2 border-brand-yellow/30 pb-4 gap-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-brand-blue text-white font-bold text-sm flex items-center justify-center shadow"><i class="fa-solid fa-map"></i></span>
+            <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Peta Sebaran Infrastruktur</h2>
+          </div>
+
+          <!-- KONTROL PETA -->
+          <div class="flex flex-col sm:flex-row items-center gap-3 flex-wrap lg:justify-end">
+            <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2 bg-white border-2 border-brand-yellow/50 rounded-xl text-sm font-bold text-brand-darkblue focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer w-full sm:w-auto">
+              <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
+            </select>
+            <div class="flex items-center gap-2">
+              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
+                <input type="checkbox" id="togglePos" checked onchange="toggleLayer('pos')" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                <i class="fa-solid fa-droplet text-blue-500"></i>
+                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Pos Hidrologi</span>
+              </label>
+              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
+                <input type="checkbox" id="toggleBendung" checked onchange="toggleLayer('bendung')" class="w-4 h-4 text-yellow-500 rounded focus:ring-yellow-500">
+                <i class="fa-solid fa-water text-brand-yellow"></i>
+                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Bendung</span>
+              </label>
+              <label class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-100 transition">
+                <input type="checkbox" id="toggleBendungan" checked onchange="toggleLayer('bendungan')" class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500">
+                <i class="fa-solid fa-water-ladder text-emerald-500"></i>
+                <span class="text-xs font-bold text-slate-700 hidden sm:inline">Bendungan</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 shadow-inner">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABEL DATA -->
+    <div data-aos="fade-up" class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
+      <div class="p-6 sm:p-10">
+        <div class="flex items-center gap-3 border-b-2 border-brand-yellow/30 pb-3 mb-6">
+          <span class="w-8 h-8 rounded-xl bg-brand-blue text-white font-bold text-sm flex items-center justify-center shadow"><i class="fa-solid fa-table"></i></span>
+          <h2 class="text-lg font-bold text-brand-darkblue uppercase tracking-wide">Rincian Data Aset</h2>
+        </div>
+
+        <div class="flex border-b border-slate-200 mb-4 gap-2">
+          <button onclick="switchTab('posTab')" id="btn-posTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-brand-blue text-white transition">Pos Hidrologi</button>
+          <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendung</button>
+          <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-4 py-2 font-bold text-sm rounded-t-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Bendungan</button>
+        </div>
+
+        <!-- Tabel Konten -->
+        <div id="posTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm block">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
+              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Pos</th><th class="py-3 px-4">Kab/Kota</th><th class="py-3 px-4">Jenis</th><th class="py-3 px-4">Status</th></tr>
+            </thead>
+            <tbody id="tablePos" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
+          </table>
+        </div>
+
+        <div id="bendungTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
+              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Aset</th><th class="py-3 px-4">Kab/Kota</th><th class="py-3 px-4">DAS</th><th class="py-3 px-4">Kondisi</th></tr>
+            </thead>
+            <tbody id="tableBendung" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
+          </table>
+        </div>
+
+        <div id="bendunganTab" class="tab-content overflow-x-auto max-h-[400px] rounded-xl border border-slate-200 shadow-sm hidden">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-brand-darkblue text-white text-xs uppercase tracking-wide sticky top-0 z-10">
+              <tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4">Nama Bendungan</th><th class="py-3 px-4">Kecamatan</th><th class="py-3 px-4">Status</th><th class="py-3 px-4">Volume (m³)</th></tr>
+            </thead>
+            <tbody id="tableBendungan" class="divide-y divide-slate-200 bg-white text-slate-700 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- LOADING MODAL -->
+  <div id="loadingModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white p-4 transition-opacity">
+    <div class="w-16 h-16 border-4 border-brand-yellow border-t-transparent rounded-full animate-spin mb-4"></div>
+    <h3 class="text-lg font-bold text-white">Memuat Data GIS...</h3>
+    <p class="text-xs text-slate-300 mt-1">Mengambil data infrastruktur dari server.</p>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // ==========================================
+    // BAGIAN PENTING: API URL GOOGLE APPS SCRIPT
+    // ==========================================
+    const API_URL = "MASUKKAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT_ANDA_DISINI";
+
+    let map;
+    let posLayerGroup = L.layerGroup();
+    let bendungLayerGroup = L.layerGroup();
+    let bendunganLayerGroup = L.layerGroup();
+    let geojsonLayerGroup = L.layerGroup();
+    let myChart = null; 
+
+    let allPosData = [];
+    let allBendungData = [];
+    let allBendunganData = [];
+    let rawGeojsonData = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      AOS.init({ duration: 800, once: true, offset: 50 });
+      initMap();
+      fetchDashboardData();
+    });
+
+    function initMap() {
+      map = L.map('map').setView([-8.6, 121.0], 7);
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16, attribution: '© Esri, HERE, Garmin, NGA, USGS'
+      }).addTo(map);
+
+      geojsonLayerGroup.addTo(map);
+      posLayerGroup.addTo(map);
+      bendungLayerGroup.addTo(map);
+      bendunganLayerGroup.addTo(map);
+
+      fetch('https://raw.githubusercontent.com/balaiperumahanntt-ui/petanttgeojson/refs/heads/main/ntt%20geojson.geojson')
+        .then(response => response.json())
+        .then(data => {
+          rawGeojsonData = data;
+          renderGeojsonBoundary("ALL");
+        })
+        .catch(err => console.error("Gagal load GeoJSON NTT", err));
+    }
+
+    function toggleLayer(type) {
+      const isChecked = document.getElementById(`toggle${type.charAt(0).toUpperCase() + type.slice(1)}`).checked;
+      if (type === 'pos') isChecked ? map.addLayer(posLayerGroup) : map.removeLayer(posLayerGroup);
+      if (type === 'bendung') isChecked ? map.addLayer(bendungLayerGroup) : map.removeLayer(bendungLayerGroup);
+      if (type === 'bendungan') isChecked ? map.addLayer(bendunganLayerGroup) : map.removeLayer(bendunganLayerGroup);
+    }
+
+    // ==========================================
+    // FUNGSI PENGAMBILAN DATA (FETCH API)
+    // ==========================================
+    function fetchDashboardData() {
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "error") {
+            throw new Error(data.message);
+          }
+          allPosData = data.posData;
+          allBendungData = data.bendungData;
+          allBendunganData = data.bendunganData;
+          
+          populateKabupatenDropdown();
+          renderData("ALL"); 
+
+          document.getElementById('loadingModal').classList.add('hidden');
+        })
+        .catch(error => {
+          console.error("Error Fetch:", error);
+          alert("Gagal memuat data dari Spreadsheet (API Error). Pastikan URL Web App sudah benar.");
+          document.getElementById('loadingModal').classList.add('hidden');
+        });
+    }
+
+    function populateKabupatenDropdown() {
+      let kabSet = new Set();
+      allPosData.forEach(row => { if(row[2]) kabSet.add(String(row[2]).trim().toUpperCase()); });
+      allBendungData.forEach(row => { if(row[1]) kabSet.add(String(row[1]).trim().toUpperCase()); });
+      
+      let select = document.getElementById('filterKabupaten');
+      Array.from(kabSet).sort().forEach(kab => {
+        let opt = document.createElement('option');
+        opt.value = kab;
+        opt.textContent = kab;
+        select.appendChild(opt);
+      });
+    }
+
+    function applyFilter() {
+      let selectedKab = document.getElementById('filterKabupaten').value;
+      renderData(selectedKab);
+      renderGeojsonBoundary(selectedKab);
+    }
+
+    function renderData(selectedKab) {
+      let fPos = allPosData.filter(row => selectedKab === "ALL" || String(row[2]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[2]).toUpperCase()));
+      let fBendung = allBendungData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab) || selectedKab.includes(String(row[1]).toUpperCase()));
+      let fBendungan = allBendunganData.filter(row => selectedKab === "ALL" || String(row[1]).toUpperCase().includes(selectedKab));
+
+      document.getElementById('statPos').innerText = fPos.length;
+      document.getElementById('statBendung').innerText = fBendung.length;
+      document.getElementById('statBendungan').innerText = fBendungan.length;
+
+      renderChart(fPos.length, fBendung.length, fBendungan.length);
+
+      const posIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-blue-500 w-8 h-8"><i class="fa-solid fa-droplet text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
+      const bendungIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-brand-yellow w-8 h-8 text-slate-800"><i class="fa-solid fa-water text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
+      const bendunganIcon = L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon bg-emerald-500 w-8 h-8"><i class="fa-solid fa-water-ladder text-sm"></i></div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
+
+      posLayerGroup.clearLayers(); bendungLayerGroup.clearLayers(); bendunganLayerGroup.clearLayers();
+
+      let htmlPos = '';
+      fPos.forEach((row, idx) => {
+        let lat = parseFloat(row[5]), lng = parseFloat(row[6]);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          let marker = L.marker([lat, lng], {icon: posIcon});
+          marker.bindPopup(`<b>${row[1]}</b><br>Kab/Kota: ${row[2]}<br>Jenis: ${row[3]}<br>Status: ${row[4]}`);
+          posLayerGroup.addLayer(marker);
+        }
+        htmlPos += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td><td class="py-2 px-4"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${row[4]}</span></td></tr>`;
+      });
+      document.getElementById('tablePos').innerHTML = htmlPos || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+
+      let htmlBendung = '';
+      fBendung.forEach((row, idx) => {
+        let lat = parseFloat(row[15]), lng = parseFloat(row[16]);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          let marker = L.marker([lat, lng], {icon: bendungIcon});
+          marker.bindPopup(`<b>${row[2]}</b><br>Kab/Kota: ${row[1]}<br>DAS: ${row[6]}<br>Kondisi: ${row[7]}`);
+          bendungLayerGroup.addLayer(marker);
+        }
+        htmlBendung += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[2]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[6]}</td><td class="py-2 px-4">${row[7]}</td></tr>`;
+      });
+      document.getElementById('tableBendung').innerHTML = htmlBendung || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+
+      let htmlBendungan = '';
+      fBendungan.forEach((row, idx) => {
+        let lat = parseFloat(row[4]), lng = parseFloat(row[5]);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          let marker = L.marker([lat, lng], {icon: bendunganIcon});
+          marker.bindPopup(`<b>${row[0]}</b><br>Kecamatan: ${row[1]}<br>Volume: ${row[3]} m³<br>Status: ${row[2]}`);
+          bendunganLayerGroup.addLayer(marker);
+        }
+        htmlBendungan += `<tr class="hover:bg-slate-50"><td class="py-2 px-4 text-center">${idx+1}</td><td class="py-2 px-4 font-bold">${row[0]}</td><td class="py-2 px-4">${row[1]}</td><td class="py-2 px-4">${row[2]}</td><td class="py-2 px-4">${row[3]}</td></tr>`;
+      });
+      document.getElementById('tableBendungan').innerHTML = htmlBendungan || `<tr><td colspan="5" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+    }
+
+    function renderGeojsonBoundary(selectedKab) {
+      if(!rawGeojsonData) return;
+      geojsonLayerGroup.clearLayers();
+      let boundsToZoom = [];
+
+      L.geoJson(rawGeojsonData, {
+        style: function(feature) {
+          let namaWilayah = (feature.properties.WADMKK || feature.properties.KABUPATEN || feature.properties.KABKOT || feature.properties.NAME_2 || "").toUpperCase();
+          let isSelected = (selectedKab === "ALL" || namaWilayah.includes(selectedKab) || selectedKab.includes(namaWilayah));
+          
+          if (isSelected) {
+            return { color: '#0E3B68', weight: selectedKab === "ALL" ? 1.5 : 2.5, fillColor: selectedKab === "ALL" ? '#F1F5F9' : '#FDB813', fillOpacity: selectedKab === "ALL" ? 0.3 : 0.25, dashArray: selectedKab === "ALL" ? '3' : '' };
+          } else {
+            return { color: '#CBD5E1', weight: 1, fillColor: '#F8FAFC', fillOpacity: 0.1, dashArray: '4' };
+          }
+        },
+        onEachFeature: function(feature, layer) {
+          let namaWilayah = (feature.properties.WADMKK || feature.properties.KABUPATEN || feature.properties.KABKOT || feature.properties.NAME_2 || "").toUpperCase();
+          if (selectedKab !== "ALL" && (namaWilayah.includes(selectedKab) || selectedKab.includes(namaWilayah))) {
+            boundsToZoom.push(layer.getBounds());
+          }
+        }
+      }).addTo(geojsonLayerGroup);
+
+      if (selectedKab !== "ALL" && boundsToZoom.length > 0) {
+        let combinedBounds = boundsToZoom[0];
+        for(let i=1; i<boundsToZoom.length; i++) combinedBounds.extend(boundsToZoom[i]);
+        map.fitBounds(combinedBounds, { padding: [30, 30] });
+      } else if (selectedKab === "ALL") {
+        map.setView([-8.6, 121.0], 7);
+      }
+    }
+
+    function renderChart(jmlPos, jmlBendung, jmlBendungan) {
+      const ctx = document.getElementById('infraChart').getContext('2d');
+      if (myChart) myChart.destroy();
+      myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Pos Hidrologi', 'Bendung', 'Bendungan'],
+          datasets: [{ data: [jmlPos, jmlBendung, jmlBendungan], backgroundColor: ['#3B82F6', '#FDB813', '#10B981'], borderRadius: 8, borderWidth: 0, barThickness: 60 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: '#E2E8F0', drawBorder: false }, ticks: { precision: 0 } },
+            x: { grid: { display: false, drawBorder: false } }
+          }
+        }
+      });
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => { el.classList.remove('block'); el.classList.add('hidden'); });
+      document.querySelectorAll('[id^="btn-"]').forEach(btn => { btn.classList.replace('bg-brand-blue', 'bg-slate-100'); btn.classList.replace('text-white', 'text-slate-600'); });
+      document.getElementById(tabId).classList.remove('hidden'); document.getElementById(tabId).classList.add('block');
+      let activeBtn = document.getElementById('btn-' + tabId);
+      activeBtn.classList.replace('bg-slate-100', 'bg-brand-blue'); activeBtn.classList.replace('text-slate-600', 'text-white');
+    }
+  </script>
+</body>
+</html>
