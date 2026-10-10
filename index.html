@@ -52,7 +52,6 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK (8 Kolom / Grid) -->
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-8">
       <div data-aos="fade-up" class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
         <div class="w-12 h-12 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
@@ -157,11 +156,14 @@
           <div id="banjirTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe</th><th class="p-3">Kondisi</th><th class="p-3">Panjang</th></tr></thead><tbody id="tableBanjir" class="divide-y text-sm"></tbody></table>
           </div>
+          
+          <!-- TABEL PANTAI (Diupdate Sesuai Urutan Baru) -->
           <div id="pantaiTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm bg-white"></tbody>
             </table>
           </div>
+
           <div id="embungTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -170,7 +172,6 @@
             </table>
           </div>
 
-          <!-- TABEL SUMUR BOR (Diupdate Sesuai Urutan Baru) -->
           <div id="sumurTab" class="tab-content hidden">
             <table class="w-full text-left whitespace-nowrap">
               <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -249,10 +250,11 @@
       rawData.pos.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
       rawData.bendung.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
       rawData.banjir.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
-      rawData.pantai.forEach(r => { if(r[2]) kabSet.add(String(r[2]).trim().toUpperCase()); });
-      rawData.embung.forEach(r => { if(r[18]) kabSet.add(String(r[18]).trim().toUpperCase()); });
       
-      // UPDATE: Index Kab/Kota Sumur Bor sekarang adalah 3
+      // UPDATE: Index Kab/Kota Pantai sekarang adalah 1
+      rawData.pantai.forEach(r => { if(r[1]) kabSet.add(String(r[1]).trim().toUpperCase()); });
+      
+      rawData.embung.forEach(r => { if(r[18]) kabSet.add(String(r[18]).trim().toUpperCase()); });
       rawData.sumur.forEach(r => { if(r[3]) kabSet.add(String(r[3]).trim().toUpperCase()); });
       
       let select = document.getElementById('filterKabupaten');
@@ -278,10 +280,11 @@
       let fBendungan = rawData.bendungan.filter(r => isMatch(r[1], selKab)); 
       let fSedimen = rawData.sedimen.filter(r => isMatch(r[1], selKab)); 
       let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
-      let fPantai = rawData.pantai.filter(r => isMatch(r[2], selKab)); 
-      let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
       
-      // UPDATE: Filter Kab/Kota Sumur Bor menggunakan Index 3
+      // UPDATE: Filter Kab/Kota Pantai menggunakan Index 1
+      let fPantai = rawData.pantai.filter(r => isMatch(r[1], selKab)); 
+      
+      let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
       let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab)); 
 
       document.getElementById('statPos').innerText = fPos.length;
@@ -344,11 +347,19 @@
       });
       document.getElementById('tableBanjir').innerHTML = hBanjir;
 
+      // ================= PANTAI (UPDATE INDEKS BARU) =================
       let hPantai = '';
       fPantai.forEach((r, i) => {
-        let lat = parseFloat(r[12]), lng = parseFloat(r[13]);
-        if (!isNaN(lat) && !isNaN(lng)) layers.pantai.addLayer(L.marker([lat, lng], {icon: iPntai}).bindPopup(`<b>${r[1]}</b><br>Kab/Kota: ${r[2]}<br>Panjang: ${r[10]}m`));
-        hPantai += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[1]}</td><td class="p-3">${r[2]}</td><td class="p-3">${r[5]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[10]}</td></tr>`;
+        // UPDATE: Index 11 = Latitude, Index 12 = Longitude
+        let lat = parseFloat(r[11]), lng = parseFloat(r[12]);
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+          // r[0]: Nama, r[1]: Kab/Kota, r[9]: Panjang
+          layers.pantai.addLayer(L.marker([lat, lng], {icon: iPntai}).bindPopup(`<b>${r[0]}</b><br>Kab/Kota: ${r[1]}<br>Panjang: ${r[9]}m`));
+        }
+        
+        // r[0]: Nama, r[1]: Kab/Kota, r[4]: Jenis, r[5]: Kondisi, r[9]: Panjang
+        hPantai += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-teal-700">${r[0]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[4]}</td><td class="p-3">${r[5]}</td><td class="p-3">${r[9]}</td></tr>`;
       });
       document.getElementById('tablePantai').innerHTML = hPantai;
 
@@ -363,18 +374,12 @@
       });
       document.getElementById('tableEmbung').innerHTML = hEmbung;
 
-      // ================= SUMUR BOR (UPDATE INDEKS BARU) =================
       let hSumur = '';
       fSumur.forEach((r, i) => {
-        // UPDATE: Index 4 = Latitude, Index 5 = Longitude
         let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
-        
         if (!isNaN(lat) && !isNaN(lng)) {
-          // r[0]: Nomor, r[7]: Dalam, r[6]: Debit
           layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0]}</b><br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
         }
-        
-        // r[0]: Nomor Sumur, r[1]: Desa/Kel, r[3]: Kab/Kota, r[6]: Debit, r[7]: Kedalaman, r[10]: Fungsi
         hSumur += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-indigo-700">${r[0]}</td><td class="p-3">${r[1]}</td><td class="p-3">${r[3]}</td><td class="p-3">${r[6]}</td><td class="p-3">${r[7]}</td><td class="p-3">${r[10]}</td></tr>`;
       });
       document.getElementById('tableSumur').innerHTML = hSumur;
