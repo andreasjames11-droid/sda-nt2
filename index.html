@@ -173,7 +173,7 @@
     // =========================================================================
     // WAJIB GANTI: MASUKKAN URL API GOOGLE APPS SCRIPT ANDA DI SINI
     // =========================================================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbyJOWP5g2zehuOPgJhZzYGpgSzJb1Kd_MfAaX1yeR9EAY2fgxVPp3SyLfkIEDY5SQpMRg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
 
     let map;
     let layers = {
@@ -202,6 +202,8 @@
 
     function fetchDashboardData() {
       fetch(API_URL).then(res => res.json()).then(data => {
+        console.log("Data loaded from API:", Object.keys(data)); // Log keys of loaded data
+
         if (data.status === "error") throw new Error(data.message);
         
         rawData.pos = data.posData || [];
@@ -211,7 +213,10 @@
         rawData.banjir = data.banjirData || [];
         rawData.pantai = data.pantaiData || [];
         rawData.embung = data.embungData || [];
-        rawData.sumur = data.sumurData || []; // Array Data Sumur Bor
+        
+        // Ensure sumurData is retrieved, even if it's undefined in the API response, default to empty array
+        rawData.sumur = data.sumurData || []; 
+        console.log("Sumur Bor Data:", rawData.sumur); // Check if data is populated
         
         populateKabupatenDropdown();
         renderData("ALL"); 
@@ -237,6 +242,7 @@
       rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
       rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
       rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
+      
       // Sumur Bor: Kab/Kota ada di Index 3
       rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
       
@@ -367,6 +373,12 @@
           <td class="p-3">${r[11] || '-'}</td>
         </tr>`;
       });
+      
+      // If table is empty, show a message
+      if (hSumur === '') {
+        hSumur = `<tr><td colspan="8" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+      }
+      
       document.getElementById('tableSumur').innerHTML = hSumur;
     }
 
