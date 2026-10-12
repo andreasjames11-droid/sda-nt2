@@ -118,7 +118,7 @@
         <p class="text-sm sm:text-base font-medium text-cyan-100">Selamat datang BALAI BESAR WILAYAH SUNGAI NUSA TENGGARA II</p>
       </div>
 
-      <!-- KARTU TOTAL KESELURUHAN INFRASTRUKTUR -->
+      <!-- TOTAL KESELURUHAN -->
       <div class="neon-total rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl text-yellow-300">
@@ -172,7 +172,7 @@
         </div>
       </div>
 
-      <!-- KOTAK PETA GIS & KONTROL FILTER -->
+      <!-- PETA GIS -->
       <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
         <div class="p-6 space-y-4">
           <div class="flex flex-col xl:flex-row justify-between gap-4">
@@ -233,21 +233,12 @@
               </table>
             </div>
 
-            <!-- TABEL PENGENDALI SEDIMEN: Nama Aset | Kabupaten | Kecamatan | Jenis | Kondisi | Daya Tampung (m³) -->
+            <!-- SEDIMEN -->
             <div id="sedimenTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                  <tr>
-                    <th class="p-3">No</th>
-                    <th class="p-3">Nama Aset</th>
-                    <th class="p-3">Kabupaten</th>
-                    <th class="p-3">Kecamatan</th>
-                    <th class="p-3">Jenis</th>
-                    <th class="p-3">Kondisi</th>
-                    <th class="p-3">Daya Tampung (m³)</th>
-                  </tr>
-                </thead>
-                <tbody id="tableSedimen" class="divide-y text-sm bg-white"></tbody>
+                  <tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kabupaten</th><th class="p-3">Kecamatan</th><th class="p-3">Jenis</th><th class="p-3">Kondisi</th><th class="p-3">Daya Tampung (m³)</th></tr>
+                </thead><tbody id="tableSedimen" class="divide-y text-sm bg-white"></tbody>
               </table>
             </div>
 
@@ -257,13 +248,44 @@
             <div id="pantaiTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm"></tbody></table>
             </div>
+            
+            <!-- EMBUNG: Nama Embung | Kabupaten | Kecamatan | Kelurahan | Status Operasi | Kondisi Infrastruktur | Th. Selesai | Kapasitas (m3) | Irigasi (Ha) -->
             <div id="embungTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Unit</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe Embung</th><th class="p-3">Kondisi</th><th class="p-3">Kapasitas (m³)</th></tr></thead><tbody id="tableEmbung" class="divide-y text-sm"></tbody></table>
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
+                  <tr>
+                    <th class="p-3">No</th>
+                    <th class="p-3">Nama Embung</th>
+                    <th class="p-3">Kabupaten</th>
+                    <th class="p-3">Kecamatan</th>
+                    <th class="p-3">Kelurahan</th>
+                    <th class="p-3">Status Operasi</th>
+                    <th class="p-3">Kondisi</th>
+                    <th class="p-3">Th. Selesai</th>
+                    <th class="p-3">Kapasitas (m³)</th>
+                    <th class="p-3">Irigasi (Ha)</th>
+                  </tr>
+                </thead><tbody id="tableEmbung" class="divide-y text-sm bg-white"></tbody>
+              </table>
             </div>
+
+            <!-- SUMUR BOR: Nomor Sumur | Desa/Kel | Kec | Kab/Kota | Debit (l/dt) | Kedalaman (m) | SWL (m) | Tahun Bor | Fungsi | Status -->
             <div id="sumurTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                  <tr><th class="p-3">No</th><th class="p-3">Nomor Sumur</th><th class="p-3">Desa / Kel</th><th class="p-3">Kecamatan</th><th class="p-3">Kab/Kota</th><th class="p-3">Debit (l/dt)</th><th class="p-3">Kedalaman (m)</th><th class="p-3">Fungsi</th><th class="p-3">Status</th></tr>
+                  <tr>
+                    <th class="p-3">No</th>
+                    <th class="p-3">Nomor Sumur</th>
+                    <th class="p-3">Desa/Kel</th>
+                    <th class="p-3">Kecamatan</th>
+                    <th class="p-3">Kab/Kota</th>
+                    <th class="p-3">Debit (l/dt)</th>
+                    <th class="p-3">Kedalaman (m)</th>
+                    <th class="p-3">SWL (m)</th>
+                    <th class="p-3">Tahun Bor</th>
+                    <th class="p-3">Fungsi</th>
+                    <th class="p-3">Status</th>
+                  </tr>
                 </thead><tbody id="tableSumur" class="divide-y text-sm bg-white"></tbody>
               </table>
             </div>
@@ -368,11 +390,12 @@
         if(Array.isArray(rawData.pos)) rawData.pos.forEach(r => { if(r[2]) kabSet.add(safeString(r[2])); });
         if(Array.isArray(rawData.bendung)) rawData.bendung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.bendungan)) rawData.bendungan.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        // Pengendali Sedimen: Kabupaten ada di indeks ke-1
         if(Array.isArray(rawData.sedimen)) rawData.sedimen.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.banjir)) rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
+        // Embung: Kabupaten ada di indeks ke-1
+        if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+        // Sumur Bor: Kabupaten ada di indeks ke-3
         if(Array.isArray(rawData.sumur)) rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
       } catch(e) { console.error("Error populating dropdown", e); }
       
@@ -392,11 +415,12 @@
         let fPos = Array.isArray(rawData.pos) ? rawData.pos.filter(r => isMatch(r[2], selKab)) : [];
         let fBendung = Array.isArray(rawData.bendung) ? rawData.bendung.filter(r => isMatch(r[1], selKab)) : [];
         let fBendungan = Array.isArray(rawData.bendungan) ? rawData.bendungan.filter(r => isMatch(r[1], selKab)) : []; 
-        // Filter Pengendali Sedimen menggunakan Kabupaten pada indeks ke-1
         let fSedimen = Array.isArray(rawData.sedimen) ? rawData.sedimen.filter(r => isMatch(r[1], selKab)) : []; 
         let fBanjir = Array.isArray(rawData.banjir) ? rawData.banjir.filter(r => isMatch(r[1], selKab)) : [];
         let fPantai = Array.isArray(rawData.pantai) ? rawData.pantai.filter(r => isMatch(r[1], selKab)) : []; 
-        let fEmbung = Array.isArray(rawData.embung) ? rawData.embung.filter(r => isMatch(r[18], selKab)) : []; 
+        // Filter Embung menggunakan Kabupaten pada indeks ke-1
+        let fEmbung = Array.isArray(rawData.embung) ? rawData.embung.filter(r => isMatch(r[1], selKab)) : []; 
+        // Filter Sumur Bor menggunakan Kabupaten pada indeks ke-3
         let fSumur = Array.isArray(rawData.sumur) ? rawData.sumur.filter(r => isMatch(r[3], selKab)) : [];
 
         let totalAll = fPos.length + fBendung.length + fBendungan.length + fSedimen.length + fBanjir.length + fPantai.length + fEmbung.length + fSumur.length;
@@ -451,8 +475,6 @@
         });
         document.getElementById('tableBendungan').innerHTML = hBendungan;
 
-        // Render Tabel & Marker Pengendali Sedimen Sesuai Urutan Baru:
-        // [0] Nama Aset, [1] Kabupaten, [2] Kecamatan, [3] Jenis, [4] Kondisi, [5] Daya Tampung, [6] Latitude, [7] Longitude
         let hSedimen = '';
         fSedimen.forEach((r, i) => {
           let lat = parseFloat(r[6]), lng = parseFloat(r[7]);
@@ -487,23 +509,52 @@
         });
         document.getElementById('tablePantai').innerHTML = hPantai;
 
+        // Render Embung Sesuai Urutan Kolom Baru:
+        // [0] Nama Embung, [1] Kabupaten, [2] Kecamatan, [3] Kelurahan, [4] Status Operasi, [5] Kondisi Infrastruktur, [6] Th. Selesai, [7] Kapasitas (m3), [8] Irigasi (Ha), [9] Latitude, [10] Longitude
         let hEmbung = '';
         fEmbung.forEach((r, i) => {
-          let lat = parseFloat(r[21]), lng = parseFloat(r[22]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(`<b>${r[1]}</b><br>Tipe: ${r[23]}`));
-          hEmbung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-pink-700">${r[1]||'-'}</td><td class="p-3">${r[18]||'-'}</td><td class="p-3">${r[23]||'-'}</td><td class="p-3">${r[7]||'-'}</td><td class="p-3">${r[28]||'-'}</td></tr>`;
+          let lat = parseFloat(r[9]), lng = parseFloat(r[10]);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(`<b>${r[0] || 'Embung'}</b><br>Kab: ${r[1]}<br>Kapasitas: ${r[7]} m³`));
+          }
+          hEmbung += `<tr>
+            <td class="p-3">${i+1}</td>
+            <td class="p-3 font-bold text-pink-700">${r[0] || '-'}</td>
+            <td class="p-3">${r[1] || '-'}</td>
+            <td class="p-3">${r[2] || '-'}</td>
+            <td class="p-3">${r[3] || '-'}</td>
+            <td class="p-3">${r[4] || '-'}</td>
+            <td class="p-3">${r[5] || '-'}</td>
+            <td class="p-3">${r[6] || '-'}</td>
+            <td class="p-3">${r[7] || '-'}</td>
+            <td class="p-3">${r[8] || '-'}</td>
+          </tr>`;
         });
         document.getElementById('tableEmbung').innerHTML = hEmbung;
 
+        // Render Sumur Bor Sesuai Urutan Kolom Baru:
+        // [0] Nomor Sumur, [1] Desa/Kel, [2] Kec, [3] Kab/Kota, [4] Latitude, [5] Longitude, [6] Debit, [7] Kedalaman, [8] SWL, [9] Tahun Bor, [10] Fungsi, [11] Status
         let hSumur = '';
         fSumur.forEach((r, i) => {
           let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
           if (!isNaN(lat) && !isNaN(lng)) {
-            layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
+            layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur Bor'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
           }
-          hSumur += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-indigo-700">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[2]||'-'}</td><td class="p-3">${r[3]||'-'}</td><td class="p-3">${r[6]||'-'}</td><td class="p-3">${r[7]||'-'}</td><td class="p-3">${r[10]||'-'}</td><td class="p-3">${r[11]||'-'}</td></tr>`;
+          hSumur += `<tr>
+            <td class="p-3">${i+1}</td>
+            <td class="p-3 font-bold text-indigo-700">${r[0] || '-'}</td>
+            <td class="p-3">${r[1] || '-'}</td>
+            <td class="p-3">${r[2] || '-'}</td>
+            <td class="p-3">${r[3] || '-'}</td>
+            <td class="p-3">${r[6] || '-'}</td>
+            <td class="p-3">${r[7] || '-'}</td>
+            <td class="p-3">${r[8] || '-'}</td>
+            <td class="p-3">${r[9] || '-'}</td>
+            <td class="p-3">${r[10] || '-'}</td>
+            <td class="p-3">${r[11] || '-'}</td>
+          </tr>`;
         });
-        if (hSumur === '') hSumur = `<tr><td colspan="9" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
+        if (hSumur === '') hSumur = `<tr><td colspan="11" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
         document.getElementById('tableSumur').innerHTML = hSumur;
 
         let chartData = [fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length];
