@@ -247,7 +247,6 @@
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm"></tbody></table>
             </div>
             
-            <!-- TABEL EMBUNG SESUAI URUTAN: Nama Embung | Kabupaten | Kecamatan | Kelurahan | Status Operasi | Kondisi Infrastruktur | Th. Selesai | Kapasitas (m3) | Irigasi (Ha) -->
             <div id="embungTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -267,7 +266,6 @@
               </table>
             </div>
 
-            <!-- TABEL SUMUR BOR SESUAI URUTAN: Nomor Sumur | Desa/Kel | Kec | Kab/Kota | Latitude | Longitude | Debit (l/dt) | Kedalaman (m) | SWL (m) | Tahun Bor | Fungsi | Status -->
             <div id="sumurTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -391,9 +389,7 @@
         if(Array.isArray(rawData.sedimen)) rawData.sedimen.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.banjir)) rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        // Embung: Kabupaten ada di indeks ke-1
         if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        // Sumur Bor: Kabupaten ada di indeks ke-3
         if(Array.isArray(rawData.sumur)) rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
       } catch(e) { console.error("Error populating dropdown", e); }
       
@@ -439,7 +435,7 @@
         Object.keys(layers).forEach(k => { if(k !== 'geojson') layers[k].clearLayers(); });
 
         let hPos = '';
-        fPos.forEach((r, i) => {
+        fPos.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
           if (!isNaN(lat) && !isNaN(lng)) layers.pos.addLayer(L.marker([lat, lng], {icon: iPos}).bindPopup(`<b>${r[1]}</b><br>${r[2]}<br>${r[3]}`));
           hPos += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[1]||'-'}</td><td class="p-3">${r[2]||'-'}</td><td class="p-3">${r[3]||'-'}</td><td class="p-3">${r[4]||'-'}</td></tr>`;
@@ -447,7 +443,7 @@
         document.getElementById('tablePos').innerHTML = hPos;
 
         let hBendung = '';
-        fBendung.forEach((r, i) => {
+        fBendung.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[15]), lng = parseFloat(r[16]);
           if (!isNaN(lat) && !isNaN(lng)) layers.bendung.addLayer(L.marker([lat, lng], {icon: iBend}).bindPopup(`<b>${r[2]}</b><br>${r[1]}`));
           hBendung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[2]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[6]||'-'}</td><td class="p-3">${r[7]||'-'}</td></tr>`;
@@ -455,7 +451,7 @@
         document.getElementById('tableBendung').innerHTML = hBendung;
 
         let hBendungan = '';
-        fBendungan.forEach((r, i) => {
+        fBendungan.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
           if (!isNaN(lat) && !isNaN(lng)) {
             layers.bendungan.addLayer(L.marker([lat, lng], {icon: iBndgn}).bindPopup(`<b>${r[0] || 'Bendungan'}</b><br>Kab: ${r[1]}<br>Status: ${r[3]}`));
@@ -472,7 +468,7 @@
         document.getElementById('tableBendungan').innerHTML = hBendungan;
 
         let hSedimen = '';
-        fSedimen.forEach((r, i) => {
+        fSedimen.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[6]), lng = parseFloat(r[7]);
           if (!isNaN(lat) && !isNaN(lng)) {
             layers.sedimen.addLayer(L.marker([lat, lng], {icon: iSed}).bindPopup(`<b>${r[0] || 'Sedimen'}</b><br>Kab: ${r[1]}<br>Jenis: ${r[3]}`));
@@ -490,7 +486,7 @@
         document.getElementById('tableSedimen').innerHTML = hSedimen;
 
         let hBanjir = '';
-        fBanjir.forEach((r, i) => {
+        fBanjir.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[14]), lng = parseFloat(r[15]);
           if (!isNaN(lat) && !isNaN(lng)) layers.banjir.addLayer(L.marker([lat, lng], {icon: iBnjr}).bindPopup(`<b>${r[0]}</b><br>${r[1]}`));
           hBanjir += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[4]||'-'}</td><td class="p-3">${r[6]||'-'}</td><td class="p-3">${r[13]||'-'}</td></tr>`;
@@ -498,17 +494,16 @@
         document.getElementById('tableBanjir').innerHTML = hBanjir;
 
         let hPantai = '';
-        fPantai.forEach((r, i) => {
+        fPantai.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[11]), lng = parseFloat(r[12]);
           if (!isNaN(lat) && !isNaN(lng)) layers.pantai.addLayer(L.marker([lat, lng], {icon: iPntai}).bindPopup(`<b>${r[0]}</b><br>Kab/Kota: ${r[1]}<br>Panjang: ${r[9]}m`));
           hPantai += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-teal-700">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[4]||'-'}</td><td class="p-3">${r[5]||'-'}</td><td class="p-3">${r[9]||'-'}</td></tr>`;
         });
         document.getElementById('tablePantai').innerHTML = hPantai;
 
-        // Render Embung Sesuai Urutan Baru (Latitude index 9, Longitude index 10):
-        // [0] Nama Embung, [1] Kabupaten, [2] Kecamatan, [3] Kelurahan, [4] Status Operasi, [5] Kondisi Infrastruktur, [6] Th. Selesai, [7] Kapasitas (m3), [8] Irigasi (Ha), [9] Latitude, [10] Longitude
+        // Render Embung (Optimasi slice 150 baris pertama untuk meringankan DOM browser)
         let hEmbung = '';
-        fEmbung.forEach((r, i) => {
+        fEmbung.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[9]), lng = parseFloat(r[10]);
           if (!isNaN(lat) && !isNaN(lng)) {
             layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(`<b>${r[0] || 'Embung'}</b><br>Kab: ${r[1]}<br>Kapasitas: ${r[7]} m³`));
@@ -528,10 +523,8 @@
         });
         document.getElementById('tableEmbung').innerHTML = hEmbung;
 
-        // Render Sumur Bor Sesuai Urutan Baru (Latitude index 4, Longitude index 5):
-        // [0] Nomor Sumur, [1] Desa/Kel, [2] Kec, [3] Kab/Kota, [4] Latitude, [5] Longitude, [6] Debit, [7] Kedalaman, [8] SWL, [9] Tahun Bor, [10] Fungsi, [11] Status
         let hSumur = '';
-        fSumur.forEach((r, i) => {
+        fSumur.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
           if (!isNaN(lat) && !isNaN(lng)) {
             layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur Bor'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
@@ -572,41 +565,4 @@
             labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
             datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2 }]
           },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
-        });
-      } catch(err) {
-        console.error("Terjadi kesalahan saat memproses data render:", err);
-      }
-    }
-
-    function renderGeojsonBoundary(selKab) {
-      if(!rawGeojsonData) return;
-      layers.geojson.clearLayers();
-      let bounds = [];
-      L.geoJson(rawGeojsonData, {
-        style: (f) => {
-          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
-          let c = (selKab === "ALL" || nm.includes(selKab) || selKab.includes(nm));
-          return c ? { color: '#0E3B68', weight: selKab==="ALL"?1:2.5, fillColor: selKab === "ALL"?'#F1F5F9':'#FDB813', fillOpacity: selKab==="ALL"?0.3:0.25 } : { color: '#CBD5E1', weight: 1, fillOpacity: 0.1 };
-        },
-        onEachFeature: (f, l) => {
-          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
-          if (selKab !== "ALL" && (nm.includes(selKab) || selKab.includes(nm))) bounds.push(l.getBounds());
-        }
-      }).addTo(layers.geojson);
-      
-      if (selKab !== "ALL" && bounds.length > 0) {
-        let b = bounds[0]; for(let i=1; i<bounds.length; i++) b.extend(bounds[i]); map.fitBounds(b, { padding: [30, 30] });
-      } else if (selKab === "ALL") map.setView([-8.6, 121.0], 7);
-    }
-
-    function switchTab(tId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.replace('block', 'hidden'));
-      document.querySelectorAll('[id^="btn-"]').forEach(btn => { btn.classList.replace('bg-blue-600', 'bg-slate-100'); btn.classList.replace('text-white', 'text-slate-600'); });
-      document.getElementById(tId).classList.replace('hidden', 'block');
-      document.getElementById('btn-' + tId).classList.replace('bg-slate-100', 'bg-blue-600');
-      document.getElementById('btn-' + tId).classList.replace('text-slate-600', 'text-white');
-    }
-  </script>
-</body>
-</html>
+          options: { responsive: true, maintainAspectRatio: false
