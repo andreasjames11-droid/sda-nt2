@@ -87,7 +87,7 @@
   <!-- LAYOUT UTAMA (SIDEBAR + KONTEN) -->
   <div class="flex flex-1 overflow-hidden">
     
-    <!-- SIDEBAR KIRI -->
+    <!-- SIDEBAR KIRI (Disesuaikan dengan Referensi Gambar)[cite: 7] -->
     <aside class="w-64 bg-white border-r border-slate-200 hidden lg:flex flex-col overflow-y-auto">
       <div class="p-4 border-b border-slate-100 flex items-center gap-3">
         <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" alt="Logo PU" class="w-10 h-10 object-contain">
@@ -98,19 +98,25 @@
       </div>
 
       <nav class="p-3 space-y-1 text-xs font-semibold text-slate-600">
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold"><i class="fa-solid fa-house text-sm"></i> Home</a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 hover:text-slate-900 transition"><i class="fa-solid fa-chart-pie text-sm"></i> Dashboard Rekap Verifikasi</a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold"><i class="fa-solid fa-house text-sm"></i> Home[cite: 7]</a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 hover:text-slate-900 transition"><i class="fa-solid fa-chart-pie text-sm"></i> Dashboard Rekap Verifikasi[cite: 7]</a>
         
-        <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Data Infrastruktur</div>
-        <a href="#" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-droplet text-blue-500 mr-2"></i> Sumber Daya Air</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-water text-yellow-500 mr-2"></i> Hidrologi (SIHKA)</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-faucet text-indigo-500 mr-2"></i> Air Baku (SIATAB)</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-map text-emerald-500 mr-2"></i> SISDA</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Data Infrastruktur[cite: 7]</div>
         
-        <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Manajemen</div>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition"><i class="fa-solid fa-database text-sm"></i> Data Master</a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition"><i class="fa-solid fa-folder-open text-sm"></i> Media Aset</a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition"><i class="fa-solid fa-circle-info text-sm"></i> About</a>
+        <!-- List Data Infrastruktur Sesuai Permintaan -->
+        <a href="#tablePos" onclick="switchTab('posTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-droplet text-blue-500 mr-2"></i> Pos Hidrologi</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tableBendung" onclick="switchTab('bendungTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-water text-yellow-500 mr-2"></i> Bendung</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tableBendungan" onclick="switchTab('bendunganTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-water-ladder text-emerald-500 mr-2"></i> Bendungan</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tableSedimen" onclick="switchTab('sedimenTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-mountain text-orange-500 mr-2"></i> Sedimen</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tableBanjir" onclick="switchTab('banjirTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-house-flood-water text-purple-500 mr-2"></i> Banjir</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tablePantai" onclick="switchTab('pantaiTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-anchor text-teal-500 mr-2"></i> Pantai</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tableEmbung" onclick="switchTab('embungTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-bowl-water text-pink-500 mr-2"></i> Embung</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        <a href="#tableSumur" onclick="switchTab('sumurTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-faucet-drip text-indigo-500 mr-2"></i> Sumur Bor</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
+        
+        <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Manajemen[cite: 7]</div>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition"><i class="fa-solid fa-database text-sm"></i> Data Master[cite: 7]</a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition"><i class="fa-solid fa-folder-open text-sm"></i> Media Aset[cite: 7]</a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition"><i class="fa-solid fa-circle-info text-sm"></i> About[cite: 7]</a>
       </nav>
     </aside>
 
@@ -195,7 +201,7 @@
 
           <!-- TABS NAVIGATION -->
           <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-1">
-            <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-blue-600 text-white">Pos</button>
+            <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-blue-600 text-white">Pos Hidrologi</button>
             <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendung</button>
             <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendungan</button>
             <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sedimen</button>
@@ -245,6 +251,11 @@
           <div class="relative w-full h-[300px]"><canvas id="infraChart"></canvas></div>
         </div>
       </div>
+
+      <!-- FOOTER / CREATED BY -->
+      <footer class="text-center py-6 text-xs text-slate-500 font-semibold border-t border-slate-200 mt-12">
+        Created by : James Andreas Bate
+      </footer>
 
     </main>
   </div>
