@@ -118,7 +118,7 @@
         <p class="text-sm sm:text-base font-medium text-cyan-100">Selamat datang BALAI BESAR WILAYAH SUNGAI NUSA TENGGARA II</p>
       </div>
 
-      <!-- TOTAL KESELURUHAN -->
+      <!-- KARTU TOTAL KESELURUHAN -->
       <div class="neon-total rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl text-yellow-300">
@@ -172,7 +172,7 @@
         </div>
       </div>
 
-      <!-- PETA GIS -->
+      <!-- KOTAK PETA GIS & KONTROL FILTER -->
       <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
         <div class="p-6 space-y-4">
           <div class="flex flex-col xl:flex-row justify-between gap-4">
@@ -224,7 +224,6 @@
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">DAS</th><th class="p-3">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y text-sm"></tbody></table>
             </div>
             
-            <!-- BENDUNGAN -->
             <div id="bendunganTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -233,7 +232,6 @@
               </table>
             </div>
 
-            <!-- SEDIMEN -->
             <div id="sedimenTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -249,7 +247,7 @@
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm"></tbody></table>
             </div>
             
-            <!-- EMBUNG: Nama Embung | Kabupaten | Kecamatan | Kelurahan | Status Operasi | Kondisi Infrastruktur | Th. Selesai | Kapasitas (m3) | Irigasi (Ha) -->
+            <!-- TABEL EMBUNG SESUAI URUTAN BARU: Nama Embung | Kabupaten | Kecamatan | Kelurahan | Status Operasi | Kondisi Infrastruktur | Th. Selesai | Kapasitas (m3) | Irigasi (Ha) -->
             <div id="embungTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -262,14 +260,14 @@
                     <th class="p-3">Status Operasi</th>
                     <th class="p-3">Kondisi</th>
                     <th class="p-3">Th. Selesai</th>
-                    <th class="p-3">Kapasitas (m³)</th>
+                    <th class="p-3">Kapasitas (m3)</th>
                     <th class="p-3">Irigasi (Ha)</th>
                   </tr>
                 </thead><tbody id="tableEmbung" class="divide-y text-sm bg-white"></tbody>
               </table>
             </div>
 
-            <!-- SUMUR BOR: Nomor Sumur | Desa/Kel | Kec | Kab/Kota | Debit (l/dt) | Kedalaman (m) | SWL (m) | Tahun Bor | Fungsi | Status -->
+            <!-- TABEL SUMUR BOR SESUAI URUTAN BARU: Nomor Sumur | Desa/Kel | Kec | Kab/Kota | Debit (l/dt) | Kedalaman (m) | SWL (m) | Tahun Bor | Fungsi | Status -->
             <div id="sumurTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -509,7 +507,7 @@
         });
         document.getElementById('tablePantai').innerHTML = hPantai;
 
-        // Render Embung Sesuai Urutan Kolom Baru:
+        // Render Embung Sesuai Urutan Baru:
         // [0] Nama Embung, [1] Kabupaten, [2] Kecamatan, [3] Kelurahan, [4] Status Operasi, [5] Kondisi Infrastruktur, [6] Th. Selesai, [7] Kapasitas (m3), [8] Irigasi (Ha), [9] Latitude, [10] Longitude
         let hEmbung = '';
         fEmbung.forEach((r, i) => {
@@ -532,7 +530,7 @@
         });
         document.getElementById('tableEmbung').innerHTML = hEmbung;
 
-        // Render Sumur Bor Sesuai Urutan Kolom Baru:
+        // Render Sumur Bor Sesuai Urutan Baru:
         // [0] Nomor Sumur, [1] Desa/Kel, [2] Kec, [3] Kab/Kota, [4] Latitude, [5] Longitude, [6] Debit, [7] Kedalaman, [8] SWL, [9] Tahun Bor, [10] Fungsi, [11] Status
         let hSumur = '';
         fSumur.forEach((r, i) => {
@@ -554,7 +552,6 @@
             <td class="p-3">${r[11] || '-'}</td>
           </tr>`;
         });
-        if (hSumur === '') hSumur = `<tr><td colspan="11" class="text-center py-4 text-slate-400">Tidak ada data untuk daerah ini</td></tr>`;
         document.getElementById('tableSumur').innerHTML = hSumur;
 
         let chartData = [fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length];
