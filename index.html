@@ -316,7 +316,7 @@
   </div>
 
   <script>
-    // Waktu Berjalan Realtime (Tanggal & Jam)
+    // Waktu Berjalan Realtime
     setInterval(() => {
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -351,26 +351,29 @@
     }
 
     function fetchDashboardData() {
-      fetch(API_URL).then(res => res.json()).then(data => {
-        if (data.status === "error") throw new Error(data.message);
-        
-        rawData.pos = data.posData || [];
-        rawData.bendung = data.bendungData || [];
-        rawData.bendungan = data.bendunganData || [];
-        rawData.sedimen = data.sedimenData || []; 
-        rawData.banjir = data.banjirData || [];
-        rawData.pantai = data.pantaiData || [];
-        rawData.embung = data.embungData || [];
-        rawData.sumur = data.sumurData || [];
-        
-        populateKabupatenDropdown();
-        renderData("ALL"); 
-        document.getElementById('loadingModal').classList.add('hidden');
-      }).catch(err => {
-        console.error(err); 
-        alert("Gagal memuat data. Kemungkinan KODE.GS belum di-Deploy ulang sebagai versi baru.");
-        document.getElementById('loadingModal').classList.add('hidden');
-      });
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "error") throw new Error(data.message);
+          
+          rawData.pos = data.posData || [];
+          rawData.bendung = data.bendungData || [];
+          rawData.bendungan = data.bendunganData || [];
+          rawData.sedimen = data.sedimenData || []; 
+          rawData.banjir = data.banjirData || [];
+          rawData.pantai = data.pantaiData || [];
+          rawData.embung = data.embungData || [];
+          rawData.sumur = data.sumurData || [];
+          
+          populateKabupatenDropdown();
+          renderData("ALL"); 
+          document.getElementById('loadingModal').classList.add('hidden');
+        })
+        .catch(err => {
+          console.error("Gagal fetch data:", err);
+          // Paksa tutup modal loading agar halaman tetap terbuka meskipun server lambat
+          document.getElementById('loadingModal').classList.add('hidden');
+        });
     }
 
     function safeString(val) { return (val || "").toString().trim().toUpperCase(); }
@@ -501,7 +504,6 @@
         });
         document.getElementById('tablePantai').innerHTML = hPantai;
 
-        // Render Embung (Optimasi slice 150 baris pertama untuk meringankan DOM browser)
         let hEmbung = '';
         fEmbung.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[9]), lng = parseFloat(r[10]);
@@ -565,4 +567,41 @@
             labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
             datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2 }]
           },
-          options: { responsive: true, maintainAspectRatio: false
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
+        });
+      } catch(err) {
+        console.error("Terjadi kesalahan saat memproses data render:", err);
+      }
+    }
+
+    function renderGeojsonBoundary(selKab) {
+      if(!rawGeojsonData) return;
+      layers.geojson.clearLayers();
+      let bounds = [];
+      L.geoJson(rawGeojsonData, {
+        style: (f) => {
+          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
+          let c = (selKab === "ALL" || nm.includes(selKab) || selKab.includes(nm));
+          return c ? { color: '#0E3B68', weight: selKab==="ALL"?1:2.5, fillColor: selKab === "ALL"?'#F1F5F9':'#FDB813', fillOpacity: selKab==="ALL"?0.3:0.25 } : { color: '#CBD5E1', weight: 1, fillOpacity: 0.1 };
+        },
+        onEachFeature: (f, l) => {
+          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
+          if (selKab !== "ALL" && (nm.includes(selKab) || selKab.includes(nm))) bounds.push(l.getBounds());
+        }
+      }).addTo(layers.geojson);
+      
+      if (selKab !== "ALL" && bounds.length > 0) {
+        let b = bounds[0]; for(let i=1; i<bounds.length; i++) b.extend(bounds[i]); map.fitBounds(b, { padding: [30, 30] });
+      } else if (selKab === "ALL") map.setView([-8.6, 121.0], 7);
+    }
+
+    function switchTab(tId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.replace('block', 'hidden'));
+      document.querySelectorAll('[id^="btn-"]').forEach(btn => { btn.classList.replace('bg-blue-600', 'bg-slate-100'); btn.classList.replace('text-white', 'text-slate-600'); });
+      document.getElementById(tId).classList.replace('hidden', 'block');
+      document.getElementById('btn-' + tId).classList.replace('bg-slate-100', 'bg-blue-600');
+      document.getElementById('btn-' + tId).classList.replace('text-slate-600', 'text-white');
+    }
+  </script>
+</body>
+</html>
