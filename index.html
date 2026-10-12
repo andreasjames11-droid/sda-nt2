@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard SIG SDA - BBWS Nusa Tenggara II</title>
+  <title>Dashboard SIG SDA - Kementerian PU</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
@@ -22,14 +22,26 @@
   </script>
 
   <style>
-    body {
-      background-color: #F1F5F9;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+    /* Efek Animasi Background Bergerak (Panning) */
+    @keyframes moveBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
+
+    body {
+      background-color: #F8FAFC;
+      background-image: linear-gradient(rgba(248, 250, 252, 0.88), rgba(248, 250, 252, 0.88)), url('https://lh3.googleusercontent.com/d/1t7Zv7jB0Tfe6pBm1tFms9bNd9zW0mM8-');
+      background-size: 150% 150%; 
+      background-attachment: fixed; 
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      animation: moveBackground 40s linear infinite;
+    }
+    
     #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
     
-    /* Neon & Gradient Cards */
+    /* Kartu Full Gradient dengan Efek Neon Glow */
     .neon-card-1 { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3); }
     .neon-card-2 { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); box-shadow: 0 4px 15px rgba(245, 175, 25, 0.3); }
     .neon-card-3 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3); }
@@ -40,11 +52,6 @@
     .neon-card-8 { background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%); box-shadow: 0 4px 15px rgba(142, 84, 233, 0.3); }
 
     .title-glow-line { display: block; height: 3px; width: 100%; background: linear-gradient(90deg, #FDB813, #ffffff); border-radius: 2px; margin-top: 3px; margin-bottom: 4px; }
-    
-    /* Custom Scrollbar untuk Sidebar */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #f1f1f1; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
 </head>
 <body class="min-h-screen text-slate-800 antialiased flex flex-col">
@@ -153,12 +160,6 @@
         </div>
       </div>
 
-      <!-- BANNER 2: PETA ASET KETAHANAN PANGAN -->
-      <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl p-8 text-white shadow-lg text-center flex flex-col justify-center items-center">
-        <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight uppercase mb-2">Peta Aset Ketahanan Pangan</h2>
-        <p class="text-xs sm:text-sm font-medium text-cyan-100">Visualisasi rekap aset hidrologi dan ketahanan pangan berbasis GIS</p>
-      </div>
-
       <!-- KOTAK PETA GIS & KONTROL FILTER -->
       <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
         <div class="p-6 space-y-4">
@@ -255,7 +256,6 @@
   </div>
 
   <script>
-    // Jam Real-time di Header
     setInterval(() => {
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
