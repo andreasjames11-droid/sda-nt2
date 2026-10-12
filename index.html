@@ -105,7 +105,7 @@
     <!-- KONTEN UTAMA KANAN -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
       
-      <!-- BANNER UTAMA DASHBOARD DENGAN TANGGAL & WAKTU BERJALAN -->
+      <!-- BANNER UTAMA DASHBOARD -->
       <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden flex flex-col justify-center items-center text-center">
         <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl"><i class="fa-solid fa-water"></i></div>
         
@@ -224,26 +224,33 @@
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">DAS</th><th class="p-3">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y text-sm"></tbody></table>
             </div>
             
-            <!-- TABEL BENDUNGAN DENGAN URUTAN KOLOM BARU: Nama, Kabupaten, Kecamatan, Status, Volume -->
+            <!-- BENDUNGAN -->
             <div id="bendunganTab" class="tab-content hidden">
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
+                  <tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kabupaten</th><th class="p-3">Kecamatan</th><th class="p-3">Status</th><th class="p-3">Volume (m³)</th></tr>
+                </thead><tbody id="tableBendungan" class="divide-y text-sm bg-white"></tbody>
+              </table>
+            </div>
+
+            <!-- TABEL PENGENDALI SEDIMEN: Nama Aset | Kabupaten | Kecamatan | Jenis | Kondisi | Daya Tampung (m³) -->
+            <div id="sedimenTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
                   <tr>
                     <th class="p-3">No</th>
-                    <th class="p-3">Nama</th>
+                    <th class="p-3">Nama Aset</th>
                     <th class="p-3">Kabupaten</th>
                     <th class="p-3">Kecamatan</th>
-                    <th class="p-3">Status</th>
-                    <th class="p-3">Volume (m³)</th>
+                    <th class="p-3">Jenis</th>
+                    <th class="p-3">Kondisi</th>
+                    <th class="p-3">Daya Tampung (m³)</th>
                   </tr>
                 </thead>
-                <tbody id="tableBendungan" class="divide-y text-sm bg-white"></tbody>
+                <tbody id="tableSedimen" class="divide-y text-sm bg-white"></tbody>
               </table>
             </div>
 
-            <div id="sedimenTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Jenis</th><th class="p-3">Kondisi</th><th class="p-3">Daya Tampung</th></tr></thead><tbody id="tableSedimen" class="divide-y text-sm"></tbody></table>
-            </div>
             <div id="banjirTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe</th><th class="p-3">Kondisi</th><th class="p-3">Panjang</th></tr></thead><tbody id="tableBanjir" class="divide-y text-sm"></tbody></table>
             </div>
@@ -360,8 +367,9 @@
       try {
         if(Array.isArray(rawData.pos)) rawData.pos.forEach(r => { if(r[2]) kabSet.add(safeString(r[2])); });
         if(Array.isArray(rawData.bendung)) rawData.bendung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        // Bendungan: Kabupaten ada di indeks ke-1
         if(Array.isArray(rawData.bendungan)) rawData.bendungan.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+        // Pengendali Sedimen: Kabupaten ada di indeks ke-1
+        if(Array.isArray(rawData.sedimen)) rawData.sedimen.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.banjir)) rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
@@ -383,8 +391,8 @@
       try {
         let fPos = Array.isArray(rawData.pos) ? rawData.pos.filter(r => isMatch(r[2], selKab)) : [];
         let fBendung = Array.isArray(rawData.bendung) ? rawData.bendung.filter(r => isMatch(r[1], selKab)) : [];
-        // Filter Bendungan menggunakan Kabupaten pada indeks ke-1
         let fBendungan = Array.isArray(rawData.bendungan) ? rawData.bendungan.filter(r => isMatch(r[1], selKab)) : []; 
+        // Filter Pengendali Sedimen menggunakan Kabupaten pada indeks ke-1
         let fSedimen = Array.isArray(rawData.sedimen) ? rawData.sedimen.filter(r => isMatch(r[1], selKab)) : []; 
         let fBanjir = Array.isArray(rawData.banjir) ? rawData.banjir.filter(r => isMatch(r[1], selKab)) : [];
         let fPantai = Array.isArray(rawData.pantai) ? rawData.pantai.filter(r => isMatch(r[1], selKab)) : []; 
@@ -426,8 +434,6 @@
         });
         document.getElementById('tableBendung').innerHTML = hBendung;
 
-        // Render Tabel & Marker Bendungan Sesuai Urutan Kolom Baru:
-        // [0] Nama, [1] Kabupaten, [2] Kecamatan, [3] Status, [4] Volume, [5] Latitude, [6] Longitude
         let hBendungan = '';
         fBendungan.forEach((r, i) => {
           let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
@@ -445,11 +451,23 @@
         });
         document.getElementById('tableBendungan').innerHTML = hBendungan;
 
+        // Render Tabel & Marker Pengendali Sedimen Sesuai Urutan Baru:
+        // [0] Nama Aset, [1] Kabupaten, [2] Kecamatan, [3] Jenis, [4] Kondisi, [5] Daya Tampung, [6] Latitude, [7] Longitude
         let hSedimen = '';
         fSedimen.forEach((r, i) => {
-          let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.sedimen.addLayer(L.marker([lat, lng], {icon: iSed}).bindPopup(`<b>${r[0]}</b>`));
-          hSedimen += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[2]||'-'}</td><td class="p-3">${r[3]||'-'}</td><td class="p-3">${r[4]||'-'}</td></tr>`;
+          let lat = parseFloat(r[6]), lng = parseFloat(r[7]);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            layers.sedimen.addLayer(L.marker([lat, lng], {icon: iSed}).bindPopup(`<b>${r[0] || 'Sedimen'}</b><br>Kab: ${r[1]}<br>Jenis: ${r[3]}`));
+          }
+          hSedimen += `<tr>
+            <td class="p-3">${i+1}</td>
+            <td class="p-3 font-bold text-orange-700">${r[0] || '-'}</td>
+            <td class="p-3">${r[1] || '-'}</td>
+            <td class="p-3">${r[2] || '-'}</td>
+            <td class="p-3">${r[3] || '-'}</td>
+            <td class="p-3">${r[4] || '-'}</td>
+            <td class="p-3">${r[5] || '-'}</td>
+          </tr>`;
         });
         document.getElementById('tableSedimen').innerHTML = hSedimen;
 
