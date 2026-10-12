@@ -22,7 +22,6 @@
   </script>
 
   <style>
-    /* Efek Animasi Background Bergerak (Panning) */
     @keyframes moveBackground {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -41,7 +40,6 @@
     #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
     
-    /* Animasi Neon Bergerak */
     @keyframes neonPulse {
       0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2); }
       50% { box-shadow: 0 0 25px rgba(253, 184, 19, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.4); }
@@ -111,7 +109,6 @@
       <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden flex flex-col justify-center items-center text-center">
         <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl"><i class="fa-solid fa-water"></i></div>
         
-        <!-- Indikator Waktu Berjalan Realtime -->
         <div class="mb-3 inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold tracking-wide text-white border border-white/30 shadow-sm">
           <i class="fa-regular fa-clock text-yellow-300"></i>
           <span id="realTimeClock">Memuat Waktu...</span>
@@ -139,7 +136,7 @@
         </div>
       </div>
 
-      <!-- KARTU STATISTIK (8 KATEGORI DENGAN SIMBOL LENGKAP) -->
+      <!-- KARTU STATISTIK (8 KATEGORI) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 text-white">
         <div class="neon-card-1 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
           <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
@@ -165,7 +162,6 @@
           <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
           <div class="flex-1 min-w-0"><p class="text-xs text-teal-100 font-bold uppercase tracking-wide">Pantai</p><span class="title-glow-line"></span><h3 id="statPantai" class="text-2xl font-extrabold text-white">0</h3></div>
         </div>
-        <!-- KARTU EMBUNG DENGAN SIMBOL / IKON -->
         <div class="neon-card-7 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
           <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-bowl-water"></i></div>
           <div class="flex-1 min-w-0"><p class="text-xs text-pink-100 font-bold uppercase tracking-wide">Embung</p><span class="title-glow-line"></span><h3 id="statEmbung" class="text-2xl font-extrabold text-white">0</h3></div>
@@ -187,7 +183,6 @@
                 <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
               </select>
               
-              <!-- Layer Toggles -->
               <div class="flex flex-wrap gap-2 text-xs font-bold text-slate-700">
                 <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pos')"><span class="text-blue-600">Pos</span></label>
                 <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('bendung')"><span class="text-yellow-600">Bendung</span></label>
@@ -228,9 +223,24 @@
             <div id="bendungTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">DAS</th><th class="p-3">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y text-sm"></tbody></table>
             </div>
+            
+            <!-- TABEL BENDUNGAN DENGAN URUTAN KOLOM BARU: Nama, Kabupaten, Kecamatan, Status, Volume -->
             <div id="bendunganTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Status</th><th class="p-3">Volume (m³)</th></tr></thead><tbody id="tableBendungan" class="divide-y text-sm"></tbody></table>
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
+                  <tr>
+                    <th class="p-3">No</th>
+                    <th class="p-3">Nama</th>
+                    <th class="p-3">Kabupaten</th>
+                    <th class="p-3">Kecamatan</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Volume (m³)</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBendungan" class="divide-y text-sm bg-white"></tbody>
+              </table>
             </div>
+
             <div id="sedimenTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kecamatan</th><th class="p-3">Jenis</th><th class="p-3">Kondisi</th><th class="p-3">Daya Tampung</th></tr></thead><tbody id="tableSedimen" class="divide-y text-sm"></tbody></table>
             </div>
@@ -350,6 +360,8 @@
       try {
         if(Array.isArray(rawData.pos)) rawData.pos.forEach(r => { if(r[2]) kabSet.add(safeString(r[2])); });
         if(Array.isArray(rawData.bendung)) rawData.bendung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+        // Bendungan: Kabupaten ada di indeks ke-1
+        if(Array.isArray(rawData.bendungan)) rawData.bendungan.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.banjir)) rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
@@ -371,6 +383,7 @@
       try {
         let fPos = Array.isArray(rawData.pos) ? rawData.pos.filter(r => isMatch(r[2], selKab)) : [];
         let fBendung = Array.isArray(rawData.bendung) ? rawData.bendung.filter(r => isMatch(r[1], selKab)) : [];
+        // Filter Bendungan menggunakan Kabupaten pada indeks ke-1
         let fBendungan = Array.isArray(rawData.bendungan) ? rawData.bendungan.filter(r => isMatch(r[1], selKab)) : []; 
         let fSedimen = Array.isArray(rawData.sedimen) ? rawData.sedimen.filter(r => isMatch(r[1], selKab)) : []; 
         let fBanjir = Array.isArray(rawData.banjir) ? rawData.banjir.filter(r => isMatch(r[1], selKab)) : [];
@@ -413,11 +426,22 @@
         });
         document.getElementById('tableBendung').innerHTML = hBendung;
 
+        // Render Tabel & Marker Bendungan Sesuai Urutan Kolom Baru:
+        // [0] Nama, [1] Kabupaten, [2] Kecamatan, [3] Status, [4] Volume, [5] Latitude, [6] Longitude
         let hBendungan = '';
         fBendungan.forEach((r, i) => {
-          let lat = parseFloat(r[4]), lng = parseFloat(r[5]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.bendungan.addLayer(L.marker([lat, lng], {icon: iBndgn}).bindPopup(`<b>${r[0]}</b>`));
-          hBendungan += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[2]||'-'}</td><td class="p-3">${r[3]||'-'}</td></tr>`;
+          let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            layers.bendungan.addLayer(L.marker([lat, lng], {icon: iBndgn}).bindPopup(`<b>${r[0] || 'Bendungan'}</b><br>Kab: ${r[1]}<br>Status: ${r[3]}`));
+          }
+          hBendungan += `<tr>
+            <td class="p-3">${i+1}</td>
+            <td class="p-3 font-bold text-emerald-700">${r[0] || '-'}</td>
+            <td class="p-3">${r[1] || '-'}</td>
+            <td class="p-3">${r[2] || '-'}</td>
+            <td class="p-3">${r[3] || '-'}</td>
+            <td class="p-3">${r[4] || '-'}</td>
+          </tr>`;
         });
         document.getElementById('tableBendungan').innerHTML = hBendungan;
 
