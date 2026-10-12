@@ -46,6 +46,21 @@
       100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2); }
     }
 
+    /* Efek Neon Box Bergerak untuk Banner Utama */
+    @keyframes bannerNeonGlow {
+      0% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.6), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(253, 184, 19, 0.9), inset 0 0 25px rgba(255, 255, 255, 0.5); border-color: rgba(253, 184, 19, 1); }
+      100% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.6), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.4); }
+    }
+
+    .banner-neon-box {
+      background: linear-gradient(rgba(11, 30, 61, 0.78), rgba(30, 96, 145, 0.82)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      border: 2px solid rgba(253, 184, 19, 0.6);
+      animation: bannerNeonGlow 4s infinite ease-in-out;
+    }
+
     .neon-total { background: linear-gradient(135deg, #0B1E3D 0%, #1E6091 100%); animation: neonPulse 4s infinite; }
     .neon-card-1 { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); animation: neonPulse 4s infinite; }
     .neon-card-2 { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); animation: neonPulse 4s infinite; }
@@ -105,17 +120,17 @@
     <!-- KONTEN UTAMA KANAN -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
       
-      <!-- BANNER UTAMA DASHBOARD -->
-      <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden flex flex-col justify-center items-center text-center">
-        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl"><i class="fa-solid fa-water"></i></div>
+      <!-- BANNER UTAMA DASHBOARD DENGAN NEON BOX BERGERAK & BACKGROUND BANGUNAN AIR -->
+      <div class="banner-neon-box rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-center items-center text-center">
+        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl"><i class="fa-solid fa-water"></i></div>
         
         <div class="mb-3 inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold tracking-wide text-white border border-white/30 shadow-sm">
           <i class="fa-regular fa-clock text-yellow-300"></i>
           <span id="realTimeClock">Memuat Waktu...</span>
         </div>
 
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight uppercase mb-2">Dashboard</h1>
-        <p class="text-sm sm:text-base font-medium text-cyan-100">Selamat datang BALAI BESAR WILAYAH SUNGAI NUSA TENGGARA II</p>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight uppercase mb-2">DASHBOARD</h1>
+        <p class="text-sm sm:text-base font-medium text-cyan-100">Selamat Datang di Balai Besar Wilayah Sungai</p>
       </div>
 
       <!-- KARTU TOTAL KESELURUHAN -->
@@ -371,7 +386,6 @@
         })
         .catch(err => {
           console.error("Gagal fetch data:", err);
-          // Paksa tutup modal loading agar halaman tetap terbuka meskipun server lambat
           document.getElementById('loadingModal').classList.add('hidden');
         });
     }
