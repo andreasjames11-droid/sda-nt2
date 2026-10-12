@@ -42,13 +42,55 @@
     #map { height: 550px; width: 100%; border-radius: 1rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
 
+    /* KARTU FULL GRADIENT DENGAN EFEK NEON GLOW */
+    .neon-card-1 {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      box-shadow: 0 0 15px rgba(42, 82, 152, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-2 {
+      background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
+      box-shadow: 0 0 15px rgba(245, 175, 25, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-3 {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      box-shadow: 0 0 15px rgba(56, 239, 125, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-4 {
+      background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+      box-shadow: 0 0 15px rgba(255, 94, 98, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-5 {
+      background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+      box-shadow: 0 0 15px rgba(131, 58, 180, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-6 {
+      background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+      box-shadow: 0 0 15px rgba(0, 180, 219, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-7 {
+      background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+      box-shadow: 0 0 15px rgba(235, 51, 73, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .neon-card-8 {
+      background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%);
+      box-shadow: 0 0 15px rgba(142, 84, 233, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
     /* Garis Pemisah Bercahaya Kuning-Biru di Bawah Teks Judul */
     .title-glow-line {
       display: block;
       height: 3px;
       width: 100%;
-      background: linear-gradient(90deg, #FDB813, #0E3B68);
-      box-shadow: 0 0 8px rgba(253, 184, 19, 0.8), 0 0 4px rgba(14, 59, 104, 0.6);
+      background: linear-gradient(90deg, #FDB813, #ffffff);
+      box-shadow: 0 0 8px rgba(253, 184, 19, 0.9), 0 0 4px rgba(255, 255, 255, 0.7);
       border-radius: 2px;
       margin-top: 3px;
       margin-bottom: 4px;
@@ -74,7 +116,6 @@
 
   <header class="glass-header text-white shadow-xl mb-8 border-b-4 border-brand-yellow">
     <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-      <!-- Logo PU tanpa latar belakang putih (dijadikan lutsinar) -->
       <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 flex items-center justify-center">
         <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" alt="Logo PU" class="w-full h-full object-contain">
       </div>
@@ -87,86 +128,86 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- KARTU STATISTIK (Dengan Garis Bercahaya Kuning-Biru di Bawah Judul) -->
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-8">
+    <!-- KARTU STATISTIK (FULL GRADIENT DENGAN EFEK NEON GLOW) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-8 text-white">
       
       <!-- 1. Pos Hidrologi -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
+      <div class="neon-card-1 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pos Hidrologi</p>
+          <p class="text-xs text-blue-100 font-bold uppercase tracking-wide">Pos Hidrologi</p>
           <span class="title-glow-line"></span>
-          <h3 id="statPos" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statPos" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 2. Bendung -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-yellow-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water"></i></div>
+      <div class="neon-card-2 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendung</p>
+          <p class="text-xs text-yellow-100 font-bold uppercase tracking-wide">Bendung</p>
           <span class="title-glow-line"></span>
-          <h3 id="statBendung" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statBendung" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 3. Bendungan -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water-ladder"></i></div>
+      <div class="neon-card-3 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-water-ladder"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Bendungan</p>
+          <p class="text-xs text-emerald-100 font-bold uppercase tracking-wide">Bendungan</p>
           <span class="title-glow-line"></span>
-          <h3 id="statBendungan" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statBendungan" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 4. Sedimen -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-orange-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-mountain"></i></div>
+      <div class="neon-card-4 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-mountain"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Sedimen</p>
+          <p class="text-xs text-orange-100 font-bold uppercase tracking-wide">Sedimen</p>
           <span class="title-glow-line"></span>
-          <h3 id="statSedimen" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statSedimen" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 5. Banjir -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-purple-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-house-flood-water"></i></div>
+      <div class="neon-card-5 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-house-flood-water"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Banjir</p>
+          <p class="text-xs text-purple-100 font-bold uppercase tracking-wide">Banjir</p>
           <span class="title-glow-line"></span>
-          <h3 id="statBanjir" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statBanjir" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 6. Pantai -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-teal-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
+      <div class="neon-card-6 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Pantai</p>
+          <p class="text-xs text-teal-100 font-bold uppercase tracking-wide">Pantai</p>
           <span class="title-glow-line"></span>
-          <h3 id="statPantai" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statPantai" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 7. Embung -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-bowl-water"></i></div>
+      <div class="neon-card-7 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-bowl-water"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Embung</p>
+          <p class="text-xs text-pink-100 font-bold uppercase tracking-wide">Embung</p>
           <span class="title-glow-line"></span>
-          <h3 id="statEmbung" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statEmbung" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
       <!-- 8. Sumur Bor -->
-      <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 flex items-center gap-3">
-        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-indigo-500 text-white flex items-center justify-center text-lg"><i class="fa-solid fa-faucet-drip"></i></div>
+      <div class="neon-card-8 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
+        <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-lg"><i class="fa-solid fa-faucet-drip"></i></div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs text-slate-500 font-bold uppercase tracking-wide">Sumur Bor</p>
+          <p class="text-xs text-indigo-100 font-bold uppercase tracking-wide">Sumur Bor</p>
           <span class="title-glow-line"></span>
-          <h3 id="statSumur" class="text-2xl font-extrabold text-brand-darkblue">0</h3>
+          <h3 id="statSumur" class="text-2xl font-extrabold text-white">0</h3>
         </div>
       </div>
 
