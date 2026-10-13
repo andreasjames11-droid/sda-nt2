@@ -22,20 +22,20 @@
   </script>
 
   <style>
-    /* Animasi background layar belakang bergerak slow motion dengan gambar jelas */
-    @keyframes moveBackgroundSlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Animasi background layar belakang bergerak slow motion dari atas ke bawah */
+    @keyframes moveBackgroundVertical {
+      0% { background-position: 50% 0%; }
+      50% { background-position: 50% 100%; }
+      100% { background-position: 50% 0%; }
     }
 
     body {
       background-color: #0B1E3D;
-      background-image: linear-gradient(rgba(11, 30, 61, 0.75), rgba(11, 30, 61, 0.80)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
-      background-size: 160% 160%; 
+      background-image: linear-gradient(rgba(11, 30, 61, 0.78), rgba(11, 30, 61, 0.82)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
+      background-size: 170% 170%; 
       background-attachment: fixed; 
       font-family: 'Plus Jakarta Sans', sans-serif;
-      animation: moveBackgroundSlow 40s ease infinite;
+      animation: moveBackgroundVertical 45s ease-in-out infinite;
     }
     
     #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
@@ -311,14 +311,14 @@
         </div>
       </div>
 
-      <!-- FOOTER / CREATED BY & SUMBER DATA -->
-      <footer class="text-center py-6 text-xs text-white font-bold border-t border-white/20 mt-12 overflow-hidden bg-slate-900/70 backdrop-blur-md rounded-2xl shadow-lg flex flex-col gap-2">
-        <div class="inline-block animate-[marquee_35s_linear_infinite] px-4 tracking-wider uppercase text-yellow-300">
+      <!-- FOOTER / CREATED BY (Kecil, Nuansa Biru-Kuning, Gradasi Diturunkan) -->
+      <footer class="text-center py-4 text-[11px] font-semibold border-t border-cyan-500/20 mt-12 overflow-hidden bg-slate-900/50 backdrop-blur-md rounded-2xl shadow-lg flex flex-col gap-1.5">
+        <div class="inline-block animate-[marquee_35s_linear_infinite] px-4 tracking-wider uppercase text-yellow-300/80">
           <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
           <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II
         </div>
-        <div class="text-cyan-200 text-xs tracking-widest font-extrabold uppercase">
-          Created by : James Andreas Bate
+        <div class="text-cyan-300/70 tracking-widest font-bold uppercase text-[10px]">
+          created by : <span class="text-yellow-400/80">James Andreas Bate</span>
         </div>
       </footer>
 
