@@ -22,7 +22,7 @@
   </script>
 
   <style>
-    /* Animasi background layar belakang bergerak slow motion */
+    /* Animasi background layar belakang bergerak slow motion dengan gambar jelas */
     @keyframes moveBackgroundSlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -31,11 +31,11 @@
 
     body {
       background-color: #0B1E3D;
-      background-image: linear-gradient(rgba(11, 30, 61, 0.82), rgba(11, 30, 61, 0.85)), url('https://lh3.googleusercontent.com/d/1c2b1jHzPFCu9O4Ewg_tASE_7aW5hNk_8');
-      background-size: 180% 180%; 
+      background-image: linear-gradient(rgba(11, 30, 61, 0.75), rgba(11, 30, 61, 0.80)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
+      background-size: 160% 160%; 
       background-attachment: fixed; 
       font-family: 'Plus Jakarta Sans', sans-serif;
-      animation: moveBackgroundSlow 35s ease infinite;
+      animation: moveBackgroundSlow 40s ease infinite;
     }
     
     #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
@@ -49,7 +49,7 @@
     }
 
     .banner-neon-box {
-      background: linear-gradient(135deg, rgba(11, 30, 61, 0.9), rgba(30, 96, 145, 0.95)), url('https://lh3.googleusercontent.com/d/1c2b1jHzPFCu9O4Ewg_tASE_7aW5hNk_8');
+      background: linear-gradient(135deg, rgba(11, 30, 61, 0.85), rgba(30, 96, 145, 0.9)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
       background-size: cover;
       background-position: center;
       border: 2px solid rgba(253, 184, 19, 0.8);
@@ -115,7 +115,7 @@
     <!-- KONTEN UTAMA KANAN -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
       
-      <!-- BANNER UTAMA DASHBOARD DENGAN NEON BOX GRADIENT -->
+      <!-- BANNER UTAMA DASHBOARD -->
       <div class="banner-neon-box rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-center items-center text-center">
         <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl"><i class="fa-solid fa-water"></i></div>
         
@@ -311,11 +311,14 @@
         </div>
       </div>
 
-      <!-- FOOTER / SUMBER DATA BERGERAK SLOWMOTION -->
-      <footer class="text-center py-6 text-xs text-white font-bold border-t border-white/20 mt-12 overflow-hidden bg-slate-900/60 backdrop-blur-md rounded-2xl shadow-lg">
+      <!-- FOOTER / CREATED BY & SUMBER DATA -->
+      <footer class="text-center py-6 text-xs text-white font-bold border-t border-white/20 mt-12 overflow-hidden bg-slate-900/70 backdrop-blur-md rounded-2xl shadow-lg flex flex-col gap-2">
         <div class="inline-block animate-[marquee_35s_linear_infinite] px-4 tracking-wider uppercase text-yellow-300">
           <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
           <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II
+        </div>
+        <div class="text-cyan-200 text-xs tracking-widest font-extrabold uppercase">
+          Created by : James Andreas Bate
         </div>
       </footer>
 
