@@ -22,72 +22,56 @@
   </script>
 
   <style>
-    @keyframes moveBackground {
+    /* Animasi background layar belakang bergerak slow motion */
+    @keyframes moveBackgroundSlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
     body {
-      background-color: #F8FAFC;
-      background-image: linear-gradient(rgba(248, 250, 252, 0.88), rgba(248, 250, 252, 0.88)), url('https://lh3.googleusercontent.com/d/1t7Zv7jB0Tfe6pBm1tFms9bNd9zW0mM8-');
-      background-size: 150% 150%; 
+      background-color: #0B1E3D;
+      background-image: linear-gradient(rgba(11, 30, 61, 0.82), rgba(11, 30, 61, 0.85)), url('https://lh3.googleusercontent.com/d/1c2b1jHzPFCu9O4Ewg_tASE_7aW5hNk_8');
+      background-size: 180% 180%; 
       background-attachment: fixed; 
       font-family: 'Plus Jakarta Sans', sans-serif;
-      animation: moveBackground 40s linear infinite;
+      animation: moveBackgroundSlow 35s ease infinite;
     }
     
     #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
     
-    @keyframes neonPulse {
-      0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2); }
-      50% { box-shadow: 0 0 25px rgba(253, 184, 19, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.4); }
-      100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2); }
-    }
-
-    /* Animasi Slow Motion & Neon Box Bergerak dengan Gambar Jelas & Jernih */
-    @keyframes slowMotionBanner {
-      0% { 
-        background-position: 50% 0%;
-        box-shadow: 0 0 15px rgba(30, 96, 145, 0.6), inset 0 0 15px rgba(253, 184, 19, 0.2); 
-        border-color: rgba(253, 184, 19, 0.4); 
-      }
-      50% { 
-        background-position: 50% 100%;
-        box-shadow: 0 0 35px rgba(253, 184, 19, 0.9), inset 0 0 25px rgba(255, 255, 255, 0.5); 
-        border-color: rgba(253, 184, 19, 1); 
-      }
-      100% { 
-        background-position: 50% 0%;
-        box-shadow: 0 0 15px rgba(30, 96, 145, 0.6), inset 0 0 15px rgba(253, 184, 19, 0.2); 
-        border-color: rgba(253, 184, 19, 0.4); 
-      }
+    /* Neon Box Gradient & Glow */
+    @keyframes neonGradientGlow {
+      0% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.7), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.5); }
+      50% { box-shadow: 0 0 35px rgba(253, 184, 19, 0.9), inset 0 0 25px rgba(255, 255, 255, 0.4); border-color: rgba(253, 184, 19, 1); }
+      100% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.7), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.5); }
     }
 
     .banner-neon-box {
-      background: linear-gradient(rgba(11, 30, 61, 0.45), rgba(30, 96, 145, 0.55)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
-      background-size: 140% 140%;
-      border: 2px solid rgba(253, 184, 19, 0.6);
-      animation: slowMotionBanner 18s infinite ease-in-out;
+      background: linear-gradient(135deg, rgba(11, 30, 61, 0.9), rgba(30, 96, 145, 0.95)), url('https://lh3.googleusercontent.com/d/1c2b1jHzPFCu9O4Ewg_tASE_7aW5hNk_8');
+      background-size: cover;
+      background-position: center;
+      border: 2px solid rgba(253, 184, 19, 0.8);
+      animation: neonGradientGlow 6s infinite ease-in-out;
     }
 
-    .neon-total { background: linear-gradient(135deg, #0B1E3D 0%, #1E6091 100%); animation: neonPulse 4s infinite; }
-    .neon-card-1 { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); animation: neonPulse 4s infinite; }
-    .neon-card-2 { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); animation: neonPulse 4s infinite; }
-    .neon-card-3 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); animation: neonPulse 4s infinite; }
-    .neon-card-4 { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); animation: neonPulse 4s infinite; }
-    .neon-card-5 { background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); animation: neonPulse 4s infinite; }
-    .neon-card-6 { background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%); animation: neonPulse 4s infinite; }
-    .neon-card-7 { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); animation: neonPulse 4s infinite; }
-    .neon-card-8 { background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%); animation: neonPulse 4s infinite; }
+    .neon-total { background: linear-gradient(135deg, #0B1E3D 0%, #1E6091 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-1 { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-2 { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-3 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-4 { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-5 { background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-6 { background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-7 { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); animation: neonGradientGlow 6s infinite; }
+    .neon-card-8 { background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%); animation: neonGradientGlow 6s infinite; }
 
     .title-glow-line { display: block; height: 3px; width: 100%; background: linear-gradient(90deg, #FDB813, #ffffff); box-shadow: 0 0 8px #FDB813; border-radius: 2px; margin-top: 3px; margin-bottom: 4px; }
   </style>
 </head>
 <body class="min-h-screen text-slate-800 antialiased flex flex-col">
 
-  <!-- RUNNING TEXT -->
+  <!-- RUNNING TEXT ATAS -->
   <div class="bg-brand-yellow text-brand-darkblue py-1.5 overflow-hidden whitespace-nowrap shadow-sm border-b border-yellow-400 font-bold text-xs z-50">
     <div class="inline-block animate-[marquee_30s_linear_infinite] px-4">
       <i class="fa-solid fa-triangle-exclamation mr-2"></i> PENGUMUMAN : Data Ini Bersifat Sementara Sewaktu-waktu Dapat Berubah — BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -102,7 +86,7 @@
   <div class="flex flex-1 overflow-hidden">
     
     <!-- SIDEBAR KIRI -->
-    <aside class="w-64 bg-white border-r border-slate-200 hidden lg:flex flex-col overflow-y-auto">
+    <aside class="w-64 bg-white/95 backdrop-blur-md border-r border-slate-200 hidden lg:flex flex-col overflow-y-auto shadow-lg">
       <div class="p-4 border-b border-slate-100 flex items-center gap-3">
         <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" alt="Logo PU" class="w-10 h-10 object-contain">
         <div>
@@ -131,7 +115,7 @@
     <!-- KONTEN UTAMA KANAN -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
       
-      <!-- BANNER UTAMA DASHBOARD DENGAN BACKGROUND JELAS & ANIMASI SLOW MOTION -->
+      <!-- BANNER UTAMA DASHBOARD DENGAN NEON BOX GRADIENT -->
       <div class="banner-neon-box rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-center items-center text-center">
         <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl"><i class="fa-solid fa-water"></i></div>
         
@@ -199,7 +183,7 @@
       </div>
 
       <!-- KOTAK PETA GIS & KONTROL FILTER -->
-      <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
         <div class="p-6 space-y-4">
           <div class="flex flex-col xl:flex-row justify-between gap-4">
             <h3 class="text-base font-bold text-slate-800 uppercase flex items-center"><i class="fa-solid fa-map-location-dot mr-2 text-blue-600"></i> Peta Sebaran Infrastruktur</h3>
@@ -226,7 +210,7 @@
       </div>
 
       <!-- TABEL RINCIAN DATA -->
-      <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
         <div class="p-6">
           <h3 class="text-base font-bold text-slate-800 uppercase mb-4"><i class="fa-solid fa-table mr-2 text-blue-600"></i> Rincian Data Aset</h3>
 
@@ -317,19 +301,22 @@
       
       <!-- GRAFIK STATISTIK (BAR & DOUGHNUT) -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden lg:col-span-2 p-6">
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden lg:col-span-2 p-6">
           <h3 class="text-base font-bold text-slate-800 uppercase mb-4 border-b pb-2"><i class="fa-solid fa-chart-column mr-2 text-blue-600"></i> Grafik Batang Infrastruktur</h3>
           <div class="relative w-full h-[300px]"><canvas id="infraChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden p-6 flex flex-col items-center justify-center">
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden p-6 flex flex-col items-center justify-center">
           <h3 class="text-base font-bold text-slate-800 uppercase mb-2 border-b pb-2 w-full text-left"><i class="fa-solid fa-chart-pie mr-2 text-blue-600"></i> Proporsi Aset</h3>
           <div class="relative w-full h-[260px] flex items-center justify-center"><canvas id="pieChart"></canvas></div>
         </div>
       </div>
 
-      <!-- FOOTER / CREATED BY -->
-      <footer class="text-center py-6 text-xs text-slate-500 font-semibold border-t border-slate-200 mt-12">
-        Created by : James Andreas Bate
+      <!-- FOOTER / SUMBER DATA BERGERAK SLOWMOTION -->
+      <footer class="text-center py-6 text-xs text-white font-bold border-t border-white/20 mt-12 overflow-hidden bg-slate-900/60 backdrop-blur-md rounded-2xl shadow-lg">
+        <div class="inline-block animate-[marquee_35s_linear_infinite] px-4 tracking-wider uppercase text-yellow-300">
+          <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
+          <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II
+        </div>
       </footer>
 
     </main>
