@@ -46,8 +46,8 @@
       100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2); }
     }
 
-    /* Animasi Aliran Sungai Slow Motion & Neon Box Bergerak untuk Banner Utama */
-    @keyframes riverSlowMotion {
+    /* Animasi Slow Motion & Neon Box Bergerak untuk Banner Utama Menggunakan Link Drive Anda */
+    @keyframes slowMotionBanner {
       0% { 
         background-position: 0% 50%;
         box-shadow: 0 0 15px rgba(30, 96, 145, 0.6), inset 0 0 15px rgba(253, 184, 19, 0.2); 
@@ -66,10 +66,10 @@
     }
 
     .banner-neon-box {
-      background: linear-gradient(rgba(11, 30, 61, 0.70), rgba(30, 96, 145, 0.75)), url('https://images.unsplash.com/photo-1437153406085-300455799787?auto=format&fit=crop&w=1400&q=80');
-      background-size: 200% 200%;
+      background: linear-gradient(rgba(11, 30, 61, 0.70), rgba(30, 96, 145, 0.78)), url('https://lh3.googleusercontent.com/d/11VdXcsxjGiVb54sUijHkFdtCvqkrmRhK');
+      background-size: 180% 180%;
       border: 2px solid rgba(253, 184, 19, 0.6);
-      animation: riverSlowMotion 20s infinite linear;
+      animation: slowMotionBanner 15s infinite ease-in-out;
     }
 
     .neon-total { background: linear-gradient(135deg, #0B1E3D 0%, #1E6091 100%); animation: neonPulse 4s infinite; }
@@ -131,7 +131,7 @@
     <!-- KONTEN UTAMA KANAN -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
       
-      <!-- BANNER UTAMA DASHBOARD DENGAN BACKGROUND SUNGAI MENGALIR SLOW MOTION -->
+      <!-- BANNER UTAMA DASHBOARD DENGAN BACKGROUND LINK DRIVE & ANIMASI SLOW MOTION -->
       <div class="banner-neon-box rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-center items-center text-center">
         <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl"><i class="fa-solid fa-water"></i></div>
         
