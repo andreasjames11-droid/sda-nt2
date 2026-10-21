@@ -193,4 +193,331 @@
           </h2>
           
           <div class="flex flex-col md:flex-row items-center gap-3 w-full xl:w-auto">
-            <select id="filterKabupaten" onchange="applyFilter()" class="px
+            <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2.5 bg-white/90 border border-slate-300 rounded-xl text-sm font-bold text-slate-700 shadow-sm focus:ring-2 focus:ring-brand-blue focus:outline-none w-full md:w-64">
+              <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Layer Checkboxes -->
+        <div class="flex flex-wrap gap-2 text-xs font-bold text-slate-700 bg-slate-100/70 p-3 rounded-2xl border border-slate-200/60">
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('pos')" class="accent-blue-600 rounded"><span class="text-blue-600"><i class="fa-solid fa-droplet"></i> Pos</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('bendung')" class="accent-amber-500 rounded"><span class="text-amber-600"><i class="fa-solid fa-water"></i> Bendung</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('bendungan')" class="accent-emerald-600 rounded"><span class="text-emerald-600"><i class="fa-solid fa-water-ladder"></i> Bendungan</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('sedimen')" class="accent-orange-600 rounded"><span class="text-orange-600"><i class="fa-solid fa-mountain"></i> Sedimen</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('banjir')" class="accent-purple-600 rounded"><span class="text-purple-600"><i class="fa-solid fa-house-flood-water"></i> Banjir</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('pantai')" class="accent-teal-600 rounded"><span class="text-teal-600"><i class="fa-solid fa-anchor"></i> Pantai</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('embung')" class="accent-pink-600 rounded"><span class="text-pink-600"><i class="fa-solid fa-bowl-water"></i> Embung</span></label>
+          <label class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors"><input type="checkbox" checked onchange="toggleLayer('sumur')" class="accent-indigo-600 rounded"><span class="text-indigo-600"><i class="fa-solid fa-faucet-drip"></i> Sumur</span></label>
+        </div>
+
+        <div class="p-2 bg-white border border-slate-200 rounded-2xl shadow-inner"><div id="map"></div></div>
+      </div>
+    </div>
+
+    <!-- TABEL DATA -->
+    <div class="glass-card rounded-3xl shadow-xl overflow-hidden border border-white">
+      <div class="p-6 sm:p-8">
+        <h2 class="text-lg font-extrabold text-brand-darkblue uppercase tracking-wide mb-6 flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue"><i class="fa-solid fa-table"></i></span>
+          Rincian Data Aset Infrastruktur
+        </h2>
+
+        <!-- TABS -->
+        <div class="flex flex-wrap border-b border-slate-200 mb-6 gap-2">
+          <button onclick="switchTab('posTab')" id="btn-posTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-brand-blue text-white shadow-md">Pos</button>
+          <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Bendung</button>
+          <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Bendungan</button>
+          <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Sedimen</button>
+          <button onclick="switchTab('banjirTab')" id="btn-banjirTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Banjir</button>
+          <button onclick="switchTab('pantaiTab')" id="btn-pantaiTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Pantai</button>
+          <button onclick="switchTab('embungTab')" id="btn-embungTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Embung</button>
+          <button onclick="switchTab('sumurTab')" id="btn-sumurTab" class="px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Sumur Bor</button>
+        </div>
+
+        <div class="overflow-x-auto max-h-[420px] rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div id="posTab" class="tab-content block">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama Pos</th><th class="p-3.5">Kab/Kota</th><th class="p-3.5">Jenis</th><th class="p-3.5">Status</th></tr></thead><tbody id="tablePos" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="bendungTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama</th><th class="p-3.5">Kab/Kota</th><th class="p-3.5">DAS</th><th class="p-3.5">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="bendunganTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama</th><th class="p-3.5">Kecamatan</th><th class="p-3.5">Status</th><th class="p-3.5">Volume (m³)</th></tr></thead><tbody id="tableBendungan" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="sedimenTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama</th><th class="p-3.5">Kecamatan</th><th class="p-3.5">Jenis</th><th class="p-3.5">Kondisi</th><th class="p-3.5">Daya Tampung</th></tr></thead><tbody id="tableSedimen" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="banjirTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama</th><th class="p-3.5">Kab/Kota</th><th class="p-3.5">Tipe</th><th class="p-3.5">Kondisi</th><th class="p-3.5">Panjang</th></tr></thead><tbody id="tableBanjir" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="pantaiTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama Aset</th><th class="p-3.5">Kab/Kota</th><th class="p-3.5">Jenis Bangunan</th><th class="p-3.5">Kondisi</th><th class="p-3.5">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="embungTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap"><thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3.5">No</th><th class="p-3.5">Nama Unit</th><th class="p-3.5">Kab/Kota</th><th class="p-3.5">Tipe Embung</th><th class="p-3.5">Kondisi</th><th class="p-3.5">Kapasitas (m³)</th></tr></thead><tbody id="tableEmbung" class="divide-y divide-slate-100 text-sm"></tbody></table>
+          </div>
+          <div id="sumurTab" class="tab-content hidden">
+            <table class="w-full text-left whitespace-nowrap">
+              <thead class="bg-brand-darkblue text-white text-xs uppercase sticky top-0 z-10">
+                <tr><th class="p-3.5">No</th><th class="p-3.5">Nomor Sumur</th><th class="p-3.5">Desa / Kel</th><th class="p-3.5">Kecamatan</th><th class="p-3.5">Kab/Kota</th><th class="p-3.5">Debit (l/dt)</th><th class="p-3.5">Kedalaman (m)</th><th class="p-3.5">Fungsi</th><th class="p-3.5">Status</th></tr>
+              </thead>
+              <tbody id="tableSumur" class="divide-y divide-slate-100 text-sm bg-white"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- GRAFIK STATISTIK -->
+    <div class="glass-card rounded-3xl shadow-xl overflow-hidden border border-white">
+      <div class="p-6 sm:p-8">
+        <h2 class="text-lg font-extrabold text-brand-darkblue uppercase tracking-wide mb-6 flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue"><i class="fa-solid fa-chart-column"></i></span>
+          Grafik Sebaran Infrastruktur
+        </h2>
+        <div class="relative w-full h-[320px]"><canvas id="infraChart"></canvas></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loadingModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex flex-col items-center justify-center text-white p-4">
+    <div class="w-14 h-14 border-4 border-brand-yellow border-t-transparent rounded-full animate-spin mb-4 shadow-lg shadow-yellow-500/30"></div>
+    <h3 class="text-lg font-extrabold tracking-wide">Memuat Data GIS...</h3>
+    <p class="text-xs text-slate-300 mt-1">Menyinkronkan data infrastruktur dari server.</p>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
+
+    let map, myChart;
+    let layers = {
+      pos: L.layerGroup(), bendung: L.layerGroup(), bendungan: L.layerGroup(),
+      sedimen: L.layerGroup(), banjir: L.layerGroup(), pantai: L.layerGroup(), 
+      embung: L.layerGroup(), sumur: L.layerGroup(), geojson: L.layerGroup()
+    };
+    let rawData = { pos:[], bendung:[], bendungan:[], sedimen:[], banjir:[], pantai:[], embung:[], sumur:[] };
+    let rawGeojsonData = null;
+
+    document.addEventListener("DOMContentLoaded", () => { initMap(); fetchDashboardData(); });
+
+    function initMap() {
+      map = L.map('map').setView([-8.6, 121.0], 7);
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16 }).addTo(map);
+      Object.values(layers).forEach(layer => layer.addTo(map));
+
+      fetch('https://raw.githubusercontent.com/balaiperumahanntt-ui/petanttgeojson/refs/heads/main/ntt%20geojson.geojson')
+        .then(res => res.json()).then(data => { rawGeojsonData = data; renderGeojsonBoundary("ALL"); }).catch(e => console.error("Error GeoJSON", e));
+    }
+
+    function toggleLayer(type) {
+      if (map.hasLayer(layers[type])) map.removeLayer(layers[type]);
+      else map.addLayer(layers[type]);
+    }
+
+    function fetchDashboardData() {
+      fetch(API_URL).then(res => res.json()).then(data => {
+        if (data.status === "error") throw new Error(data.message);
+        
+        rawData.pos = data.posData || [];
+        rawData.bendung = data.bendungData || [];
+        rawData.bendungan = data.bendunganData || [];
+        rawData.sedimen = data.sedimenData || []; 
+        rawData.banjir = data.banjirData || [];
+        rawData.pantai = data.pantaiData || [];
+        rawData.embung = data.embungData || [];
+        rawData.sumur = data.sumurData || [];
+        
+        populateKabupatenDropdown();
+        renderData("ALL"); 
+        document.getElementById('loadingModal').classList.add('hidden');
+      }).catch(err => {
+        console.error(err); 
+        alert("Gagal memuat data. Kemungkinan KODE.GS belum di-Deploy ulang sebagai versi baru.");
+        document.getElementById('loadingModal').classList.add('hidden');
+      });
+    }
+
+    function safeString(val) { return (val || "").toString().trim().toUpperCase(); }
+    function isMatch(rowKab, selKab) {
+      if(selKab === "ALL") return true;
+      let str = safeString(rowKab);
+      return str.includes(selKab) || selKab.includes(str);
+    }
+
+    function populateKabupatenDropdown() {
+      let kabSet = new Set();
+      rawData.pos.forEach(r => { if(r[2]) kabSet.add(safeString(r[2])); });
+      rawData.bendung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+      rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+      rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+      rawData.embung.forEach(r => { if(r[18]) kabSet.add(safeString(r[18])); });
+      rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
+      
+      let select = document.getElementById('filterKabupaten');
+      Array.from(kabSet).filter(k => k !== "").sort().forEach(kab => {
+        let opt = document.createElement('option'); opt.value = kab; opt.textContent = kab; select.appendChild(opt);
+      });
+    }
+
+    function applyFilter() {
+      let selectedKab = document.getElementById('filterKabupaten').value;
+      renderData(selectedKab); renderGeojsonBoundary(selectedKab);
+    }
+
+    function renderData(selKab) {
+      let fPos = rawData.pos.filter(r => isMatch(r[2], selKab));
+      let fBendung = rawData.bendung.filter(r => isMatch(r[1], selKab));
+      let fBendungan = rawData.bendungan.filter(r => isMatch(r[1], selKab)); 
+      let fSedimen = rawData.sedimen.filter(r => isMatch(r[1], selKab)); 
+      let fBanjir = rawData.banjir.filter(r => isMatch(r[1], selKab));
+      let fPantai = rawData.pantai.filter(r => isMatch(r[1], selKab)); 
+      let fEmbung = rawData.embung.filter(r => isMatch(r[18], selKab)); 
+      let fSumur = rawData.sumur.filter(r => isMatch(r[3], selKab));
+
+      document.getElementById('statPos').innerText = fPos.length;
+      document.getElementById('statBendung').innerText = fBendung.length;
+      document.getElementById('statBendungan').innerText = fBendungan.length;
+      document.getElementById('statSedimen').innerText = fSedimen.length;
+      document.getElementById('statBanjir').innerText = fBanjir.length;
+      document.getElementById('statPantai').innerText = fPantai.length;
+      document.getElementById('statEmbung').innerText = fEmbung.length;
+      document.getElementById('statSumur').innerText = fSumur.length;
+
+      const ic = (bg, fa) => L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon ${bg} w-7 h-7"><i class="fa-solid ${fa} text-xs"></i></div>`, iconSize: [28,28], iconAnchor: [14,14] });
+      const iPos = ic('bg-blue-600', 'fa-droplet'), iBend = ic('bg-amber-500', 'fa-water'), iBndgn = ic('bg-emerald-600', 'fa-water-ladder');
+      const iSed = ic('bg-orange-600', 'fa-mountain'), iBnjr = ic('bg-purple-600', 'fa-house-flood-water');
+      const iPntai = ic('bg-teal-600', 'fa-anchor'), iEmb = ic('bg-pink-600', 'fa-bowl-water'), iSmr = ic('bg-indigo-600', 'fa-faucet-drip');
+
+      Object.keys(layers).forEach(k => { if(k !== 'geojson') layers[k].clearLayers(); });
+
+      // Render Pos
+      let hPos = '';
+      fPos.forEach((r, i) => {
+        let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.pos.addLayer(L.marker([lat, lng], {icon: iPos}).bindPopup(`<b>${r[1]}</b><br>${r[2]}<br>${r[3]}`));
+        hPos += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-slate-900">${r[1]||'-'}</td><td class="p-3.5">${r[2]||'-'}</td><td class="p-3.5">${r[3]||'-'}</td><td class="p-3.5">${r[4]||'-'}</td></tr>`;
+      });
+      document.getElementById('tablePos').innerHTML = hPos;
+
+      // Render Bendung
+      let hBendung = '';
+      fBendung.forEach((r, i) => {
+        let lat = parseFloat(r[15]), lng = parseFloat(r[16]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.bendung.addLayer(L.marker([lat, lng], {icon: iBend}).bindPopup(`<b>${r[2]}</b><br>${r[1]}`));
+        hBendung += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-slate-900">${r[2]||'-'}</td><td class="p-3.5">${r[1]||'-'}</td><td class="p-3.5">${r[6]||'-'}</td><td class="p-3.5">${r[7]||'-'}</td></tr>`;
+      });
+      document.getElementById('tableBendung').innerHTML = hBendung;
+
+      // Render Bendungan
+      let hBendungan = '';
+      fBendungan.forEach((r, i) => {
+        let lat = parseFloat(r[4]), lng = parseFloat(r[5]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.bendungan.addLayer(L.marker([lat, lng], {icon: iBndgn}).bindPopup(`<b>${r[0]}</b>`));
+        hBendungan += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-slate-900">${r[0]||'-'}</td><td class="p-3.5">${r[1]||'-'}</td><td class="p-3.5">${r[2]||'-'}</td><td class="p-3.5">${r[3]||'-'}</td></tr>`;
+      });
+      document.getElementById('tableBendungan').innerHTML = hBendungan;
+
+      // Render Sedimen
+      let hSedimen = '';
+      fSedimen.forEach((r, i) => {
+        let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.sedimen.addLayer(L.marker([lat, lng], {icon: iSed}).bindPopup(`<b>${r[0]}</b>`));
+        hSedimen += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-slate-900">${r[0]||'-'}</td><td class="p-3.5">${r[1]||'-'}</td><td class="p-3.5">${r[2]||'-'}</td><td class="p-3.5">${r[3]||'-'}</td><td class="p-3.5">${r[4]||'-'}</td></tr>`;
+      });
+      document.getElementById('tableSedimen').innerHTML = hSedimen;
+
+      // Render Banjir
+      let hBanjir = '';
+      fBanjir.forEach((r, i) => {
+        let lat = parseFloat(r[14]), lng = parseFloat(r[15]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.banjir.addLayer(L.marker([lat, lng], {icon: iBnjr}).bindPopup(`<b>${r[0]}</b><br>${r[1]}`));
+        hBanjir += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-slate-900">${r[0]||'-'}</td><td class="p-3.5">${r[1]||'-'}</td><td class="p-3.5">${r[4]||'-'}</td><td class="p-3.5">${r[6]||'-'}</td><td class="p-3.5">${r[13]||'-'}</td></tr>`;
+      });
+      document.getElementById('tableBanjir').innerHTML = hBanjir;
+
+      // Render Pantai
+      let hPantai = '';
+      fPantai.forEach((r, i) => {
+        let lat = parseFloat(r[11]), lng = parseFloat(r[12]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.pantai.addLayer(L.marker([lat, lng], {icon: iPntai}).bindPopup(`<b>${r[0]}</b><br>Kab/Kota: ${r[1]}<br>Panjang: ${r[9]}m`));
+        hPantai += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-teal-700">${r[0]||'-'}</td><td class="p-3.5">${r[1]||'-'}</td><td class="p-3.5">${r[4]||'-'}</td><td class="p-3.5">${r[5]||'-'}</td><td class="p-3.5">${r[9]||'-'}</td></tr>`;
+      });
+      document.getElementById('tablePantai').innerHTML = hPantai;
+
+      // Render Embung
+      let hEmbung = '';
+      fEmbung.forEach((r, i) => {
+        let lat = parseFloat(r[21]), lng = parseFloat(r[22]);
+        if (!isNaN(lat) && !isNaN(lng)) layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(`<b>${r[1]}</b><br>Tipe: ${r[23]}`));
+        hEmbung += `<tr class="hover:bg-slate-50 transition-colors"><td class="p-3.5">${i+1}</td><td class="p-3.5 font-bold text-pink-700">${r[1]||'-'}</td><td class="p-3.5">${r[18]||'-'}</td><td class="p-3.5">${r[23]||'-'}</td><td class="p-3.5">${r[7]||'-'}</td><td class="p-3.5">${r[28]||'-'}</td></tr>`;
+      });
+      document.getElementById('tableEmbung').innerHTML = hEmbung;
+
+      // Render Sumur Bor
+      let hSumur = '';
+      fSumur.forEach((r, i) => {
+        let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
+        if (!isNaN(lat) && !isNaN(lng)) {
+          layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
+        }
+        hSumur += `<tr class="hover:bg-slate-50 transition-colors">
+          <td class="p-3.5">${i+1}</td>
+          <td class="p-3.5 font-bold text-indigo-700">${r[0] || '-'}</td>
+          <td class="p-3.5">${r[1] || '-'}</td>
+          <td class="p-3.5">${r[2] || '-'}</td>
+          <td class="p-3.5">${r[3] || '-'}</td>
+          <td class="p-3.5">${r[6] || '-'}</td>
+          <td class="p-3.5">${r[7] || '-'}</td>
+          <td class="p-3.5">${r[10] || '-'}</td>
+          <td class="p-3.5">${r[11] || '-'}</td>
+        </tr>`;
+      });
+      if (hSumur === '') hSumur = `<tr><td colspan="9" class="text-center py-6 text-slate-400 font-medium">Tidak ada data untuk daerah ini</td></tr>`;
+      document.getElementById('tableSumur').innerHTML = hSumur;
+
+      // Render Grafik Chart.js
+      if(myChart) myChart.destroy();
+      myChart = new Chart(document.getElementById('infraChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
+          datasets: [{ data: [fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length], backgroundColor: ['#2563EB', '#F59E0B', '#059669', '#EA580C', '#9333EA', '#0D9488', '#DB2777', '#4F46E5'], borderRadius: 8 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+      });
+    }
+
+    function renderGeojsonBoundary(selKab) {
+      if(!rawGeojsonData) return;
+      layers.geojson.clearLayers();
+      let bounds = [];
+      L.geoJson(rawGeojsonData, {
+        style: (f) => {
+          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
+          let c = (selKab === "ALL" || nm.includes(selKab) || selKab.includes(nm));
+          return c ? { color: '#0A2E5C', weight: selKab==="ALL"?1:2.5, fillColor: selKab==="ALL"?'#F1F5F9':'#FDB813', fillOpacity: selKab==="ALL"?0.3:0.25 } : { color: '#CBD5E1', weight: 1, fillOpacity: 0.1 };
+        },
+        onEachFeature: (f, l) => {
+          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
+          if (selKab !== "ALL" && (nm.includes(selKab) || selKab.includes(nm))) bounds.push(l.getBounds());
+        }
+      }).addTo(layers.geojson);
+      
+      if (selKab !== "ALL" && bounds.length > 0) {
+        let b = bounds[0]; for(let i=1; i<bounds.length; i++) b.extend(bounds[i]); map.fitBounds(b, { padding: [30, 30] });
+      } else if (selKab === "ALL") map.setView([-8.6, 121.0], 7);
+    }
+
+    function switchTab(tId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.replace('block', 'hidden'));
+      document.querySelectorAll('[id^="btn-"]').forEach(btn => { 
+        btn.className = "px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"; 
+      });
+      document.getElementById(tId).classList.replace('hidden', 'block');
+      document.getElementById('btn-' + tId).className = "px-4 py-2 font-bold text-xs sm:text-sm rounded-xl transition-all bg-brand-blue text-white shadow-md";
+    }
+  </script>
+</body>
+</html>
