@@ -144,7 +144,7 @@
         </div>
       </div>
 
-      <!-- KARTU STATISTIK (8 KATEGORI) -->
+      <!-- KARTU STATISTIK (8 KATEGORI DENGAN SIMBOL EMBUNG FA-BOWL-WATER) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 text-white">
         <div class="neon-card-1 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
           <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
@@ -170,12 +170,13 @@
           <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
           <div class="flex-1 min-w-0"><p class="text-xs text-teal-100 font-bold uppercase tracking-wide">Pantai</p><span class="title-glow-line"></span><h3 id="statPantai" class="text-2xl font-extrabold text-white">0</h3></div>
         </div>
+        <!-- Kartu Embung dengan Simbol fa-bowl-water yang Jelas -->
         <div class="neon-card-7 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-bowl-water"></i></div>
+          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg text-white"><i class="fa-solid fa-bowl-water"></i></div>
           <div class="flex-1 min-w-0"><p class="text-xs text-pink-100 font-bold uppercase tracking-wide">Embung</p><span class="title-glow-line"></span><h3 id="statEmbung" class="text-2xl font-extrabold text-white">0</h3></div>
         </div>
         <div class="neon-card-8 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-faucet-drip"></i></div>
+          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg text-white"><i class="fa-solid fa-faucet-drip"></i></div>
           <div class="flex-1 min-w-0"><p class="text-xs text-indigo-100 font-bold uppercase tracking-wide">Sumur Bor</p><span class="title-glow-line"></span><h3 id="statSumur" class="text-2xl font-extrabold text-white">0</h3></div>
         </div>
       </div>
@@ -255,7 +256,7 @@
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm"></tbody></table>
             </div>
             
-            <!-- Tabel Embung Sesuai Urutan Kolom Persis -->
+            <!-- Tabel Embung -->
             <div id="embungTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -406,9 +407,7 @@
         if(Array.isArray(rawData.sedimen)) rawData.sedimen.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.banjir)) rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        // Embung: Kabupaten ada di indeks ke-1 (Kolom B)
         if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        // Sumur Bor: Kabupaten ada di indeks ke-3 (Kolom D)
         if(Array.isArray(rawData.sumur)) rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
       } catch(e) { console.error("Error populating dropdown", e); }
       
@@ -431,7 +430,6 @@
         let fSedimen = Array.isArray(rawData.sedimen) ? rawData.sedimen.filter(r => isMatch(r[1], selKab)) : []; 
         let fBanjir = Array.isArray(rawData.banjir) ? rawData.banjir.filter(r => isMatch(r[1], selKab)) : [];
         let fPantai = Array.isArray(rawData.pantai) ? rawData.pantai.filter(r => isMatch(r[1], selKab)) : []; 
-        // Filter Embung berdasarkan Kabupaten di indeks ke-1
         let fEmbung = Array.isArray(rawData.embung) ? rawData.embung.filter(r => isMatch(r[1], selKab)) : []; 
         let fSumur = Array.isArray(rawData.sumur) ? rawData.sumur.filter(r => isMatch(r[3], selKab)) : [];
 
@@ -521,8 +519,6 @@
         });
         document.getElementById('tablePantai').innerHTML = hPantai;
 
-        // Render Embung Sesuai Urutan Kolom Persis:
-        // [0] Nama Embung, [1] Kabupaten, [2] Kecamatan, [3] Kelurahan, [4] Status Operasi, [5] Kondisi Infrastruktur, [6] Tahun Selesai, [7] Kapasitas (m3), [8] Irigasi (Ha), [9] Latitude, [10] Longitude
         let hEmbung = '';
         fEmbung.slice(0, 150).forEach((r, i) => {
           let lat = parseFloat(r[9]), lng = parseFloat(r[10]);
