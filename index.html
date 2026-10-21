@@ -22,7 +22,6 @@
   </script>
 
   <style>
-    /* Animasi background layar belakang bergerak slow motion dari atas ke bawah */
     @keyframes moveBackgroundVertical {
       0% { background-position: 50% 0%; }
       50% { background-position: 50% 100%; }
@@ -41,7 +40,6 @@
     #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
     .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
     
-    /* Neon Box Gradient & Glow */
     @keyframes neonGradientGlow {
       0% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.7), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.5); }
       50% { box-shadow: 0 0 35px rgba(253, 184, 19, 0.9), inset 0 0 25px rgba(255, 255, 255, 0.4); border-color: rgba(253, 184, 19, 1); }
@@ -146,7 +144,7 @@
         </div>
       </div>
 
-      <!-- KARTU STATISTIK (8 KATEGORI DENGAN SIMBOL EMBUNG) -->
+      <!-- KARTU STATISTIK (8 KATEGORI DENGAN SIMBOL EMBUNG fa-bowl-water) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 text-white">
         <div class="neon-card-1 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
           <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
@@ -258,7 +256,7 @@
               <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm"></tbody></table>
             </div>
             
-            <!-- Tabel Embung dengan urutan kolom yang diminta -->
+            <!-- Tabel Embung Sesuai Urutan Kolom Baru -->
             <div id="embungTab" class="tab-content hidden">
               <table class="w-full text-left whitespace-nowrap">
                 <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
@@ -313,14 +311,14 @@
         </div>
       </div>
 
-      <!-- FOOTER / CREATED BY (Kecil, Nuansa Biru-Kuning, Gradasi Diturunkan) -->
+      <!-- FOOTER / CREATED BY & SUMBER DATA -->
       <footer class="text-center py-4 text-[11px] font-semibold border-t border-cyan-500/20 mt-12 overflow-hidden bg-slate-900/50 backdrop-blur-md rounded-2xl shadow-lg flex flex-col gap-1.5">
         <div class="inline-block animate-[marquee_35s_linear_infinite] px-4 tracking-wider uppercase text-yellow-300/80">
           <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
           <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II
         </div>
-        <div class="text-cyan-300/60 tracking-widest font-bold uppercase text-[10px]">
-          created by : <span class="text-yellow-400/70">James Andreas Bate</span>
+        <div class="text-cyan-300/70 tracking-widest font-bold uppercase text-[10px]">
+          created by : <span class="text-yellow-400/80">James Andreas Bate</span>
         </div>
       </footer>
 
@@ -411,6 +409,7 @@
         if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
         // Embung: Kabupaten ada di indeks ke-1 sesuai urutan baru
         if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
+        // Sumur Bor: Kabupaten ada di indeks ke-3
         if(Array.isArray(rawData.sumur)) rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
       } catch(e) { console.error("Error populating dropdown", e); }
       
