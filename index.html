@@ -1,622 +1,777 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard SIG SDA - Kementerian PU</title>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg">
-  
+  <title>GIS Infrastruktur SDA - Kementerian Pekerjaan Umum</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     tailwind.config = {
-      theme: { extend: { colors: { brand: { blue: '#1E6091', darkblue: '#0B1E3D', ocean: '#1A4A7A', yellow: '#FDB813' } } } }
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            pu: {
+              bg: '#0d1b2a',
+              card: '#1b263b',
+              border: '#415a77',
+              accent: '#1d4ed8',
+              blue: '#0284c7',
+              gold: '#eab308',
+              yellow: '#facc15'
+            }
+          }
+        }
+      }
     }
   </script>
-
   <style>
-    @keyframes moveBackgroundVertical {
-      0% { background-position: 50% 0%; }
-      50% { background-position: 50% 100%; }
-      100% { background-position: 50% 0%; }
+    body { background-color: #0d1b2a; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+    #map { height: 480px; width: 100%; border-radius: 0.75rem; z-index: 10; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0d1b2a; }
+    ::-webkit-scrollbar-thumb { background: #415a77; border-radius: 4px; }
+    @keyframes slowPan {
+      0% { background-position: center 0%; }
+      50% { background-position: center 100%; }
+      100% { background-position: center 0%; }
     }
-
-    body {
-      background-color: #0B1E3D;
-      background-image: linear-gradient(rgba(11, 30, 61, 0.78), rgba(11, 30, 61, 0.82)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
-      background-size: 170% 170%; 
-      background-attachment: fixed; 
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      animation: moveBackgroundVertical 45s ease-in-out infinite;
+    .animated-bg {
+      animation: slowPan 25s ease-in-out infinite;
     }
-    
-    #map { height: 500px; width: 100%; border-radius: 0.75rem; z-index: 10; }
-    .map-marker-icon { display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 2px solid white; }
-    
-    @keyframes neonGradientGlow {
-      0% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.7), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.5); }
-      50% { box-shadow: 0 0 35px rgba(253, 184, 19, 0.9), inset 0 0 25px rgba(255, 255, 255, 0.4); border-color: rgba(253, 184, 19, 1); }
-      100% { box-shadow: 0 0 15px rgba(30, 96, 145, 0.7), inset 0 0 15px rgba(253, 184, 19, 0.2); border-color: rgba(253, 184, 19, 0.5); }
-    }
-
-    .banner-neon-box {
-      background: linear-gradient(135deg, rgba(11, 30, 61, 0.85), rgba(30, 96, 145, 0.9)), url('https://lh3.googleusercontent.com/d/1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL');
-      background-size: cover;
-      background-position: center;
-      border: 2px solid rgba(253, 184, 19, 0.8);
-      animation: neonGradientGlow 6s infinite ease-in-out;
-    }
-
-    .neon-total { background: linear-gradient(135deg, #0B1E3D 0%, #1E6091 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-1 { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-2 { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-3 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-4 { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-5 { background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-6 { background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-7 { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); animation: neonGradientGlow 6s infinite; }
-    .neon-card-8 { background: linear-gradient(135deg, #4776e6 0%, #8e54e9 100%); animation: neonGradientGlow 6s infinite; }
-
-    .title-glow-line { display: block; height: 3px; width: 100%; background: linear-gradient(90deg, #FDB813, #ffffff); box-shadow: 0 0 8px #FDB813; border-radius: 2px; margin-top: 3px; margin-bottom: 4px; }
   </style>
 </head>
-<body class="min-h-screen text-slate-800 antialiased flex flex-col">
+<body class="min-h-screen flex flex-col justify-between antialiased relative">
 
-  <!-- RUNNING TEXT ATAS -->
-  <div class="bg-brand-yellow text-brand-darkblue py-1.5 overflow-hidden whitespace-nowrap shadow-sm border-b border-yellow-400 font-bold text-xs z-50">
-    <div class="inline-block animate-[marquee_30s_linear_infinite] px-4">
-      <i class="fa-solid fa-triangle-exclamation mr-2"></i> PENGUMUMAN : Data Ini Bersifat Sementara Sewaktu-waktu Dapat Berubah — BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
-      <i class="fa-solid fa-triangle-exclamation mr-2"></i> PENGUMUMAN : Data Ini Bersifat Sementara Sewaktu-waktu Dapat Berubah — BBWS NT II
+  <!-- LOGIN MODAL (ULTRA-MODERN PU ENTERPRISE DESIGN) -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-2xl z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <!-- Ambient Background Accents -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-25 pointer-events-none animated-bg" style="background-image: url('https://drive.google.com/thumbnail?id=1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL&sz=w1600');"></div>
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-pu-gold/25 rounded-full blur-[100px] pointer-events-none animate-pulse"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/30 rounded-full blur-[100px] pointer-events-none animate-pulse"></div>
+
+    <div class="relative bg-gradient-to-b from-slate-900/90 via-slate-900/95 to-slate-950/95 backdrop-blur-3xl border-2 border-pu-gold/75 w-full max-w-md p-8 sm:p-10 rounded-[2.5rem] shadow-[0_0_70px_rgba(234,179,8,0.3)] space-y-6 z-10 text-center transform transition-all">
+      
+      <!-- PU Emblem Header -->
+      <div class="relative mx-auto w-24 h-24">
+        <div class="absolute inset-0 rounded-full bg-pu-gold/30 blur-xl animate-pulse"></div>
+        <div class="relative w-24 h-24 rounded-2xl bg-gradient-to-br from-pu-gold via-yellow-400 to-amber-600 text-slate-950 flex items-center justify-center mx-auto text-4xl font-black shadow-2xl border-2 border-yellow-200 transform hover:rotate-6 transition duration-300">
+          <img src="https://drive.google.com/thumbnail?id=1rAsG_KDTpjGF0N1kefJIZ61edVWmUhJU&sz=w300" alt="Logo PU" class="w-16 h-16 object-contain drop-shadow-md" onerror="this.onerror=null; this.src='https://i.ibb.co.com/RpTQRCrn/logo.png';">
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <h1 class="text-xl sm:text-2xl font-black text-white tracking-wider drop-shadow">KEMENTERIAN PEKERJAAN UMUM</h1>
+        <p class="text-xs text-pu-gold font-bold tracking-widest uppercase">BALAI BESAR WILAYAH SUNGAI NUSA TENGGARA II</p>
+      </div>
+
+      <form onsubmit="window.handleLogin(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-bold text-pu-gold uppercase mb-1.5 flex items-center gap-2">
+            <i class="fa-solid fa-user text-xs"></i> Username Operator
+          </label>
+          <div class="relative group">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-pu-gold group-focus-within:text-white transition">
+              <i class="fa-solid fa-user-shield text-sm"></i>
+            </span>
+            <input type="text" id="loginUser" required placeholder="Masukkan username..." class="w-full bg-slate-950/90 border-2 border-slate-700 group-hover:border-slate-600 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white font-medium focus:outline-none focus:border-pu-gold focus:ring-2 focus:ring-pu-gold/50 transition shadow-inner">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-pu-gold uppercase mb-1.5 flex items-center gap-2">
+            <i class="fa-solid fa-lock text-xs"></i> Password Keamanan
+          </label>
+          <div class="relative group">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-pu-gold group-focus-within:text-white transition">
+              <i class="fa-solid fa-key text-sm"></i>
+            </span>
+            <input type="password" id="loginPass" required placeholder="Masukkan password..." class="w-full bg-slate-950/90 border-2 border-slate-700 group-hover:border-slate-600 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-white font-medium focus:outline-none focus:border-pu-gold focus:ring-2 focus:ring-pu-gold/50 transition shadow-inner">
+          </div>
+        </div>
+
+        <div class="pt-2 space-y-3">
+          <button type="submit" class="w-full py-4 bg-gradient-to-r from-pu-gold via-yellow-400 to-amber-500 text-slate-950 font-black rounded-2xl shadow-[0_4px_25px_rgba(234,179,8,0.5)] hover:shadow-[0_6px_30px_rgba(234,179,8,0.7)] transform hover:-translate-y-0.5 transition duration-200 text-sm tracking-widest uppercase flex items-center justify-center gap-2.5">
+            <i class="fa-solid fa-right-to-bracket text-base"></i> Masuk ke Sistem
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-  <style>
-    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-  </style>
 
-  <!-- LAYOUT UTAMA -->
-  <div class="flex flex-1 overflow-hidden">
+  <!-- MAIN APP CONTAINER -->
+  <div id="mainApp" class="flex-1 flex flex-col lg:flex-row">
     
-    <!-- SIDEBAR KIRI -->
-    <aside class="w-64 bg-white/95 backdrop-blur-md border-r border-slate-200 hidden lg:flex flex-col overflow-y-auto shadow-lg">
-      <div class="p-4 border-b border-slate-100 flex items-center gap-3">
-        <img src="https://i.ibb.co.com/4wtkzPws/Logo-PU-RGB.jpg" alt="Logo PU" class="w-10 h-10 object-contain">
-        <div>
-          <h4 class="text-xs font-extrabold text-slate-800 leading-tight">BBWS NUSA TENGGARA II</h4>
-          <p class="text-[10px] text-slate-500 font-medium">Kementerian Pekerjaan Umum</p>
-        </div>
-      </div>
-
-      <nav class="p-3 space-y-1 text-xs font-semibold text-slate-600">
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold"><i class="fa-solid fa-house text-sm"></i> Home</a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 hover:text-slate-900 transition"><i class="fa-solid fa-chart-pie text-sm"></i> Dashboard Rekap Verifikasi</a>
-        
-        <div class="pt-3 pb-1 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Data Infrastruktur</div>
-        
-        <a href="#tablePos" onclick="switchTab('posTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-droplet text-blue-500 mr-2"></i> Pos Hidrologi</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tableBendung" onclick="switchTab('bendungTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-water text-yellow-500 mr-2"></i> Bendung</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tableBendungan" onclick="switchTab('bendunganTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-water-ladder text-emerald-500 mr-2"></i> Bendungan</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tableSedimen" onclick="switchTab('sedimenTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-mountain text-orange-500 mr-2"></i> Sedimen</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tableBanjir" onclick="switchTab('banjirTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-house-flood-water text-purple-500 mr-2"></i> Banjir</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tablePantai" onclick="switchTab('pantaiTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-anchor text-teal-500 mr-2"></i> Pantai</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tableEmbung" onclick="switchTab('embungTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-bowl-water text-pink-500 mr-2"></i> Embung</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-        <a href="#tableSumur" onclick="switchTab('sumurTab')" class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-50 transition"><span><i class="fa-solid fa-faucet-drip text-indigo-500 mr-2"></i> Sumur Bor</span> <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i></a>
-      </nav>
-    </aside>
-
-    <!-- KONTEN UTAMA KANAN -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
-      
-      <!-- BANNER UTAMA DASHBOARD -->
-      <div class="banner-neon-box rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-center items-center text-center">
-        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl"><i class="fa-solid fa-water"></i></div>
-        
-        <div class="mb-3 inline-flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold tracking-wide text-white border border-white/30 shadow-sm">
-          <i class="fa-regular fa-clock text-yellow-300"></i>
-          <span id="realTimeClock">Memuat Waktu...</span>
-        </div>
-
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight uppercase mb-2 drop-shadow-md">DASHBOARD</h1>
-        <p class="text-sm sm:text-base font-medium text-cyan-100 drop-shadow">Selamat Datang di Balai Besar Wilayah Sungai Nusa Tenggara II</p>
-      </div>
-
-      <!-- KARTU TOTAL KESELURUHAN -->
-      <div class="neon-total rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-        <div class="flex items-center gap-4">
-          <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl text-yellow-300">
-            <i class="fa-solid fa-city"></i>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-full lg:w-64 border-r border-pu-border flex flex-col justify-between shrink-0 p-4 space-y-6 shadow-xl relative bg-cover bg-center" style="background-image: linear-gradient(rgba(13, 27, 42, 0.93), rgba(27, 38, 59, 0.93)), url('https://drive.google.com/thumbnail?id=1oIgvfL9kPkiAH482L10yLRC-3IUrKYK7&sz=w1200');">
+      <div class="space-y-6 relative z-10">
+        <div class="flex items-center gap-3 px-2 py-3 border-b border-pu-border">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pu-gold via-yellow-400 to-amber-600 text-slate-950 flex items-center justify-center font-bold shadow-lg text-base shrink-0">
+            <i class="fa-solid fa-helmet-safety"></i>
           </div>
           <div>
-            <p class="text-xs text-cyan-200 font-bold uppercase tracking-wider">Total Keseluruhan Infrastruktur SDA</p>
-            <h2 id="statTotal" class="text-4xl font-black text-white mt-1">0</h2>
+            <h2 class="text-[11px] font-extrabold text-white leading-tight">Balai Besar Wilayah Sungai Nusa Tenggara II</h2>
+            <p class="text-[10px] text-pu-gold font-extrabold mt-0.5">Bidang Pelaksanaan</p>
           </div>
         </div>
-        <div class="text-right hidden sm:block">
-          <span class="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-xs font-semibold tracking-wider uppercase">
-            Provinsi NTT
-          </span>
-        </div>
-      </div>
 
-      <!-- KARTU STATISTIK (8 KATEGORI DENGAN SIMBOL EMBUNG FA-BOWL-WATER) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 text-white">
-        <div class="neon-card-1 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-droplet"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-blue-100 font-bold uppercase tracking-wide">Pos Hidrologi</p><span class="title-glow-line"></span><h3 id="statPos" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <div class="neon-card-2 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-water"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-yellow-100 font-bold uppercase tracking-wide">Bendung</p><span class="title-glow-line"></span><h3 id="statBendung" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <div class="neon-card-3 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-water-ladder"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-emerald-100 font-bold uppercase tracking-wide">Bendungan</p><span class="title-glow-line"></span><h3 id="statBendungan" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <div class="neon-card-4 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-mountain"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-orange-100 font-bold uppercase tracking-wide">Sedimen</p><span class="title-glow-line"></span><h3 id="statSedimen" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <div class="neon-card-5 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-house-flood-water"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-purple-100 font-bold uppercase tracking-wide">Banjir</p><span class="title-glow-line"></span><h3 id="statBanjir" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <div class="neon-card-6 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg"><i class="fa-solid fa-anchor"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-teal-100 font-bold uppercase tracking-wide">Pantai</p><span class="title-glow-line"></span><h3 id="statPantai" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <!-- Kartu Embung dengan Simbol fa-bowl-water yang Jelas -->
-        <div class="neon-card-7 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg text-white"><i class="fa-solid fa-bowl-water"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-pink-100 font-bold uppercase tracking-wide">Embung</p><span class="title-glow-line"></span><h3 id="statEmbung" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-        <div class="neon-card-8 rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]">
-          <div class="w-12 h-12 flex-shrink-0 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg text-white"><i class="fa-solid fa-faucet-drip"></i></div>
-          <div class="flex-1 min-w-0"><p class="text-xs text-indigo-100 font-bold uppercase tracking-wide">Sumur Bor</p><span class="title-glow-line"></span><h3 id="statSumur" class="text-2xl font-extrabold text-white">0</h3></div>
-        </div>
-      </div>
-
-      <!-- KOTAK PETA GIS & KONTROL FILTER -->
-      <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-        <div class="p-6 space-y-4">
-          <div class="flex flex-col xl:flex-row justify-between gap-4">
-            <h3 class="text-base font-bold text-slate-800 uppercase flex items-center"><i class="fa-solid fa-map-location-dot mr-2 text-blue-600"></i> Peta Sebaran Infrastruktur</h3>
-            
-            <div class="flex flex-col md:flex-row items-center gap-3 flex-wrap xl:justify-end">
-              <select id="filterKabupaten" onchange="applyFilter()" class="px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold w-full md:w-auto">
-                <option value="ALL">-- Tampilkan Semua Kabupaten --</option>
-              </select>
-              
-              <div class="flex flex-wrap gap-2 text-xs font-bold text-slate-700">
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pos')"><span class="text-blue-600">Pos</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('bendung')"><span class="text-yellow-600">Bendung</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('bendungan')"><span class="text-emerald-600">Bendungan</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('sedimen')"><span class="text-orange-600">Sedimen</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('banjir')"><span class="text-purple-600">Banjir</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('pantai')"><span class="text-teal-600">Pantai</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('embung')"><span class="text-pink-600">Embung</span></label>
-                <label class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg border cursor-pointer"><input type="checkbox" checked onchange="toggleLayer('sumur')"><span class="text-indigo-600">Sumur</span></label>
-              </div>
-            </div>
-          </div>
-          <div class="p-2 bg-slate-50 border rounded-2xl shadow-inner"><div id="map"></div></div>
-        </div>
-      </div>
-
-      <!-- TABEL RINCIAN DATA -->
-      <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-        <div class="p-6">
-          <h3 class="text-base font-bold text-slate-800 uppercase mb-4"><i class="fa-solid fa-table mr-2 text-blue-600"></i> Rincian Data Aset</h3>
-
-          <!-- TABS NAVIGATION -->
-          <div class="flex flex-wrap border-b border-slate-200 mb-4 gap-1">
-            <button onclick="switchTab('posTab')" id="btn-posTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-blue-600 text-white">Pos Hidrologi</button>
-            <button onclick="switchTab('bendungTab')" id="btn-bendungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendung</button>
-            <button onclick="switchTab('bendunganTab')" id="btn-bendunganTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Bendungan</button>
-            <button onclick="switchTab('sedimenTab')" id="btn-sedimenTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sedimen</button>
-            <button onclick="switchTab('banjirTab')" id="btn-banjirTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Banjir</button>
-            <button onclick="switchTab('pantaiTab')" id="btn-pantaiTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Pantai</button>
-            <button onclick="switchTab('embungTab')" id="btn-embungTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Embung</button>
-            <button onclick="switchTab('sumurTab')" id="btn-sumurTab" class="px-3 py-1.5 font-bold text-xs md:text-sm rounded-t bg-slate-100 text-slate-600">Sumur Bor</button>
-          </div>
-
-          <div class="overflow-x-auto max-h-[400px] rounded-xl border border-slate-200">
-            <div id="posTab" class="tab-content block">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Pos</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis</th><th class="p-3">Status</th></tr></thead><tbody id="tablePos" class="divide-y text-sm"></tbody></table>
-            </div>
-            <div id="bendungTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">DAS</th><th class="p-3">Kondisi</th></tr></thead><tbody id="tableBendung" class="divide-y text-sm"></tbody></table>
-            </div>
-            
-            <div id="bendunganTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                  <tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kabupaten</th><th class="p-3">Kecamatan</th><th class="p-3">Status</th><th class="p-3">Volume (m³)</th></tr>
-                </thead><tbody id="tableBendungan" class="divide-y text-sm bg-white"></tbody>
-              </table>
-            </div>
-
-            <div id="sedimenTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                  <tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kabupaten</th><th class="p-3">Kecamatan</th><th class="p-3">Jenis</th><th class="p-3">Kondisi</th><th class="p-3">Daya Tampung (m³)</th></tr>
-                </thead><tbody id="tableSedimen" class="divide-y text-sm bg-white"></tbody>
-              </table>
-            </div>
-
-            <div id="banjirTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama</th><th class="p-3">Kab/Kota</th><th class="p-3">Tipe</th><th class="p-3">Kondisi</th><th class="p-3">Panjang</th></tr></thead><tbody id="tableBanjir" class="divide-y text-sm"></tbody></table>
-            </div>
-            <div id="pantaiTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap"><thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10"><tr><th class="p-3">No</th><th class="p-3">Nama Aset</th><th class="p-3">Kab/Kota</th><th class="p-3">Jenis Bangunan</th><th class="p-3">Kondisi</th><th class="p-3">Panjang (m)</th></tr></thead><tbody id="tablePantai" class="divide-y text-sm"></tbody></table>
-            </div>
-            
-            <!-- Tabel Embung -->
-            <div id="embungTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                  <tr>
-                    <th class="p-3">No</th>
-                    <th class="p-3">Nama Embung</th>
-                    <th class="p-3">Kabupaten</th>
-                    <th class="p-3">Kecamatan</th>
-                    <th class="p-3">Kelurahan</th>
-                    <th class="p-3">Status Operasi</th>
-                    <th class="p-3">Kondisi Infrastruktur</th>
-                    <th class="p-3">Tahun Selesai</th>
-                    <th class="p-3">Kapasitas (m3)</th>
-                    <th class="p-3">Irigasi (Ha)</th>
-                  </tr>
-                </thead><tbody id="tableEmbung" class="divide-y text-sm bg-white"></tbody>
-              </table>
-            </div>
-
-            <div id="sumurTab" class="tab-content hidden">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="bg-slate-800 text-white text-xs uppercase sticky top-0 z-10">
-                  <tr>
-                    <th class="p-3">No</th>
-                    <th class="p-3">Nomor Sumur</th>
-                    <th class="p-3">Desa/Kel</th>
-                    <th class="p-3">Kecamatan</th>
-                    <th class="p-3">Kab/Kota</th>
-                    <th class="p-3">Debit (l/dt)</th>
-                    <th class="p-3">Kedalaman (m)</th>
-                    <th class="p-3">SWL (m)</th>
-                    <th class="p-3">Tahun Bor</th>
-                    <th class="p-3">Fungsi</th>
-                    <th class="p-3">Status</th>
-                  </tr>
-                </thead><tbody id="tableSumur" class="divide-y text-sm bg-white"></tbody>
-              </table>
-            </div>
+        <div class="space-y-1">
+          <p class="px-2 text-[10px] font-bold text-pu-gold uppercase tracking-wider mb-2">Kategori Aset SDA</p>
+          <div id="sidebarNavList" class="space-y-1">
+            <!-- Sidebar items injected dynamically -->
           </div>
         </div>
       </div>
+
+      <div class="pt-4 border-t border-pu-border px-2 flex items-center justify-between">
+        <div>
+          <p id="userBadge" class="text-xs font-bold text-pu-gold">Administrator PU</p>
+          <p class="text-[10px] text-slate-400">Sistem Aktif</p>
+        </div>
+        <button onclick="window.handleLogout()" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition" title="Ganti Akun">
+          <i class="fa-solid fa-power-off text-xs"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <div class="flex-1 flex flex-col min-w-0">
       
-      <!-- GRAFIK STATISTIK (BAR & DOUGHNUT) -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden lg:col-span-2 p-6">
-          <h3 class="text-base font-bold text-slate-800 uppercase mb-4 border-b pb-2"><i class="fa-solid fa-chart-column mr-2 text-blue-600"></i> Grafik Batang Infrastruktur</h3>
-          <div class="relative w-full h-[300px]"><canvas id="infraChart"></canvas></div>
+      <!-- TOP BANNER BAR (ENHANCED DESIGN WITH SLOW MOTION BACKGROUND ANIMATION) -->
+      <header class="border-b-4 border-pu-gold py-12 px-6 flex flex-col items-center justify-center gap-3 text-center shadow-2xl relative overflow-hidden bg-cover animated-bg" style="background-image: linear-gradient(rgba(13, 27, 42, 0.88), rgba(27, 38, 59, 0.88)), url('https://drive.google.com/thumbnail?id=1O5Co7DtHjLmQg6tqOi4NzwumPIUrG7uL&sz=w1600');">
+        <!-- Decorative Glow Accents -->
+        <div class="absolute -top-16 -left-16 w-60 h-60 bg-pu-gold/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -right-16 w-60 h-60 bg-pu-blue/25 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- PU Logo Emblem at Top -->
+        <div class="z-10 mb-1">
+          <div class="w-20 h-20 rounded-full bg-pu-card border-2 border-pu-gold p-1 shadow-2xl flex items-center justify-center overflow-hidden mx-auto">
+            <img src="https://drive.google.com/thumbnail?id=1rAsG_KDTpjGF0N1kefJIZ61edVWmUhJU&sz=w300" alt="Logo PU" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://i.ibb.co.com/RpTQRCrn/logo.png';">
+          </div>
         </div>
-        <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden p-6 flex flex-col items-center justify-center">
-          <h3 class="text-base font-bold text-slate-800 uppercase mb-2 border-b pb-2 w-full text-left"><i class="fa-solid fa-chart-pie mr-2 text-blue-600"></i> Proporsi Aset</h3>
-          <div class="relative w-full h-[260px] flex items-center justify-center"><canvas id="pieChart"></canvas></div>
+
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-pu-gold/20 border border-pu-gold/40 text-pu-gold text-xs font-extrabold uppercase tracking-widest mb-1 shadow-inner z-10">
+          <i class="fa-solid fa-landmark"></i> Kementerian Pekerjaan Umum
         </div>
+
+        <div class="z-10 max-w-4xl mx-auto">
+          <h1 class="font-black tracking-wider drop-shadow-lg text-white uppercase text-[30px] leading-tight">
+            SELAMAT DATANG <span class="text-pu-gold font-extrabold">di Balai Besar Wilayah Sungai Nusa Tenggara II</span>
+          </h1>
+        </div>
+
+        <div class="z-10 mt-1">
+          <div id="realtime-clock" class="text-pu-gold font-bold bg-slate-900/90 backdrop-blur-md px-6 py-2 rounded-2xl border border-pu-gold/50 shadow-2xl text-xs sm:text-sm inline-flex items-center gap-2 flex-wrap justify-center">
+            <i class="fa-regular fa-clock"></i>
+            <!-- Realtime 3 time zones clock -->
+          </div>
+        </div>
+      </header>
+
+      <!-- RUNNING TEXT BANNER -->
+      <div class="bg-pu-bg border-b border-pu-border py-2 px-4 overflow-hidden whitespace-nowrap text-xs text-pu-gold font-bold flex items-center">
+        <span class="bg-pu-gold text-slate-950 px-2 py-0.5 rounded text-[10px] font-extrabold uppercase mr-3 shrink-0 shadow"><i class="fa-solid fa-bullhorn mr-1"></i> Informasi</span>
+        <marquee scrollamount="5" class="w-full">
+          Sumber Data Water Resources Data Center BBWS NT II - Sistem Informasi Geografis Terpadu - Bidang Pelaksanaan SDA
+        </marquee>
       </div>
 
-      <!-- FOOTER / CREATED BY & SUMBER DATA -->
-      <footer class="text-center py-4 text-[11px] font-semibold border-t border-cyan-500/20 mt-12 overflow-hidden bg-slate-900/50 backdrop-blur-md rounded-2xl shadow-lg flex flex-col gap-1.5">
-        <div class="inline-block animate-[marquee_35s_linear_infinite] px-4 tracking-wider uppercase text-yellow-300/80">
-          <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
-          <i class="fa-solid fa-database mr-2"></i> Sumber Data : Water Resources Data Center (WRDC) BBWS NT II
+      <!-- MAIN DASHBOARD BODY -->
+      <main class="p-4 sm:p-6 space-y-6 flex-1">
+
+        <!-- 8 METRIC CARDS GRID -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="statCardsContainer">
+          <!-- Injected via JS -->
         </div>
-        <div class="text-cyan-300/70 tracking-widest font-bold uppercase text-[10px]">
-          created by : <span class="text-yellow-400/80">James Andreas Bate</span>
+
+        <!-- PETA SEBARAN SECTION -->
+        <section class="bg-pu-card border border-pu-border rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-pu-border">
+            <div class="flex items-center gap-2">
+              <span class="text-pu-gold"><i class="fa-solid fa-map-location-dot"></i></span>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Peta Sebaran Infrastruktur Sumber Daya Air</h3>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <select id="filterKab" onchange="window.filterMapData()" class="bg-pu-bg border border-pu-border text-xs rounded-xl px-3 py-2 text-white focus:outline-none focus:border-pu-gold">
+                <option value="">-- Semua Kabupaten --</option>
+              </select>
+              <select id="filterKategori" onchange="window.filterMapData()" class="bg-pu-bg border border-pu-border text-xs rounded-xl px-3 py-2 text-white focus:outline-none focus:border-pu-gold">
+                <option value="ALL">-- Tampilkan Semua Kategori --</option>
+                <option value="posHidrologi">Pos Hidrologi</option>
+                <option value="bendung">Bendung</option>
+                <option value="bendungan">Bendungan</option>
+                <option value="sedimen">Pengendali Sedimen</option>
+                <option value="banjir">Pengendali Banjir</option>
+                <option value="pantai">Pengaman Pantai</option>
+                <option value="embung">Embung</option>
+                <option value="sumurBor">Sumur Bor</option>
+              </select>
+            </div>
+          </div>
+          <div class="relative">
+            <div id="map"></div>
+          </div>
+        </section>
+
+        <!-- RINCIAN DATA ASET -->
+        <section class="bg-pu-card border border-pu-border rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-pu-border">
+            <div class="flex items-center gap-2">
+              <span class="text-pu-gold"><i class="fa-solid fa-table-list"></i></span>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Rincian Data Aset</h3>
+            </div>
+            <div class="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0" id="tableTabs">
+              <!-- Tabs injected dynamically -->
+            </div>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-pu-border max-h-[400px]">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead id="tableHead" class="bg-pu-bg text-pu-gold uppercase sticky top-0 z-10 font-bold"></thead>
+              <tbody id="tableBody" class="divide-y divide-pu-border bg-pu-card text-slate-300"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- CHARTS SECTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-pu-card border border-pu-border rounded-2xl p-5 shadow-xl flex flex-col">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white mb-4"><i class="fa-solid fa-chart-column mr-2 text-pu-gold"></i> Grafik Batang Infrastruktur SDA</h3>
+            <div class="flex-1 relative min-h-[260px]">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+          <div class="bg-pu-card border border-pu-border rounded-2xl p-5 shadow-xl flex flex-col">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white mb-4"><i class="fa-solid fa-chart-pie mr-2 text-pu-gold"></i> Proporsi Aset Wilayah Kerja</h3>
+            <div class="flex-1 relative min-h-[260px] flex items-center justify-center">
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="bg-pu-card border-t border-pu-border py-4 px-6 space-y-2 text-center text-xs text-pu-gold font-medium">
+        <div>Sumber Data Water Resources Data Center BBWS NT II - Sistem Informasi Geografis Terpadu - Bidang Pelaksanaan SDA</div>
+        <div class="overflow-hidden whitespace-nowrap text-[11px] text-slate-400 font-bold">
+          <marquee scrollamount="4" class="w-full">Generated by: Embo</marquee>
         </div>
       </footer>
-
-    </main>
+    </div>
   </div>
 
-  <!-- LOADING OVERLAY -->
-  <div id="loadingModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white p-4">
-    <div class="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-    <h3 class="text-lg font-bold">Memuat Data Sistem...</h3><p class="text-xs text-slate-300">Menyinkronkan data GIS dari server pusat.</p>
+  <!-- WALKING ANIMAL ANIMATION (GORILA) WANDERING ACROSS DASHBOARD -->
+  <div id="walkingGorilla" class="fixed z-50 pointer-events-none transition-all duration-75 flex items-center text-3xl filter drop-shadow-lg" style="left: 100px; top: 200px;">
+    🦍
+  </div>
+
+  <!-- FLOATING GORILLA TOGGLE WIDGET (BOTTOM-RIGHT CORNER) -->
+  <div class="fixed bottom-4 right-4 z-50 bg-[#f4f1ea] text-slate-800 border border-slate-300 rounded-2xl px-4 py-2.5 flex items-center gap-3 shadow-2xl">
+    <div class="w-9 h-9 rounded-xl bg-slate-900 text-amber-400 flex items-center justify-center text-lg shadow-inner">
+      🦍
+    </div>
+    <div class="text-left">
+      <p class="text-xs font-bold text-slate-900 leading-tight">Gorila</p>
+      <p id="gorillaStatusText" class="text-[10px] text-slate-500 font-semibold">Aktif</p>
+    </div>
+    <label class="relative inline-flex items-center cursor-pointer ml-2">
+      <input type="checkbox" id="gorillaToggle" checked onchange="window.toggleGorillaWalk(this)" class="sr-only peer">
+      <div class="w-10 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
+    </label>
+  </div>
+
+  <!-- LOADING MODAL -->
+  <div id="loadingModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center flex-col text-white hidden">
+    <div class="w-12 h-12 border-4 border-pu-gold border-t-transparent rounded-full animate-spin mb-3"></div>
+    <p class="text-xs font-semibold">Memuat Data Spasial & Database...</p>
   </div>
 
   <script>
-    // Waktu Berjalan Realtime
-    setInterval(() => {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      document.getElementById('realTimeClock').innerText = now.toLocaleDateString('id-ID', options);
-    }, 1000);
-
-    const API_URL = "https://script.google.com/macros/s/AKfycbzOxRiibgzdY2hTF8x6uCX_zzPa0AX22VHjsA0D2m2lIEykYqBKB5S_JMEEe4ATQwg/exec";
-
-    let map, myChart, myPieChart;
-    let layers = {
-      pos: L.layerGroup(), bendung: L.layerGroup(), bendungan: L.layerGroup(),
-      sedimen: L.layerGroup(), banjir: L.layerGroup(), pantai: L.layerGroup(), 
-      embung: L.layerGroup(), sumur: L.layerGroup(), geojson: L.layerGroup()
+    window.isGAS = (typeof google !== 'undefined' && google.script && typeof google.script.run !== 'undefined');
+    window.appState = {
+      currentUser: { nama: "Administrator PU", role: "Admin" },
+      activeCategory: 'posHidrologi',
+      data: {
+        posHidrologi: [],
+        bendung: [],
+        bendungan: [],
+        sedimen: [],
+        banjir: [],
+        pantai: [],
+        embung: [],
+        sumurBor: []
+      }
     };
-    let rawData = { pos:[], bendung:[], bendungan:[], sedimen:[], banjir:[], pantai:[], embung:[], sumur:[] };
-    let rawGeojsonData = null;
 
-    document.addEventListener("DOMContentLoaded", () => { initMap(); fetchDashboardData(); });
+    let map = null;
+    let markersLayer = L.layerGroup();
+    let barChartInstance = null;
+    let pieChartInstance = null;
+    let gorillaInterval = null;
+    let gorillaX = 150, gorillaY = 250;
+    let targetX = 400, targetY = 300;
+
+    const categoryMeta = {
+      posHidrologi: { label: 'Pos Hidrologi', icon: 'fa-gauge', color: '#eab308' },
+      bendung: { label: 'Bendung', icon: 'fa-archway', color: '#38bdf8' },
+      bendungan: { label: 'Bendungan', icon: 'fa-water', color: '#facc15' },
+      sedimen: { label: 'Pengendali Sedimen', icon: 'fa-mountain', color: '#60a5fa' },
+      banjir: { label: 'Pengendali Banjir', icon: 'fa-shield-halved', color: '#fde047' },
+      pantai: { label: 'Pengaman Pantai', icon: 'fa-umbrella-beach', color: '#93c5fd' },
+      embung: { label: 'Embung', icon: 'fa-droplet', color: '#ca8a04' },
+      sumurBor: { label: 'Sumur Bor', icon: 'fa-water', color: '#3b82f6' }
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+      initMap();
+      startClock();
+      startGorillaWalk();
+      
+      if (window.isGAS) {
+        document.getElementById('loadingModal').classList.remove('hidden');
+        google.script.run
+          .withSuccessHandler(res => {
+            document.getElementById('loadingModal').classList.add('hidden');
+            if (res && Object.keys(res).length > 0) {
+              window.appState.data = res;
+              window.initDashboard();
+            }
+          })
+          .withFailureHandler(err => {
+            document.getElementById('loadingModal').classList.add('hidden');
+            console.error("Gagal memuat data sheet:", err);
+            window.initDashboard();
+          })
+          .getAllInfrastructureData();
+      } else {
+        window.appState.data = {
+          posHidrologi: [{ Nama_Pos: "Pos Hujan Ruteng", Kabupaten_Kota: "Manggarai", Jenis_Pos: "Hujan", Status: "Aktif", Latitude: "-8.61", Longitude: "120.47" }],
+          bendung: [{ Nama_Aset: "Bendung Mbay", Kabupaten_Kota: "Nagekeo", Kecamatan: "Aesesa", Kondisi_Bangunan: "Baik", Latitude: "-8.45", Longitude: "121.28" }],
+          bendungan: [{ Nama_Bendungan: "Bendungan Raknamo", Kecamatan: "East Kupang", Status_Operasi: "Operasional", Volume_m3: "32700000", Latitude: "-10.15", Longitude: "123.95" }],
+          sedimen: [{ Nama_Aset: "Check Dam Noelmina", Kabupaten: "Kupang", Kecamatan: "Takari", Latitude: "-9.80", Longitude: "123.90" }],
+          banjir: [{ Nama_Aset: "Pengendali Banjir Wai Mese", Kabupaten___Kota: "Manggarai", Kecamatan: "Reok", Latitude: "-8.30", Longitude: "120.49" }],
+          pantai: [{ Nama_Bangunan: "Pengaman Pantai Waioti", Kabupaten___Kota: "Sikka", Kecamatan: "Alok Timur", Latitude: "-8.63", Longitude: "122.25" }],
+          embung: [{ Nama_Embung: "Embung Oesena", Kabupaten: "Kabupaten Kupang", Kecamatan: "Amarasi", Latitude: "-10.25", Longitude: "123.75" }],
+          sumurBor: [{ Nomor_Sumur: "SB-01 Kupang", Kab_Kota: "Kota Kupang", Kec: "Kelapa Lima", Latitude: "-10.17", Longitude: "123.61" }]
+        };
+        window.initDashboard();
+      }
+    });
+
+    function startGorillaWalk() {
+      const gorillaEl = document.getElementById('walkingGorilla');
+      if (!gorillaEl) return;
+      
+      gorillaX = Math.random() * (window.innerWidth - 100);
+      gorillaY = Math.random() * (window.innerHeight - 200) + 100;
+      targetX = Math.random() * (window.innerWidth - 100);
+      targetY = Math.random() * (window.innerHeight - 200) + 100;
+
+      setInterval(() => {
+        const toggle = document.getElementById('gorillaToggle');
+        if (toggle && !toggle.checked) {
+          gorillaEl.style.display = 'none';
+          return;
+        }
+        gorillaEl.style.display = 'flex';
+
+        let dx = targetX - gorillaX;
+        let dy = targetY - gorillaY;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 15) {
+          targetX = Math.random() * (window.innerWidth - 120);
+          targetY = Math.random() * (window.innerHeight - 200) + 80;
+        } else {
+          let speed = 2.2;
+          gorillaX += (dx / dist) * speed;
+          gorillaY += (dy / dist) * speed;
+
+          if (dx < 0) {
+            gorillaEl.style.transform = 'scaleX(-1)';
+          } else {
+            gorillaEl.style.transform = 'scaleX(1)';
+          }
+        }
+
+        gorillaEl.style.left = gorillaX + 'px';
+        gorillaEl.style.top = gorillaY + 'px';
+      }, 35);
+    }
+
+    window.toggleGorillaWalk = function(checkbox) {
+      const statusText = document.getElementById('gorillaStatusText');
+      const gorillaEl = document.getElementById('walkingGorilla');
+      if (checkbox.checked) {
+        statusText.textContent = 'Aktif';
+        if (gorillaEl) gorillaEl.style.display = 'flex';
+      } else {
+        statusText.textContent = 'Mati';
+        if (gorillaEl) gorillaEl.style.display = 'none';
+      }
+    };
+
+    function startClock() {
+      const update = () => {
+        const now = new Date();
+        const dateStr = new Intl.DateTimeFormat('id-ID', { timeZone: 'Asia/Makassar', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(now);
+        const wib = new Intl.DateTimeFormat('id-ID', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+        const wita = new Intl.DateTimeFormat('id-ID', { timeZone: 'Asia/Makassar', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+        const wit = new Intl.DateTimeFormat('id-ID', { timeZone: 'Asia/Jayapura', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+
+        const clockEl = document.getElementById('realtime-clock');
+        if (clockEl) {
+          clockEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${dateStr} &nbsp;|&nbsp; <span class="text-white">WIB:</span> ${wib} &nbsp;|&nbsp; <span class="text-white">WITA:</span> ${wita} &nbsp;|&nbsp; <span class="text-white">WIT:</span> ${wit}`;
+        }
+      };
+      update();
+      setInterval(update, 1000);
+    }
+
+    window.handleLogin = function(e) {
+      e.preventDefault();
+      let u = document.getElementById('loginUser').value;
+      let p = document.getElementById('loginPass').value;
+
+      if (window.isGAS) {
+        document.getElementById('loadingModal').classList.remove('hidden');
+        google.script.run
+          .withSuccessHandler(res => {
+            document.getElementById('loadingModal').classList.add('hidden');
+            if (res.success) {
+              window.startApp(res.user);
+            } else {
+              alert(res.message);
+            }
+          })
+          .login({ username: u, password: p });
+      } else {
+        window.startApp({ nama_lengkap: u });
+      }
+    };
+
+    window.quickLogin = function() {
+      document.getElementById('loginUser').value = 'admin';
+      document.getElementById('loginPass').value = 'das12345';
+      window.handleLogin(new Event('submit'));
+    };
+
+    window.enterAsViewer = function() {
+      document.getElementById('loginModal').classList.add('hidden');
+    };
+
+    window.startApp = function(userData) {
+      window.appState.currentUser = userData;
+      document.getElementById('userBadge').innerText = userData.nama_lengkap || userData.nama || "Administrator PU";
+      document.getElementById('loginModal').classList.add('hidden');
+    };
+
+    window.handleLogout = function() {
+      document.getElementById('loginModal').classList.remove('hidden');
+    };
 
     function initMap() {
-      map = L.map('map').setView([-8.6, 121.0], 7);
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16 }).addTo(map);
-      Object.values(layers).forEach(layer => layer.addTo(map));
+      const nttBounds = [[-11.5, 120.0], [-7.5, 126.0]];
+      map = L.map('map', { maxBounds: nttBounds }).setView([-8.65, 121.5], 8);
+
+      const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: '© Esri Satellite'
+      });
+      const darkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 18,
+        attribution: '© CartoDB Dark Matter'
+      });
+      const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap'
+      });
+      const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '© OpenTopoMap'
+      });
+
+      satellite.addTo(map);
+
+      const baseMaps = {
+        "Satelit (Esri)": satellite,
+        "Peta Gelap (Dark Matter)": darkMatter,
+        "OpenStreetMap": osm,
+        "Topografi": topo
+      };
+
+      markersLayer.addTo(map);
+      L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
 
       fetch('https://raw.githubusercontent.com/balaiperumahanntt-ui/petanttgeojson/refs/heads/main/ntt%20geojson.geojson')
-        .then(res => res.json()).then(data => { rawGeojsonData = data; renderGeojsonBoundary("ALL"); }).catch(e => console.error("Error GeoJSON", e));
-    }
-
-    function toggleLayer(type) {
-      if (map.hasLayer(layers[type])) map.removeLayer(layers[type]);
-      else map.addLayer(layers[type]);
-    }
-
-    function fetchDashboardData() {
-      fetch(API_URL)
         .then(res => res.json())
         .then(data => {
-          if (data.status === "error") throw new Error(data.message);
-          
-          rawData.pos = data.posData || [];
-          rawData.bendung = data.bendungData || [];
-          rawData.bendungan = data.bendunganData || [];
-          rawData.sedimen = data.sedimenData || []; 
-          rawData.banjir = data.banjirData || [];
-          rawData.pantai = data.pantaiData || [];
-          rawData.embung = data.embungData || [];
-          rawData.sumur = data.sumurData || [];
-          
-          populateKabupatenDropdown();
-          renderData("ALL"); 
-          document.getElementById('loadingModal').classList.add('hidden');
+          L.geoJson(data, {
+            style: { color: '#eab308', weight: 1.5, fillColor: '#0284c7', fillOpacity: 0.15 }
+          }).addTo(map);
         })
-        .catch(err => {
-          console.error("Gagal fetch data:", err);
-          document.getElementById('loadingModal').classList.add('hidden');
-        });
+        .catch(err => console.warn("GeoJSON NTT load warning:", err));
     }
 
-    function safeString(val) { return (val || "").toString().trim().toUpperCase(); }
-    function isMatch(rowKab, selKab) {
-      if(selKab === "ALL") return true;
-      let str = safeString(rowKab);
-      return str.includes(selKab) || selKab.includes(str);
-    }
+    window.initDashboard = function() {
+      window.renderSidebarNav();
+      window.renderStatCards();
+      window.renderTableTabs();
+      window.renderTable(window.appState.activeCategory);
+      window.renderCharts();
+      window.updateMapMarkers();
+      window.populateKabupatenFilter();
+    };
 
-    function populateKabupatenDropdown() {
-      let kabSet = new Set();
-      try {
-        if(Array.isArray(rawData.pos)) rawData.pos.forEach(r => { if(r[2]) kabSet.add(safeString(r[2])); });
-        if(Array.isArray(rawData.bendung)) rawData.bendung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.bendungan)) rawData.bendungan.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.sedimen)) rawData.sedimen.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.banjir)) rawData.banjir.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.pantai)) rawData.pantai.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.embung)) rawData.embung.forEach(r => { if(r[1]) kabSet.add(safeString(r[1])); });
-        if(Array.isArray(rawData.sumur)) rawData.sumur.forEach(r => { if(r[3]) kabSet.add(safeString(r[3])); });
-      } catch(e) { console.error("Error populating dropdown", e); }
-      
-      let select = document.getElementById('filterKabupaten');
-      Array.from(kabSet).filter(k => k !== "").sort().forEach(kab => {
-        let opt = document.createElement('option'); opt.value = kab; opt.textContent = kab; select.appendChild(opt);
+    window.renderSidebarNav = function() {
+      const navList = document.getElementById('sidebarNavList');
+      navList.innerHTML = '';
+      Object.keys(categoryMeta).forEach(key => {
+        let count = (window.appState.data[key] || []).length;
+        let meta = categoryMeta[key];
+        let isActive = window.appState.activeCategory === key;
+        navList.innerHTML += `
+          <button onclick="window.switchCategory('${key}')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition ${isActive ? 'bg-pu-gold text-slate-950 font-bold shadow-md' : 'text-slate-300 hover:bg-pu-card hover:text-white'}">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid ${meta.icon}" style="color: ${isActive ? '#020617' : meta.color};"></i>
+              ${meta.label}
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${isActive ? 'bg-slate-950 text-pu-gold' : 'bg-pu-bg text-slate-400'}">${count}</span>
+          </button>
+        `;
       });
-    }
+    };
 
-    function applyFilter() {
-      let selectedKab = document.getElementById('filterKabupaten').value;
-      renderData(selectedKab); renderGeojsonBoundary(selectedKab);
-    }
-
-    function renderData(selKab) {
-      try {
-        let fPos = Array.isArray(rawData.pos) ? rawData.pos.filter(r => isMatch(r[2], selKab)) : [];
-        let fBendung = Array.isArray(rawData.bendung) ? rawData.bendung.filter(r => isMatch(r[1], selKab)) : [];
-        let fBendungan = Array.isArray(rawData.bendungan) ? rawData.bendungan.filter(r => isMatch(r[1], selKab)) : []; 
-        let fSedimen = Array.isArray(rawData.sedimen) ? rawData.sedimen.filter(r => isMatch(r[1], selKab)) : []; 
-        let fBanjir = Array.isArray(rawData.banjir) ? rawData.banjir.filter(r => isMatch(r[1], selKab)) : [];
-        let fPantai = Array.isArray(rawData.pantai) ? rawData.pantai.filter(r => isMatch(r[1], selKab)) : []; 
-        let fEmbung = Array.isArray(rawData.embung) ? rawData.embung.filter(r => isMatch(r[1], selKab)) : []; 
-        let fSumur = Array.isArray(rawData.sumur) ? rawData.sumur.filter(r => isMatch(r[3], selKab)) : [];
-
-        let totalAll = fPos.length + fBendung.length + fBendungan.length + fSedimen.length + fBanjir.length + fPantai.length + fEmbung.length + fSumur.length;
-
-        document.getElementById('statTotal').innerText = totalAll;
-        document.getElementById('statPos').innerText = fPos.length;
-        document.getElementById('statBendung').innerText = fBendung.length;
-        document.getElementById('statBendungan').innerText = fBendungan.length;
-        document.getElementById('statSedimen').innerText = fSedimen.length;
-        document.getElementById('statBanjir').innerText = fBanjir.length;
-        document.getElementById('statPantai').innerText = fPantai.length;
-        document.getElementById('statEmbung').innerText = fEmbung.length;
-        document.getElementById('statSumur').innerText = fSumur.length;
-
-        const ic = (bg, fa) => L.divIcon({ className: 'bg-transparent', html: `<div class="map-marker-icon ${bg} w-7 h-7"><i class="fa-solid ${fa} text-xs"></i></div>`, iconSize: [28,28], iconAnchor: [14,14] });
-        const iPos = ic('bg-blue-500', 'fa-droplet'), iBend = ic('bg-yellow-500', 'fa-water'), iBndgn = ic('bg-emerald-500', 'fa-water-ladder');
-        const iSed = ic('bg-orange-500', 'fa-mountain'), iBnjr = ic('bg-purple-500', 'fa-house-flood-water');
-        const iPntai = ic('bg-teal-500', 'fa-anchor'), iEmb = ic('bg-pink-500', 'fa-bowl-water'), iSmr = ic('bg-indigo-500', 'fa-faucet-drip');
-
-        Object.keys(layers).forEach(k => { if(k !== 'geojson') layers[k].clearLayers(); });
-
-        let hPos = '';
-        fPos.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.pos.addLayer(L.marker([lat, lng], {icon: iPos}).bindPopup(`<b>${r[1]}</b><br>${r[2]}<br>${r[3]}`));
-          hPos += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[1]||'-'}</td><td class="p-3">${r[2]||'-'}</td><td class="p-3">${r[3]||'-'}</td><td class="p-3">${r[4]||'-'}</td></tr>`;
-        });
-        document.getElementById('tablePos').innerHTML = hPos;
-
-        let hBendung = '';
-        fBendung.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[15]), lng = parseFloat(r[16]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.bendung.addLayer(L.marker([lat, lng], {icon: iBend}).bindPopup(`<b>${r[2]}</b><br>${r[1]}`));
-          hBendung += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[2]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[6]||'-'}</td><td class="p-3">${r[7]||'-'}</td></tr>`;
-        });
-        document.getElementById('tableBendung').innerHTML = hBendung;
-
-        let hBendungan = '';
-        fBendungan.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[5]), lng = parseFloat(r[6]);
-          if (!isNaN(lat) && !isNaN(lng)) {
-            layers.bendungan.addLayer(L.marker([lat, lng], {icon: iBndgn}).bindPopup(`<b>${r[0] || 'Bendungan'}</b><br>Kab: ${r[1]}<br>Status: ${r[3]}`));
-          }
-          hBendungan += `<tr>
-            <td class="p-3">${i+1}</td>
-            <td class="p-3 font-bold text-emerald-700">${r[0] || '-'}</td>
-            <td class="p-3">${r[1] || '-'}</td>
-            <td class="p-3">${r[2] || '-'}</td>
-            <td class="p-3">${r[3] || '-'}</td>
-            <td class="p-3">${r[4] || '-'}</td>
-          </tr>`;
-        });
-        document.getElementById('tableBendungan').innerHTML = hBendungan;
-
-        let hSedimen = '';
-        fSedimen.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[6]), lng = parseFloat(r[7]);
-          if (!isNaN(lat) && !isNaN(lng)) {
-            layers.sedimen.addLayer(L.marker([lat, lng], {icon: iSed}).bindPopup(`<b>${r[0] || 'Sedimen'}</b><br>Kab: ${r[1]}<br>Jenis: ${r[3]}`));
-          }
-          hSedimen += `<tr>
-            <td class="p-3">${i+1}</td>
-            <td class="p-3 font-bold text-orange-700">${r[0] || '-'}</td>
-            <td class="p-3">${r[1] || '-'}</td>
-            <td class="p-3">${r[2] || '-'}</td>
-            <td class="p-3">${r[3] || '-'}</td>
-            <td class="p-3">${r[4] || '-'}</td>
-            <td class="p-3">${r[5] || '-'}</td>
-          </tr>`;
-        });
-        document.getElementById('tableSedimen').innerHTML = hSedimen;
-
-        let hBanjir = '';
-        fBanjir.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[14]), lng = parseFloat(r[15]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.banjir.addLayer(L.marker([lat, lng], {icon: iBnjr}).bindPopup(`<b>${r[0]}</b><br>${r[1]}`));
-          hBanjir += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[4]||'-'}</td><td class="p-3">${r[6]||'-'}</td><td class="p-3">${r[13]||'-'}</td></tr>`;
-        });
-        document.getElementById('tableBanjir').innerHTML = hBanjir;
-
-        let hPantai = '';
-        fPantai.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[11]), lng = parseFloat(r[12]);
-          if (!isNaN(lat) && !isNaN(lng)) layers.pantai.addLayer(L.marker([lat, lng], {icon: iPntai}).bindPopup(`<b>${r[0]}</b><br>Kab/Kota: ${r[1]}<br>Panjang: ${r[9]}m`));
-          hPantai += `<tr><td class="p-3">${i+1}</td><td class="p-3 font-bold text-teal-700">${r[0]||'-'}</td><td class="p-3">${r[1]||'-'}</td><td class="p-3">${r[4]||'-'}</td><td class="p-3">${r[5]||'-'}</td><td class="p-3">${r[9]||'-'}</td></tr>`;
-        });
-        document.getElementById('tablePantai').innerHTML = hPantai;
-
-        let hEmbung = '';
-        fEmbung.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[9]), lng = parseFloat(r[10]);
-          if (!isNaN(lat) && !isNaN(lng)) {
-            layers.embung.addLayer(L.marker([lat, lng], {icon: iEmb}).bindPopup(`<b>${r[0] || 'Embung'}</b><br>Kab: ${r[1]}<br>Kapasitas: ${r[7]} m³`));
-          }
-          hEmbung += `<tr>
-            <td class="p-3">${i+1}</td>
-            <td class="p-3 font-bold text-pink-700">${r[0] || '-'}</td>
-            <td class="p-3">${r[1] || '-'}</td>
-            <td class="p-3">${r[2] || '-'}</td>
-            <td class="p-3">${r[3] || '-'}</td>
-            <td class="p-3">${r[4] || '-'}</td>
-            <td class="p-3">${r[5] || '-'}</td>
-            <td class="p-3">${r[6] || '-'}</td>
-            <td class="p-3">${r[7] || '-'}</td>
-            <td class="p-3">${r[8] || '-'}</td>
-          </tr>`;
-        });
-        document.getElementById('tableEmbung').innerHTML = hEmbung;
-
-        let hSumur = '';
-        fSumur.slice(0, 150).forEach((r, i) => {
-          let lat = parseFloat(r[4]), lng = parseFloat(r[5]); 
-          if (!isNaN(lat) && !isNaN(lng)) {
-            layers.sumur.addLayer(L.marker([lat, lng], {icon: iSmr}).bindPopup(`<b>${r[0] || 'Sumur Bor'}</b><br>Desa: ${r[1]}<br>Kedalaman: ${r[7]}m<br>Debit: ${r[6]} l/dt`));
-          }
-          hSumur += `<tr>
-            <td class="p-3">${i+1}</td>
-            <td class="p-3 font-bold text-indigo-700">${r[0] || '-'}</td>
-            <td class="p-3">${r[1] || '-'}</td>
-            <td class="p-3">${r[2] || '-'}</td>
-            <td class="p-3">${r[3] || '-'}</td>
-            <td class="p-3">${r[6] || '-'}</td>
-            <td class="p-3">${r[7] || '-'}</td>
-            <td class="p-3">${r[8] || '-'}</td>
-            <td class="p-3">${r[9] || '-'}</td>
-            <td class="p-3">${r[10] || '-'}</td>
-            <td class="p-3">${r[11] || '-'}</td>
-          </tr>`;
-        });
-        document.getElementById('tableSumur').innerHTML = hSumur;
-
-        let chartData = [fPos.length, fBendung.length, fBendungan.length, fSedimen.length, fBanjir.length, fPantai.length, fEmbung.length, fSumur.length];
-        let chartColors = ['#3B82F6', '#FDB813', '#10B981', '#F97316', '#A855F7', '#14B8A6', '#EC4899', '#6366F1'];
-
-        if(myChart) myChart.destroy();
-        myChart = new Chart(document.getElementById('infraChart').getContext('2d'), {
-          type: 'bar',
-          data: {
-            labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
-            datasets: [{ data: chartData, backgroundColor: chartColors, borderRadius: 6 }]
-          },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-
-        if(myPieChart) myPieChart.destroy();
-        myPieChart = new Chart(document.getElementById('pieChart').getContext('2d'), {
-          type: 'doughnut',
-          data: {
-            labels: ['Pos', 'Bendung', 'Bendungan', 'Sedimen', 'Banjir', 'Pantai', 'Embung', 'Sumur Bor'],
-            datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2 }]
-          },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
-        });
-      } catch(err) {
-        console.error("Terjadi kesalahan saat memproses data render:", err);
-      }
-    }
-
-    function renderGeojsonBoundary(selKab) {
-      if(!rawGeojsonData) return;
-      layers.geojson.clearLayers();
-      let bounds = [];
-      L.geoJson(rawGeojsonData, {
-        style: (f) => {
-          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
-          let c = (selKab === "ALL" || nm.includes(selKab) || selKab.includes(nm));
-          return c ? { color: '#0E3B68', weight: selKab==="ALL"?1:2.5, fillColor: selKab === "ALL"?'#F1F5F9':'#FDB813', fillOpacity: selKab==="ALL"?0.3:0.25 } : { color: '#CBD5E1', weight: 1, fillOpacity: 0.1 };
-        },
-        onEachFeature: (f, l) => {
-          let nm = safeString(f.properties.WADMKK || f.properties.KABUPATEN || f.properties.KABKOT);
-          if (selKab !== "ALL" && (nm.includes(selKab) || selKab.includes(nm))) bounds.push(l.getBounds());
-        }
-      }).addTo(layers.geojson);
+    window.renderStatCards = function() {
+      const container = document.getElementById('statCardsContainer');
+      container.innerHTML = '';
       
-      if (selKab !== "ALL" && bounds.length > 0) {
-        let b = bounds[0]; for(let i=1; i<bounds.length; i++) b.extend(bounds[i]); map.fitBounds(b, { padding: [30, 30] });
-      } else if (selKab === "ALL") map.setView([-8.6, 121.0], 7);
-    }
+      let totalOverall = 0;
+      Object.keys(categoryMeta).forEach(key => {
+        let count = (window.appState.data[key] || []).length;
+        totalOverall += count;
+        let meta = categoryMeta[key];
+        container.innerHTML += `
+          <div onclick="window.switchCategory('${key}')" class="bg-pu-card border border-pu-border hover:border-pu-gold rounded-xl p-4 cursor-pointer transition shadow-lg flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs shadow" style="background-color: ${meta.color}25; color: ${meta.color};">
+                <i class="fa-solid ${meta.icon}"></i>
+              </span>
+              <span class="text-[10px] font-bold text-pu-gold uppercase">TOTAL</span>
+            </div>
+            <div>
+              <h4 class="text-xl font-extrabold text-white">${count}</h4>
+              <p class="text-[10px] text-slate-300 truncate">${meta.label}</p>
+            </div>
+          </div>
+        `;
+      });
 
-    function switchTab(tId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.replace('block', 'hidden'));
-      document.querySelectorAll('[id^="btn-"]').forEach(btn => { btn.classList.replace('bg-blue-600', 'bg-slate-100'); btn.classList.replace('text-white', 'text-slate-600'); });
-      document.getElementById(tId).classList.replace('hidden', 'block');
-      document.getElementById('btn-' + tId).classList.replace('bg-slate-100', 'bg-blue-600');
-      document.getElementById('btn-' + tId).classList.replace('text-slate-600', 'text-white');
-    }
+      container.insertAdjacentHTML('afterbegin', `
+        <div class="bg-gradient-to-br from-pu-gold/20 to-pu-card border-2 border-pu-gold rounded-xl p-4 shadow-xl flex flex-col justify-between col-span-2 sm:col-span-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="w-8 h-8 rounded-lg bg-pu-gold text-slate-950 flex items-center justify-center text-sm shadow font-bold">
+              <i class="fa-solid fa-chart-pie"></i>
+            </span>
+            <span class="text-[11px] font-extrabold text-pu-gold uppercase tracking-wider bg-pu-gold/20 px-2 py-0.5 rounded border border-pu-gold/40">Total Keseluruhan Aset SDA</span>
+          </div>
+          <div>
+            <h4 class="text-2xl sm:text-3xl font-black text-white">${totalOverall.toLocaleString('id-ID')} <span class="text-xs font-semibold text-pu-gold">Unit / Pos</span></h4>
+            <p class="text-[11px] text-slate-300 mt-0.5">Akumulasi seluruh infrastruktur sumber daya air di wilayah kerja BBWS NTT II</p>
+          </div>
+        </div>
+      `);
+    };
+
+    window.renderTableTabs = function() {
+      const tabs = document.getElementById('tableTabs');
+      tabs.innerHTML = '';
+      Object.keys(categoryMeta).forEach(key => {
+        let meta = categoryMeta[key];
+        let isActive = window.appState.activeCategory === key;
+        tabs.innerHTML += `
+          <button onclick="window.switchCategory('${key}')" class="px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${isActive ? 'bg-pu-gold text-slate-950 shadow' : 'bg-pu-bg text-slate-300 hover:text-white border border-pu-border'}">
+            ${meta.label}
+          </button>
+        `;
+      });
+    };
+
+    window.switchCategory = function(catKey) {
+      window.appState.activeCategory = catKey;
+      window.renderSidebarNav();
+      window.renderTableTabs();
+      window.renderTable(catKey);
+    };
+
+    window.renderTable = function(catKey) {
+      const head = document.getElementById('tableHead');
+      const body = document.getElementById('tableBody');
+      const rows = window.appState.data[catKey] || [];
+
+      if (rows.length === 0) {
+        head.innerHTML = '';
+        body.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-500 italic">Tidak ada data untuk kategori ini.</td></tr>`;
+        return;
+      }
+
+      let keys = Object.keys(rows[0]).filter(k => k !== '_rowId');
+      head.innerHTML = `<tr><th class="py-2.5 px-3">No</th>` + keys.map(k => `<th class="py-2.5 px-3">${k.replace(/_/g, ' ')}</th>`).join('') + `</tr>`;
+      
+      body.innerHTML = '';
+      rows.forEach((row, idx) => {
+        let tds = keys.map(k => `<td class="py-2.5 px-3">${row[k] || '-'}</td>`).join('');
+        body.innerHTML += `<tr class="hover:bg-pu-bg transition border-b border-pu-border"><td class="py-2.5 px-3 font-bold text-pu-gold">${idx + 1}</td>${tds}</tr>`;
+      });
+    };
+
+    window.updateMapMarkers = function() {
+      markersLayer.clearLayers();
+      let selectedKab = document.getElementById('filterKab').value.toUpperCase();
+      let selectedCat = document.getElementById('filterKategori').value;
+
+      let catsToProcess = selectedCat === 'ALL' ? Object.keys(window.appState.data) : [selectedCat];
+
+      catsToProcess.forEach(cat => {
+        let items = window.appState.data[cat] || [];
+        let meta = categoryMeta[cat] || { label: cat, color: '#eab308' };
+
+        items.forEach(item => {
+          let latVal = item.Latitude || item.Lat || item.LATITUDE || item.Lintang || item.Koordinat_Lat || 0;
+          let lngVal = item.Longitude || item.Long || item.LONGITUDE || item.Bujur || item.Koordinat_Long || 0;
+
+          let parseCoord = (val) => {
+            if (!val) return 0;
+            let s = String(val).trim().replace(',', '.');
+            let num = parseFloat(s);
+            return isNaN(num) ? 0 : num;
+          };
+
+          let lat = parseCoord(latVal);
+          let lng = parseCoord(lngVal);
+
+          let kab = String(item.Kabupaten_Kota || item.Kabupaten || item.Kab_Kota || item['Kabupaten/Kota'] || "").toUpperCase();
+
+          if (selectedKab && !kab.includes(selectedKab)) return;
+
+          if (lat !== 0 && lng !== 0 && lat >= -12.0 && lat <= -5.0 && lng >= 118.0 && lng <= 127.0) {
+            let markerIcon = L.divIcon({
+              className: 'custom-div-icon',
+              html: `<div style="background-color: ${meta.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.5);"></div>`,
+              iconSize: [14, 14],
+              iconAnchor: [7, 7]
+            });
+
+            let title = item.Nama_Embung || item.Nama_Pos || item.Nama_Aset || item.Nama_Bendungan || item.Nama_Bangunan || item.Nomor_Sumur || item['Nama Embung'] || item['Nomor Sumur'] || "Infrastruktur SDA";
+            
+            // Build technical data table for popup matching all table columns
+            let technicalHtml = `<div style="max-height: 220px; overflow-y: auto; margin-top: 6px; font-size: 10px; border-top: 1px solid #cbd5e1; padding-top: 4px;">`;
+            technicalHtml += `<table style="width: 100%; border-collapse: collapse;">`;
+            for (let key in item) {
+              if (key !== '_rowId' && item[key] !== undefined && item[key] !== "") {
+                let cleanKey = key.replace(/_/g, ' ');
+                technicalHtml += `<tr style="border-bottom: 1px solid #f1f5f9;"><td style="font-weight: bold; color: #475569; padding: 2.5px 4px; width: 48%;">${cleanKey}</td><td style="color: #0f172a; padding: 2.5px 4px;">${item[key]}</td></tr>`;
+              }
+            }
+            technicalHtml += `</table></div>`;
+
+            let popupContent = `
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 240px; max-width: 300px;">
+                <div style="font-weight: 800; font-size: 12px; color: #1d4ed8; text-transform: uppercase; margin-bottom: 2px;">
+                  <i class="fa-solid fa-water"></i> ${meta.label}
+                </div>
+                <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">
+                  ${title}
+                </div>
+                ${technicalHtml}
+              </div>
+            `;
+
+            let marker = L.marker([lat, lng], { icon: markerIcon });
+            marker.bindPopup(popupContent);
+            markersLayer.addLayer(marker);
+          }
+        });
+      });
+    };
+
+    window.filterMapData = function() {
+      window.updateMapMarkers();
+    };
+
+    window.populateKabupatenFilter = function() {
+      let kabSet = new Set();
+      Object.keys(window.appState.data).forEach(cat => {
+        (window.appState.data[cat] || []).forEach(item => {
+          let kab = item.Kabupaten_Kota || item.Kabupaten || item.Kab_Kota;
+          if (kab) kabSet.add(kab);
+        });
+      });
+
+      const select = document.getElementById('filterKab');
+      select.innerHTML = '<option value="">-- Semua Kabupaten --</option>';
+      kabSet.forEach(kab => {
+        select.innerHTML += `<option value="${kab}">${kab}</option>`;
+      });
+    };
+
+    window.renderCharts = function() {
+      const barCtx = document.getElementById('barChart').getContext('2d');
+      const pieCtx = document.getElementById('pieChart').getContext('2d');
+
+      let labels = Object.keys(categoryMeta).map(k => categoryMeta[k].label);
+      let counts = Object.keys(categoryMeta).map(k => (window.appState.data[k] || []).length);
+      let colors = Object.keys(categoryMeta).map(k => categoryMeta[k].color);
+
+      if (barChartInstance) barChartInstance.destroy();
+      barChartInstance = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Jumlah Aset',
+            data: counts,
+            backgroundColor: colors,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: '#415a77' }, ticks: { color: '#eab308', font: { size: 10 } } },
+            x: { grid: { display: false }, ticks: { color: '#f8fafc', font: { size: 10 } } }
+          }
+        }
+      });
+
+      if (pieChartInstance) pieChartInstance.destroy();
+      pieChartInstance = new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: '#1b263b'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#f8fafc', boxWidth: 10, font: { size: 9 } } }
+          }
+        }
+      });
+    };
   </script>
 </body>
 </html>
